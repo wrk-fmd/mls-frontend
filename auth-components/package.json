@@ -1,0 +1,15 @@
+{
+  "name": "mls-auth-components",
+  "version": "3.0.0-SNAPSHOT",
+  "scripts": {
+    "install": "ng build auth-components"
+  },
+  "private": true,
+  "peerDependencies": {
+    "@angular/common": "^8.2.14",
+    "@angular/core": "^8.2.14",
+    "@angular/material": "~8.2.3",
+    "angularx-qrcode": "^2.1.0",
+    "mls-auth": "file:auth"
+  }
+}

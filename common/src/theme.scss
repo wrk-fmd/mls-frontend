@@ -1,0 +1,76 @@
+@import '~@angular/material/theming';
+
+@include mat-core();
+
+$mls-colors-primary: (
+  50 : #f6e2e2,
+  100 : #e9b7b6,
+  200 : #db8786,
+  300 : #cd5655,
+  400 : #c23230,
+  500 : #b70e0c,
+  600 : #b00c0a,
+  700 : #a70a08,
+  800 : #9f0806,
+  900 : #900403,
+  A100 : #ffbcbc,
+  A200 : #ff8989,
+  A400 : #ff5656,
+  A700 : #ff3c3c,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #ffffff,
+    400 : #ffffff,
+    500 : #ffffff,
+    600 : #ffffff,
+    700 : #ffffff,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #000000,
+    A700 : #ffffff,
+  )
+);
+
+$mls-colors-secondary: (
+  50 : #e0edf4,
+  100 : #b3d1e3,
+  200 : #80b2d0,
+  300 : #4d93bd,
+  400 : #267cae,
+  500 : #0065a0,
+  600 : #005d98,
+  700 : #00538e,
+  800 : #004984,
+  900 : #003773,
+  A100 : #a1c7ff,
+  A200 : #6ea8ff,
+  A400 : #3b8aff,
+  A700 : #227aff,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #000000,
+    400 : #ffffff,
+    500 : #ffffff,
+    600 : #ffffff,
+    700 : #ffffff,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #ffffff,
+    A700 : #ffffff,
+  )
+);
+
+$mls-app-primary: mat-palette($mls-colors-primary);
+$mls-app-accent: mat-palette($mls-colors-secondary, A200, A100, A400);
+$mls-app-warn: mat-palette($mat-red);
+
+$mls-app-theme: mat-light-theme($mls-app-primary, $mls-app-accent, $mls-app-warn);
+@include angular-material-theme($mls-app-theme);

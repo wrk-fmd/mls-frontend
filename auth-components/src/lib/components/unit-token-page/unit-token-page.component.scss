@@ -1,0 +1,17 @@
+@media print {
+  .unit-token-page {
+    margin: 0 1.5cm;
+    page-break-after: always;
+
+    &::before {
+      content: " ";
+      height: 1.5cm;
+      display: block;
+    }
+  }
+
+  @page {
+    margin: 0;
+  }
+}
+

@@ -1,0 +1,25 @@
+<div class="mid-con-wrapper">
+  <div class="form-wrapper">
+    <form [formGroup]="credentialsForm" class="example-form">
+      <div>
+        <mat-form-field class="example-full-width">
+          <mat-label translate>login.username</mat-label>
+          <input matInput formControlName="username">
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-form-field class="example-full-width">
+          <mat-label translate>login.password</mat-label>
+          <input matInput type="password" formControlName="password"/>
+        </mat-form-field>
+      </div>
+
+      <div class="button-wrapper">
+        <button mat-raised-button [disabled]="loading" (click)="onLoginClick()" color="primary">
+          {{'login.submit' | translate}}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

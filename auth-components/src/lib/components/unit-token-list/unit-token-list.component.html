@@ -1,0 +1,10 @@
+<mat-toolbar color="primary" class="hidden-print">
+  <h2 translate>auth.tokens.header</h2>
+  <a mat-button routerLink="/tokens">{{'auth.concern.change' | translate}}</a>
+</mat-toolbar>
+
+<main>
+  <div class="unit-list">
+    <unit-token-page *ngFor="let unit of units" [unit]="unit"></unit-token-page>
+  </div>
+</main>
