@@ -1,6 +1,6 @@
-import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import {NgModule} from '@angular/core';
-import {LoggerModule, NgxLoggerLevel} from 'ngx-logger';
+import {LoggerModule} from 'ngx-logger';
 
 import {AuthGuard} from './auth/auth.guard';
 import {AuthService} from './auth/auth.service';
@@ -12,8 +12,7 @@ import {TokenService} from './auth/token.service';
  */
 @NgModule({
   imports: [
-    HttpClientModule,
-    LoggerModule.forRoot({level: NgxLoggerLevel.DEBUG}),
+    LoggerModule.forChild(),
   ],
   providers: [
     AuthGuard, AuthService, TokenService, {

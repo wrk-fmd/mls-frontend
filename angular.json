@@ -18,15 +18,14 @@
             "main": "mls/src/main.ts",
             "polyfills": "mls/src/polyfills.ts",
             "tsConfig": "mls/tsconfig.app.json",
-            "aot": false,
+            "aot": true,
             "assets": [
               "mls/src/favicon.ico",
               "mls/src/assets"
             ],
             "styles": [
               "common/src/theme.scss",
-              "common/src/styles.scss",
-              "mls/src/styles.css"
+              "common/src/styles.scss"
             ],
             "scripts": [],
             "es5BrowserSupport": true

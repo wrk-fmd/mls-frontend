@@ -1,58 +1,51 @@
 import {CommonModule} from '@angular/common';
-import {APP_INITIALIZER, NgModule} from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {
-  MatButtonModule,
-  MatFormFieldModule,
-  MatIconModule,
-  MatInputModule,
-  MatListModule,
-  MatSnackBarModule,
-  MatToolbarModule
-} from '@angular/material';
+import {NgModule} from '@angular/core';
+import {ReactiveFormsModule} from '@angular/forms';
+
+import {MatButtonModule} from '@angular/material/button';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatIconModule} from '@angular/material/icon';
+import {MatInputModule} from '@angular/material/input';
+import {MatListModule} from '@angular/material/list';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatToolbarModule} from '@angular/material/toolbar';
+
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
+import {QRCodeModule} from 'angularx-qrcode';
 
-import {AuthApiModule, AuthModule} from 'mls-auth-api';
-import {registerTranslations} from './translations';
-import {UnitTokenConcernsComponent, UnitTokenListComponent, UnitTokenPageComponent} from './components';
+import translationsDe from '../i18n/de';
+import translationsEn from '../i18n/en';
+
 import {AuthRoutingModule} from './auth-routing.module';
-import {QRCodeModule} from "angularx-qrcode";
-
-const imports = [
-  // Angular
-  CommonModule, FormsModule, ReactiveFormsModule,
-  // Angular Material
-  MatButtonModule,
-  MatFormFieldModule,
-  MatIconModule,
-  MatInputModule,
-  MatListModule,
-  MatSnackBarModule,
-  MatToolbarModule,
-  // MLS modules
-  AuthModule,
-  AuthRoutingModule
-];
+import {UnitTokenConcernsComponent, UnitTokenListComponent, UnitTokenPageComponent} from './components';
 
 @NgModule({
   declarations: [
     UnitTokenConcernsComponent, UnitTokenListComponent, UnitTokenPageComponent
   ],
   imports: [
-    ...imports,
+    // Angular
+    CommonModule, ReactiveFormsModule,
+    // Angular Material
+    MatButtonModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    MatListModule,
+    MatSnackBarModule,
+    MatToolbarModule,
+    // Translations
     TranslateModule.forChild(),
+    // QR Codes
     QRCodeModule,
-    AuthApiModule
+    // MLS modules
+    AuthRoutingModule
   ],
-  exports: imports,
-  providers: [
-    {
-      provide: APP_INITIALIZER,
-      useFactory: registerTranslations,
-      deps: [TranslateService],
-      multi: true
-    }
-  ]
+  providers: []
 })
 export class AuthComponentsModule {
+  constructor(translate: TranslateService) {
+    translate.setTranslation('en', translationsEn, true);
+    translate.setTranslation('de', translationsDe, true);
+  }
 }
