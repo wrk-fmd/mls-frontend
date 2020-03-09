@@ -1,0 +1,10 @@
+export { ConcernEndpointService } from './services/concern-endpoint.service';
+export { ContainerEndpointService } from './services/container-endpoint.service';
+export { IncidentEndpointService } from './services/incident-endpoint.service';
+export { TaskEndpointService } from './services/task-endpoint.service';
+export { JournalEndpointService } from './services/journal-endpoint.service';
+export { PatientEndpointService } from './services/patient-endpoint.service';
+export { UnitEndpointService } from './services/unit-endpoint.service';
+export { LoggingEndpointService } from './services/logging-endpoint.service';
+export { PointEndpointService } from './services/point-endpoint.service';
+export { SystemEndpointService } from './services/system-endpoint.service';
