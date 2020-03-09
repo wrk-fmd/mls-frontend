@@ -2,11 +2,11 @@ version: '3.7'
 
 services:
   mls-frontend:
-    image: wrk-fmd/mls-frontend:${MLS_TAG:-latest}
+    image: wrkfmdit/mls-frontend:${MLS_TAG:-latest}
     build:
       context: .
     ports:
-    - 80:8080
+      - 8089:80
 
 networks:
   default:

@@ -12,6 +12,10 @@ RUN npm install
 COPY ./auth-api/ ./auth-api/
 RUN npm run build auth-api
 
+# Add the CoCeSo API library and build it
+COPY ./coceso-api/ ./coceso-api/
+RUN npm run build coceso-api
+
 # Add the STOMP library and build it
 COPY ./stomp/ ./stomp/
 RUN npm run build stomp
@@ -24,12 +28,19 @@ RUN npm run build common
 COPY ./auth-components/ ./auth-components/
 RUN npm run build auth-components
 
-# Add the full source code and build the apps
-COPY ./ ./
+# Add the CoCeSo components library and build it
+COPY ./coceso-components/ ./coceso-components/
+RUN npm run build coceso-components
+
+# Add the application and build it
+COPY ./mls/ ./mls/
 RUN npm run build mls -- --prod
 
 # Second stage: Configure nginx
 FROM nginx:alpine AS runtime
 
-COPY --from=build /app/dist/app/ /app/
+COPY --from=build /app/dist/mls/ /app/
+RUN chmod 644 /app/favicon.ico
+RUN chmod 644 /app/assets/*
+
 COPY nginx.conf /etc/nginx/conf.d/default.conf
