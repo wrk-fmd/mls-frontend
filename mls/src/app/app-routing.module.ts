@@ -6,7 +6,8 @@ import {LoginComponent} from 'mls-common';
 const routes: Routes = [
   {path: 'login', canActivate: [AuthGuard], component: LoginComponent},
   {path: 'tokens', canActivate: [AuthGuard], loadChildren: () => import('mls-auth-components').then(m => m.AuthComponentsModule)},
-  {path: '**', redirectTo: 'tokens'} // TODO Create a proper landing page
+  {path: '', canActivate: [AuthGuard], loadChildren: () => import('mls-coceso-components').then(m => m.CocesoComponentsModule)},
+  {path: '**', redirectTo: ''}
 ];
 
 @NgModule({

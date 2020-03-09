@@ -42,6 +42,18 @@
       ],
       "mls-auth-components/*": [
         "dist/auth-components/*"
+      ],
+      "mls-coceso-api": [
+        "dist/coceso-api"
+      ],
+      "mls-coceso-api/*": [
+        "dist/coceso-api/*"
+      ],
+      "mls-coceso-components": [
+        "dist/coceso-components"
+      ],
+      "mls-coceso-components/*": [
+        "dist/coceso-components/*"
       ]
     }
   }

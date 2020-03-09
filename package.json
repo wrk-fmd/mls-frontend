@@ -2,6 +2,7 @@
   "name": "mls-frontend",
   "version": "3.0.0-SNAPSHOT",
   "scripts": {
+    "install": "ng build auth-api && ng build coceso-api && ng build stomp && ng build common && ng build auth-components && ng build coceso-components",
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
@@ -27,6 +28,8 @@
     "core-js": "^3.6.4",
     "mls-auth-api": "file:auth-api",
     "mls-auth-components": "file:auth-components",
+    "mls-coceso-api": "file:coceso-api",
+    "mls-coceso-components": "file:coceso-components",
     "mls-common": "file:common",
     "mls-stomp": "file:stomp",
     "ngx-logger": "^4.1.2",

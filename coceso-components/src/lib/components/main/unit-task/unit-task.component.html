@@ -1,0 +1,5 @@
+<span [ngClass]="['unit-task', css | async]">
+  <mat-icon *ngIf="icon | async; let icon">{{icon}}</mat-icon>
+  <span *ngIf="type | async as type" translate>incident.type.short.{{type}}</span>
+  <span *ngIf="state | async as state" class="task-state" translate>task.state.{{state}}</span>
+</span>

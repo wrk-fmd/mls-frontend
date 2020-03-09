@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 html {
   height: 100%;
 }
@@ -6,7 +10,10 @@ body {
   height: 100%;
   background-color: #f2f2f2;
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.pre {
+  white-space: pre-wrap;
 }
 
 .bold {
@@ -17,12 +24,44 @@ body {
   font-weight: 600;
 }
 
+.mat-toolbar {
+  &.mat-toolbar-single-row {
+    height: unset;
+    padding: 0.5em 1em;
+  }
+
+  .concern-name:before {
+    content: ': ';
+  }
+
+  ul.nav {
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    flex: 1 1 auto;
+    margin: 0 1em;
+    padding: 0;
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    li {
+      display: inline-block;
+    }
+  }
+}
+
 main {
   padding: 1.5em 1em;
 }
 
 .fill-remaining-space {
   flex: 1 1 auto;
+}
+
+.mat-card {
+  margin-bottom: 1.5em;
 }
 
 .table-scroll {
@@ -32,4 +71,13 @@ main {
 .mat-table {
   display: table !important;
   min-width: 100%;
+}
+
+.mat-button-toggle .mat-button-toggle-button .mat-button-toggle-label-content {
+  line-height: unset;
+  padding: 0.5em;
+}
+
+mat-form-field {
+  width: 100%;
 }

@@ -1,0 +1,154 @@
+<mat-expansion-panel>
+  <mat-expansion-panel-header translate>main.filter</mat-expansion-panel-header>
+
+  <div class="filter-group">
+    <label translate>incident.type.label</label>
+    <mat-checkbox>{{'incident.type.Task' | translate}}</mat-checkbox>
+    <mat-checkbox>{{'incident.type.Transport' | translate}}</mat-checkbox>
+    <mat-checkbox>{{'incident.type.Relocation' | translate}}</mat-checkbox>
+  </div>
+
+  <div class="filter-group">
+    <label translate>incident.blue</label>
+    <mat-checkbox>{{'form.yes' | translate}}</mat-checkbox>
+    <mat-checkbox>{{'form.no' | translate}}</mat-checkbox>
+  </div>
+
+  <div class="filter-group">
+    <label translate>incident.state.label</label>
+    <mat-checkbox>{{'incident.state.Open' | translate}}</mat-checkbox>
+    <mat-checkbox>{{'incident.state.Demand' | translate}}</mat-checkbox>
+    <mat-checkbox>{{'incident.state.Working' | translate}}</mat-checkbox>
+    <mat-checkbox>{{'incident.state.Done' | translate}}</mat-checkbox>
+  </div>
+
+  <div class="filter-group">
+    <label translate>incident.casus</label>
+    <mat-checkbox>{{'form.yes' | translate}}</mat-checkbox>
+    <mat-checkbox>{{'form.no' | translate}}</mat-checkbox>
+  </div>
+
+  <div class="filter-group">
+    <label translate>incident.patient</label>
+    <mat-checkbox>{{'form.yes' | translate}}</mat-checkbox>
+    <mat-checkbox>{{'form.no' | translate}}</mat-checkbox>
+  </div>
+
+  <!--  <div class="form-group" data-bind="visible: (disableFilter.type !== true)">-->
+  <!--    <label><spring:message code="incident.type"/>:</label>-->
+  <!--    <div class="clearfix">-->
+  <!--      <div class="checkbox-inline">-->
+  <!--        <label>-->
+  <!--          <input type="checkbox" data-bind="value: constants.type.task, checked: filter.type"/>-->
+  <!--          <spring:message code="incident.type.task"/>-->
+  <!--        </label>-->
+  <!--      </div>-->
+  <!--      <div class="checkbox-inline">-->
+  <!--        <label>-->
+  <!--          <input type="checkbox" data-bind="value: constants.type.transport, checked: filter.type"/>-->
+  <!--          <spring:message code="incident.type.transport"/>-->
+  <!--        </label>-->
+  <!--      </div>-->
+  <!--      <div class="checkbox-inline">-->
+  <!--        <label>-->
+  <!--          <input type="checkbox" data-bind="value: constants.type.relocation, checked: filter.type"/>-->
+  <!--          <spring:message code="incident.type.relocation"/>-->
+  <!--        </label>-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--  </div>-->
+
+  <!--  <div class="form-group" data-bind="visible: (disableFilter.blue !== true)">-->
+  <!--    <label><spring:message code="incident.blue"/>:</label>-->
+  <!--    <div class="clearfix">-->
+  <!--      <div class="checkbox-inline">-->
+  <!--        <label>-->
+  <!--          <input type="checkbox" value="true" data-bind="checked: filter.blue"/>-->
+  <!--          <spring:message code="yes"/>-->
+  <!--        </label>-->
+  <!--      </div>-->
+  <!--      <div class="checkbox-inline">-->
+  <!--        <label>-->
+  <!--          <input type="checkbox" value="false" data-bind="checked: filter.blue"/>-->
+  <!--          <spring:message code="no"/>-->
+  <!--        </label>-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--  </div>-->
+
+  <!--  <div class="form-group" data-bind="visible: (disableFilter.state !== true)">-->
+  <!--    <label><spring:message code="incident.state"/>:</label>-->
+  <!--    <div class="clearfix">-->
+  <!--      <div class="checkbox-inline" data-bind="visible: (!disableFilter.state || disableFilter.state.open !== true)">-->
+  <!--        <label>-->
+  <!--          <input type="checkbox" data-bind="value: constants.state.open, checked: filter.state"/>-->
+  <!--          <spring:message code="incident.state.open"/>-->
+  <!--        </label>-->
+  <!--      </div>-->
+  <!--      <div class="checkbox-inline" data-bind="visible: (!disableFilter.state || disableFilter.state.demand !== true)">-->
+  <!--        <label>-->
+  <!--          <input type="checkbox" data-bind="value: constants.state.demand, checked: filter.state"/>-->
+  <!--          <spring:message code="incident.state.demand"/>-->
+  <!--        </label>-->
+  <!--      </div>-->
+  <!--      <div class="checkbox-inline" data-bind="visible: (!disableFilter.state || disableFilter.state.inprogress !== true)">-->
+  <!--        <label>-->
+  <!--          <input type="checkbox" data-bind="value: constants.state.inprogress, checked: filter.state"/>-->
+  <!--          <spring:message code="incident.state.inprogress"/>-->
+  <!--        </label>-->
+  <!--      </div>-->
+  <!--      <div class="checkbox-inline" data-bind="visible: (!disableFilter.state || disableFilter.state.done !== true)">-->
+  <!--        <label>-->
+  <!--          <input type="checkbox" data-bind="value: constants.state.done, checked: filter.state"/>-->
+  <!--          <spring:message code="incident.state.done"/>-->
+  <!--        </label>-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--  </div>-->
+
+  <!--  <div class="form-group" data-bind="visible: (disableFilter.patient !== true)">-->
+  <!--    <label><spring:message code="incident.casus"/>:</label>-->
+  <!--    <div class="clearfix">-->
+  <!--      <div class="checkbox-inline">-->
+  <!--        <label>-->
+  <!--          <input type="checkbox" value="true" data-bind="checked: filter.isCasusNrSet"/>-->
+  <!--          <spring:message code="yes"/>-->
+  <!--        </label>-->
+  <!--      </div>-->
+  <!--      <div class="checkbox-inline">-->
+  <!--        <label>-->
+  <!--          <input type="checkbox" value="false" data-bind="checked: filter.isCasusNrSet"/>-->
+  <!--          <spring:message code="no"/>-->
+  <!--        </label>-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--  </div>-->
+
+  <!--  <div class="form-group" data-bind="visible: (disableFilter.patient !== true)">-->
+  <!--    <label><spring:message code="patient"/>:</label>-->
+  <!--    <div class="clearfix">-->
+  <!--      <div class="checkbox-inline">-->
+  <!--        <label>-->
+  <!--          <input type="checkbox" value="true" data-bind="checked: filter.hasPatientAssigned"/>-->
+  <!--          <spring:message code="yes"/>-->
+  <!--        </label>-->
+  <!--      </div>-->
+  <!--      <div class="checkbox-inline">-->
+  <!--        <label>-->
+  <!--          <input type="checkbox" value="false" data-bind="checked: filter.hasPatientAssigned"/>-->
+  <!--          <spring:message code="no"/>-->
+  <!--        </label>-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--  </div>-->
+  <!--  </div>-->
+</mat-expansion-panel>
+
+<mat-accordion>
+  <mat-expansion-panel *ngFor="let incident of incidents | async">
+    <mat-expansion-panel-header>
+      <coceso-main-incident-title [incident]="incident"></coceso-main-incident-title>
+    </mat-expansion-panel-header>
+    <coceso-main-incident-data [incident]="incident"></coceso-main-incident-data>
+  </mat-expansion-panel>
+</mat-accordion>

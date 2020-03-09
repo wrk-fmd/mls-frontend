@@ -1,0 +1,16 @@
+.incident-data-list {
+  dt {
+    width: 100px;
+    float: left;
+    clear: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: bold;
+  }
+
+  dd {
+    margin-left: 120px;
+    margin-bottom: 8px;
+  }
+}

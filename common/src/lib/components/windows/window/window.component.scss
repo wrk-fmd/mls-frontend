@@ -1,0 +1,43 @@
+.dialog-window {
+  .mat-dialog-container {
+    padding: 0;
+  }
+
+  .cdk-drag-handle {
+    cursor: move;
+  }
+
+  .dialog-window-title {
+    display: flex;
+    align-items: center;
+    padding: .25em .5em;
+    border-bottom: 1px solid #cbcbcb;
+
+    .mat-dialog-title {
+      flex: 1 1 auto;
+      margin: 0 .5em 0 0;
+      line-height: 24px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .dialog-window-close {
+      width: 24px;
+      height: 24px;
+      line-height: 24px;
+
+      .mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+        line-height: 18px;
+      }
+    }
+  }
+
+  .mat-dialog-content, .mat-dialog-actions {
+    min-height: 0;
+    padding: .5em;
+    margin: 0;
+  }
+}

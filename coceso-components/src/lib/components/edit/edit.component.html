@@ -1,0 +1,18 @@
+<mat-toolbar color="primary">
+  <h2 translate>coceso.header</h2>
+  <h3 class="concern-name" *ngIf="concern | async as concern">{{concern.name}}</h3>
+
+  <ul class="nav">
+    <li><a mat-button routerLink="../main">{{'concern.links.main' | translate}}</a></li>
+    <li><a mat-button routerLink="..">{{'concern.links.overview' | translate}}</a></li>
+  </ul>
+</mat-toolbar>
+
+<mat-tab-group [selectedIndex]="1">
+  <mat-tab [label]="'concern.edit.header' | translate">
+    <mls-concern-edit></mls-concern-edit>
+  </mat-tab>
+  <mat-tab [label]="'concern.edit.units' | translate">
+    <mls-units-edit></mls-units-edit>
+  </mat-tab>
+</mat-tab-group>

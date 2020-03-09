@@ -1,0 +1,33 @@
+<dl class="incident-data-list">
+  <ng-container *ngIf="showBo()">
+    <dt translate>incident.bo</dt>
+    <dd><span class="pre">{{incident.bo.info}}</span></dd>
+  </ng-container>
+
+  <ng-container *ngIf="showAo()">
+    <dt translate>incident.ao</dt>
+    <dd><span class="pre">{{incident.ao.info}}</span></dd>
+  </ng-container>
+
+  <ng-container *ngIf="incident.info">
+    <dt translate>incident.info</dt>
+    <dd><span class="pre">{{incident.info}}</span></dd>
+  </ng-container>
+
+  <dt translate>incident.state.label</dt>
+  <dd translate>incident.state.{{incident.state}}</dd>
+
+  <ng-container *ngFor="let task of incident.units">
+    <dt>{{unitCall(task) | async}}</dt>
+    <dd>
+      <span translate>task.state.{{task.state}}</span>
+      <button mat-button (click)="nextState(task)">TODO icon next</button>
+    </dd>
+  </ng-container>
+</dl>
+
+<p>
+  <button mat-button (click)="openForm()">main.incident.list.openForm</button>
+  <button mat-button (click)="addJournalEntry()">main.incident.list.addLog</button>
+  <button mat-button (click)="openJournal()">main.incident.list.openDashboard</button>
+</p>

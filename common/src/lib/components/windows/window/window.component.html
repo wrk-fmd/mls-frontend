@@ -1,0 +1,24 @@
+<div cdkDrag cdkDragRootElement=".dialog-window" cdkDragBoundary=".window-area" (mousedown)="focused.emit()">
+  <div class="dialog-window-title">
+    <h2 mat-dialog-title cdkDragHandle>{{windowTitle | async}}</h2>
+
+    <button mat-icon-button class="dialog-window-close" [mat-dialog-close]="true" tabindex="-1">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <mat-dialog-content class="mat-typography">
+    <div [cdkPortalOutlet]="content" (attached)="setComponent($event)"></div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions *ngIf="actions | async" align="end">
+    <ng-container *ngFor="let button of actions | async">
+      <button *ngIf="button.filled" mat-flat-button [color]="button.color" [disabled]="button.disabled" (click)="button.action()">
+        {{button.label}}
+      </button>
+      <button *ngIf="!button.filled" mat-stroked-button [color]="button.color" [disabled]="button.disabled" (click)="button.action()">
+        {{button.label}}
+      </button>
+    </ng-container>
+  </mat-dialog-actions>
+</div>

@@ -1,7 +1,9 @@
 export default {
   form: {
     cancel: 'Abbrechen',
-    ok: 'OK'
+    ok: 'OK',
+    no: 'Nein',
+    yes: 'Ja'
   },
   login: {
     username: 'Username',

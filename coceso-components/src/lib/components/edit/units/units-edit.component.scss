@@ -1,0 +1,29 @@
+.mat-table {
+  tr.mat-header-row {
+    height: initial;
+  }
+
+  th, td {
+    padding: 0.25em 0.5em;
+    vertical-align: top;
+  }
+
+  ::ng-deep .mat-form-field {
+    .mat-form-field-wrapper {
+      margin-top: 0.2em;
+      margin-bottom: -1.115em;
+    }
+
+    .mat-form-field-flex {
+      padding-top: 0;
+    }
+
+    .mat-form-field-infix {
+      border: 0;
+    }
+
+    textarea {
+      min-height: 3.858em;
+    }
+  }
+}

@@ -1,0 +1,154 @@
+<mat-toolbar color="primary">
+  <h2 translate>main.nav.header</h2>
+
+  <ul class="nav">
+    <!-- Units -->
+    <li>
+      <button mat-button [matMenuTriggerFor]="unitMenu">
+        <span translate>main.nav.units.header</span>
+        <mat-icon>arrow_drop_down</mat-icon>
+      </button>
+
+      <mat-menu #unitMenu="matMenu">
+        <button mat-menu-item (click)="showUnits()">
+          <mat-icon>assignment</mat-icon>
+          <span translate>main.nav.units.overview</span>
+        </button>
+
+        <button mat-menu-item (click)="showUnitsHierarchy()">
+          <mat-icon>assignment</mat-icon>
+          <span translate>main.nav.units.hierarchy</span>
+        </button>
+
+        <button mat-menu-item (click)="showUnitsAlarm()">
+          <mat-icon>assignment</mat-icon>
+          <span translate>main.nav.units.alarm</span>
+        </button>
+
+        <button mat-menu-item (click)="showUnitsAvailable()">
+          <mat-icon>assignment</mat-icon>
+          <span translate>main.nav.units.available</span>
+        </button>
+
+        <button mat-menu-item (click)="showUnitsFree()">
+          <mat-icon>assignment</mat-icon>
+          <span translate>main.nav.units.free</span>
+        </button>
+      </mat-menu>
+    </li>
+
+    <!-- Incidents -->
+    <li>
+      <button mat-button [matMenuTriggerFor]="incidentMenu">
+        <span translate>main.nav.incidents.header</span>
+        <mat-icon>arrow_drop_down</mat-icon>
+      </button>
+
+      <mat-menu #incidentMenu="matMenu">
+        <button mat-menu-item (click)="createIncident()">
+          <mat-icon>add</mat-icon>
+          <span translate>main.nav.incidents.createIncident</span>
+        </button>
+
+        <button mat-menu-item (click)="createRelocation()">
+          <mat-icon>send</mat-icon>
+          <span translate>main.nav.incidents.createRelocation</span>
+        </button>
+
+        <mat-divider></mat-divider>
+
+        <button mat-menu-item (click)="showAllIncidents()">
+          <mat-icon>list</mat-icon>
+          <span translate>main.nav.incidents.showAll</span>
+        </button>
+
+        <button mat-menu-item (click)="showActiveIncidents()">
+          <mat-icon>list</mat-icon>
+          <span translate>main.nav.incidents.showActive</span>
+        </button>
+
+        <button mat-menu-item (click)="showDoneIncidents()">
+          <mat-icon>list</mat-icon>
+          <span translate>main.nav.incidents.showDone</span>
+        </button>
+      </mat-menu>
+    </li>
+
+    <!-- Windows -->
+    <li>
+      <button mat-button [matMenuTriggerFor]="windowMenu">
+        <span translate>main.nav.windows.header</span>
+        <mat-icon>arrow_drop_down</mat-icon>
+      </button>
+
+      <mat-menu #windowMenu="matMenu">
+        <button mat-menu-item (click)="showCustomJournal()">
+          <mat-icon>info</mat-icon>
+          <span translate>main.nav.windows.showCustomJournal</span>
+        </button>
+
+        <button mat-menu-item (click)="addJournalEntry()">
+          <mat-icon>note_add</mat-icon>
+          <span translate>main.nav.windows.addJournalEntry</span>
+        </button>
+
+        <button mat-menu-item (click)="showPatients()">
+          <mat-icon>person</mat-icon>
+          <span translate>main.nav.windows.showPatients</span>
+        </button>
+
+        <button mat-menu-item (click)="showRadioCalls()">
+          <mat-icon>call</mat-icon>
+          <span translate>main.nav.windows.showRadioCalls</span>
+        </button>
+
+        <mat-divider></mat-divider>
+
+        <a mat-menu-item routerLink="../edit" target="_blank">
+          <mat-icon>launch</mat-icon>
+          <span translate>main.nav.windows.edit</span>
+        </a>
+
+        <a mat-menu-item routerLink="../dashboard" target="_blank">
+          <mat-icon>launch</mat-icon>
+          <span translate>main.nav.windows.dashboard</span>
+        </a>
+
+        <mat-divider></mat-divider>
+
+        <button mat-menu-item (click)="showJournal()">
+          <mat-icon>info</mat-icon>
+          <span translate>main.nav.windows.showJournal</span>
+        </button>
+      </mat-menu>
+    </li>
+
+    <li *ngIf="sections | async as sections">
+      <button mat-button [matMenuTriggerFor]="filterMenu">
+        <span translate>main.nav.filter.header</span>
+        <mat-icon>arrow_drop_down</mat-icon>
+      </button>
+
+      <mat-menu #filterMenu="matMenu">
+        <button mat-menu-item (click)="setSection(null)" [ngClass]="{'mat-menu-item-highlighted': !activeSection}">
+          <mat-icon>not_interested</mat-icon>
+          <span translate>main.nav.filter.none</span>
+        </button>
+
+        <button mat-menu-item *ngFor="let section of sections" (click)="setSection(section)"
+                [ngClass]="{'mat-menu-item-highlighted': activeSection === section}">
+          <mat-icon>filter</mat-icon>
+          <span>{{section}}</span>
+        </button>
+      </mat-menu>
+    </li>
+
+    <li>
+      <a mat-button routerLink="..">
+        <span translate>main.nav.quit</span>
+      </a>
+    </li>
+  </ul>
+</mat-toolbar>
+
+<window-manager></window-manager>

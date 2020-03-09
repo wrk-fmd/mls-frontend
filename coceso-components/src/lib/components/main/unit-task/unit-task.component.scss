@@ -1,0 +1,40 @@
+.unit-task {
+  padding: 5px;
+  display: inline-block;
+
+  .mat-icon {
+    font-size: 16px;
+    vertical-align: top;
+    height: unset;
+    width: unset;
+  }
+
+  .task-state:not(:first-child):before {
+    content: ': ';
+  }
+
+  &.unit-task-Task {
+    background-color: #9999ff;
+  }
+
+  &.unit-task-TaskBlue {
+    background-color: #0064cd;
+    color: #ffffff;
+  }
+
+  &.unit-task-Relocation {
+    background-color: #cc99ff;
+  }
+
+  &.unit-task-HoldPosition {
+    background-color: #d83cff;
+  }
+
+  &.unit-task-ToHome {
+    background-color: #99ff99;
+  }
+
+  &.unit-task-Standby {
+    background-color: #ffb66c;
+  }
+}

@@ -1,0 +1,11 @@
+<main class="window-area" #winmanContainer></main>
+
+<footer>
+  <ul class="taskbar">
+    <li *ngFor="let window of windows">
+      <button mat-raised-button (click)="focus(window)" [color]="window === focused ? 'primary' : null">
+        {{window.componentInstance.taskTitle | async}}
+      </button>
+    </li>
+  </ul>
+</footer>
