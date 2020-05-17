@@ -2,7 +2,7 @@ import {Component, Input} from '@angular/core';
 
 import {IncidentDto, IncidentTypeDto, TaskDto, TaskStateDto} from 'mls-coceso-api';
 
-import {BehaviorSubject, Observable, Subject} from 'rxjs';
+import {BehaviorSubject, Observable, of, Subject} from 'rxjs';
 import {map, switchMap} from 'rxjs/operators';
 
 import {IncidentHelper} from '../../../helpers/incident.helper';
@@ -30,7 +30,7 @@ export class UnitTaskComponent {
   }
 
   private loadOptions(task: TaskDto): Observable<TaskDisplayOptions> {
-    return task ? this.incidentService.getById(task.incident).pipe(map(i => this.buildOptions(task, i))) : null;
+    return task ? this.incidentService.getById(task.incident).pipe(map(i => this.buildOptions(task, i))) : of(null);
   }
 
   private buildOptions(task: TaskDto, incident: IncidentDto): TaskDisplayOptions {

@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 import {IncidentDto, IncidentTypeDto, PointDto, TaskDto, TaskStateDto} from 'mls-coceso-api';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {ClockService} from '../services/clock.service';
 
@@ -72,7 +72,7 @@ export class IncidentHelper {
 
   timer(incident: IncidentDto): Observable<TimerData> {
     if (!incident || incident.closed) {
-      return null;
+      return of(null);
     }
 
     return this.clockService.elapsedMinutes(incident.stateChange).pipe(map(elapsed => this.timerData(incident, elapsed)));
