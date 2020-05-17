@@ -2,6 +2,9 @@
   "$schema": "../node_modules/ng-packagr/ng-package.schema.json",
   "dest": "../dist/coceso-api",
   "lib": {
-    "entryFile": "src/public-api.ts"
+    "entryFile": "src/public-api.ts",
+    "umdModuleIds": {
+      "mls-coceso-api": "mls-coceso-api"
+    }
   }
 }

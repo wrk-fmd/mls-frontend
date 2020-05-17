@@ -2,6 +2,11 @@
   "$schema": "../node_modules/ng-packagr/ng-package.schema.json",
   "dest": "../dist/auth-components",
   "lib": {
-    "entryFile": "src/public-api.ts"
+    "entryFile": "src/public-api.ts",
+    "umdModuleIds": {
+      "@ngx-translate/core": "ngx-translate",
+      "angularx-qrcode": "angularx-qrcode",
+      "mls-auth-api": "mls-auth-api"
+    }
   }
 }
