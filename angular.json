@@ -25,7 +25,8 @@
             ],
             "styles": [
               "common/src/theme.scss",
-              "common/src/styles.scss"
+              "common/src/styles.scss",
+              "coceso-components/src/styles.scss"
             ],
             "scripts": [],
             "es5BrowserSupport": true

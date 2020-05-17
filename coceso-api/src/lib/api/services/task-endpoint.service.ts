@@ -7,6 +7,7 @@ import { StrictHttpResponse as __StrictHttpResponse } from '../strict-http-respo
 import { Observable as __Observable } from 'rxjs';
 import { map as __map, filter as __filter } from 'rxjs/operators';
 
+import { TaskUpdateDto } from '../models/task-update-dto';
 
 /**
  * Task Endpoint
@@ -78,9 +79,9 @@ class TaskEndpointService extends __BaseService {
    *
    * - `unit`: unit
    *
-   * - `state`: state
-   *
    * - `incident`: incident
+   *
+   * - `data`: data
    *
    * - `concern`: concern
    */
@@ -89,8 +90,8 @@ class TaskEndpointService extends __BaseService {
     let __headers = new HttpHeaders();
     let __body: any = null;
 
-    __body = params.state;
 
+    __body = params.data;
 
     let req = new HttpRequest<any>(
       'PUT',
@@ -114,9 +115,9 @@ class TaskEndpointService extends __BaseService {
    *
    * - `unit`: unit
    *
-   * - `state`: state
-   *
    * - `incident`: incident
+   *
+   * - `data`: data
    *
    * - `concern`: concern
    */
@@ -161,14 +162,14 @@ module TaskEndpointService {
     unit: number;
 
     /**
-     * state
-     */
-    state: 'Assigned' | 'ZBO' | 'ABO' | 'ZAO' | 'AAO' | 'Detached';
-
-    /**
      * incident
      */
     incident: number;
+
+    /**
+     * data
+     */
+    data: TaskUpdateDto;
 
     /**
      * concern

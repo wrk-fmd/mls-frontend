@@ -6,6 +6,4 @@ export interface UnitBatchCreateDto {
   home?: PointDto;
   portable?: boolean;
   to?: number;
-  transportVehicle?: boolean;
-  withDoc?: boolean;
 }

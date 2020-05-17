@@ -6,9 +6,9 @@ export interface IncidentCreateDto {
   bo?: PointDto;
   caller?: string;
   casusNr?: string;
+  closed?: 'Open' | 'Closed' | 'Cancelled' | 'NoPatient' | 'NoTransport';
   info?: string;
   priority?: boolean;
   section?: string;
-  state?: 'Open' | 'Demand' | 'InProgress' | 'Done';
-  type?: 'HoldPosition' | 'Standby' | 'Relocation' | 'ToHome' | 'Task' | 'Transport';
+  type?: 'Standby' | 'ToHome' | 'Position' | 'Task' | 'Transport';
 }

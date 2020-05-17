@@ -1,6 +1,6 @@
 /* tslint:disable */
 export interface ContainerCreateDto {
+  index?: number;
   name?: string;
-  ordering?: number;
   parent?: number;
 }

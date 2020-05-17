@@ -12,6 +12,7 @@ import { PatientEndpointService } from './services/patient-endpoint.service';
 import { UnitEndpointService } from './services/unit-endpoint.service';
 import { LoggingEndpointService } from './services/logging-endpoint.service';
 import { PointEndpointService } from './services/point-endpoint.service';
+import { StaffEndpointService } from './services/staff-endpoint.service';
 import { SystemEndpointService } from './services/system-endpoint.service';
 
 /**
@@ -36,6 +37,7 @@ import { SystemEndpointService } from './services/system-endpoint.service';
     UnitEndpointService,
     LoggingEndpointService,
     PointEndpointService,
+    StaffEndpointService,
     SystemEndpointService
   ],
 })

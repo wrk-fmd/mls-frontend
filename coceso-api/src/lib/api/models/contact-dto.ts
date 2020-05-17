@@ -1,5 +1,5 @@
 /* tslint:disable */
 export interface ContactDto {
-  contact?: string;
+  data?: string;
   type?: string;
 }

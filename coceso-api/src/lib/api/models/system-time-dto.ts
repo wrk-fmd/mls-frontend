@@ -1,4 +1,4 @@
 /* tslint:disable */
 export interface SystemTimeDto {
-  time?: string;
+  time?: number;
 }

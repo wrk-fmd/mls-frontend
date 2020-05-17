@@ -1,7 +1,4 @@
 /* tslint:disable */
-export interface TaskDto {
-  incident?: number;
+export interface TaskUpdateDto {
   state?: 'Assigned' | 'ZBO' | 'ABO' | 'ZAO' | 'AAO' | 'Detached';
-  unit?: number;
-  updated?: number;
 }

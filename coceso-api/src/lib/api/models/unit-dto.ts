@@ -16,7 +16,5 @@ export interface UnitDto {
   position?: PointDto;
   section?: string;
   state?: 'OFF_DUTY' | 'READY' | 'NOT_READY';
-  transportVehicle?: boolean;
-  type?: 'Portable' | 'Triage' | 'Treatment' | 'Postprocessing' | 'Info' | 'Officer';
-  withDoc?: boolean;
+  types?: Array<'Portable' | 'Triage' | 'Treatment' | 'Postprocessing' | 'Info' | 'Officer'>;
 }

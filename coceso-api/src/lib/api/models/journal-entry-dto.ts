@@ -1,13 +1,13 @@
 /* tslint:disable */
-import { ChangesDto } from './changes-dto';
+import { ChangeDto } from './change-dto';
 export interface JournalEntryDto {
-  changes?: ChangesDto;
+  changes?: Array<ChangeDto>;
   id?: number;
   incident?: number;
   patient?: number;
   state?: 'Assigned' | 'ZBO' | 'ABO' | 'ZAO' | 'AAO' | 'Detached';
   text?: string;
-  timestamp?: string;
+  timestamp?: number;
   type?: string;
   unit?: number;
   username?: string;

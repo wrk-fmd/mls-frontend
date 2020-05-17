@@ -8,7 +8,5 @@ export interface UnitCreateDto {
   info?: string;
   portable?: boolean;
   section?: string;
-  transportVehicle?: boolean;
-  type?: 'Portable' | 'Triage' | 'Treatment' | 'Postprocessing' | 'Info' | 'Officer';
-  withDoc?: boolean;
+  types?: Array<'Portable' | 'Triage' | 'Treatment' | 'Postprocessing' | 'Info' | 'Officer'>;
 }

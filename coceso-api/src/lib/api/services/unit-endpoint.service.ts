@@ -569,7 +569,7 @@ module UnitEndpointService {
     /**
      * member
      */
-    member: string;
+    member: number;
 
     /**
      * concern
@@ -590,7 +590,7 @@ module UnitEndpointService {
     /**
      * member
      */
-    member: string;
+    member: number;
 
     /**
      * concern

@@ -10,6 +10,7 @@ import { map as __map, filter as __filter } from 'rxjs/operators';
 import { ContainerDto } from '../models/container-dto';
 import { ContainerCreateDto } from '../models/container-create-dto';
 import { ContainerUpdateDto } from '../models/container-update-dto';
+import { ContainerUnitDto } from '../models/container-unit-dto';
 
 /**
  * Container Endpoint
@@ -207,7 +208,7 @@ class ContainerEndpointService extends __BaseService {
    *
    * - `unit`: unit
    *
-   * - `ordering`: ordering
+   * - `data`: data
    *
    * - `container`: container
    *
@@ -218,7 +219,7 @@ class ContainerEndpointService extends __BaseService {
     let __headers = new HttpHeaders();
     let __body: any = null;
 
-    __body = params.ordering;
+    __body = params.data;
 
 
     let req = new HttpRequest<any>(
@@ -243,7 +244,7 @@ class ContainerEndpointService extends __BaseService {
    *
    * - `unit`: unit
    *
-   * - `ordering`: ordering
+   * - `data`: data
    *
    * - `container`: container
    *
@@ -335,7 +336,7 @@ module ContainerEndpointService {
     /**
      * container
      */
-    container: string;
+    container: number;
 
     /**
      * concern
@@ -351,7 +352,7 @@ module ContainerEndpointService {
     /**
      * container
      */
-    container: string;
+    container: number;
 
     /**
      * concern
@@ -370,14 +371,14 @@ module ContainerEndpointService {
     unit: number;
 
     /**
-     * ordering
+     * data
      */
-    ordering: number;
+    data: ContainerUnitDto;
 
     /**
      * container
      */
-    container: string;
+    container: number;
 
     /**
      * concern
@@ -398,7 +399,7 @@ module ContainerEndpointService {
     /**
      * container
      */
-    container: string;
+    container: number;
 
     /**
      * concern

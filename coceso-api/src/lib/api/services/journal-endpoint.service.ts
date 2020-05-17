@@ -18,7 +18,7 @@ import { CustomJournalEntryDto } from '../models/custom-journal-entry-dto';
 })
 class JournalEndpointService extends __BaseService {
   static readonly getCustomJournalEntriesPath = '/concerns/{concern}/journal';
-  static readonly addCustomJornalEntryPath = '/concerns/{concern}/journal';
+  static readonly addCustomJournalEntryPath = '/concerns/{concern}/journal';
   static readonly getJournalByIncidentPath = '/concerns/{concern}/journal/incidents/{incident}';
   static readonly getLastJournalEntriesPath = '/concerns/{concern}/journal/last/{limit}';
   static readonly getJournalByUnitPath = '/concerns/{concern}/journal/units/{unit}';
@@ -67,13 +67,13 @@ class JournalEndpointService extends __BaseService {
   }
 
   /**
-   * @param params The `JournalEndpointService.AddCustomJornalEntryParams` containing the following parameters:
+   * @param params The `JournalEndpointService.AddCustomJournalEntryParams` containing the following parameters:
    *
    * - `data`: data
    *
    * - `concern`: concern
    */
-  addCustomJornalEntryResponse(params: JournalEndpointService.AddCustomJornalEntryParams): __Observable<__StrictHttpResponse<null>> {
+  addCustomJournalEntryResponse(params: JournalEndpointService.AddCustomJournalEntryParams): __Observable<__StrictHttpResponse<null>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
@@ -97,14 +97,14 @@ class JournalEndpointService extends __BaseService {
     );
   }
   /**
-   * @param params The `JournalEndpointService.AddCustomJornalEntryParams` containing the following parameters:
+   * @param params The `JournalEndpointService.AddCustomJournalEntryParams` containing the following parameters:
    *
    * - `data`: data
    *
    * - `concern`: concern
    */
-  addCustomJornalEntry(params: JournalEndpointService.AddCustomJornalEntryParams): __Observable<null> {
-    return this.addCustomJornalEntryResponse(params).pipe(
+  addCustomJournalEntry(params: JournalEndpointService.AddCustomJournalEntryParams): __Observable<null> {
+    return this.addCustomJournalEntryResponse(params).pipe(
       __map(_r => _r.body as null)
     );
   }
@@ -264,9 +264,9 @@ class JournalEndpointService extends __BaseService {
 module JournalEndpointService {
 
   /**
-   * Parameters for addCustomJornalEntry
+   * Parameters for addCustomJournalEntry
    */
-  export interface AddCustomJornalEntryParams {
+  export interface AddCustomJournalEntryParams {
 
     /**
      * data

@@ -1,9 +1,8 @@
 /* tslint:disable */
 import { ContactDto } from './contact-dto';
-export interface StaffMemberDto {
+export interface StaffMemberUpdateDto {
   contacts?: Array<ContactDto>;
   firstname?: string;
-  id?: number;
   info?: string;
   lastname?: string;
   personnelId?: Array<number>;

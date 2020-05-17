@@ -1,8 +1,9 @@
 /* tslint:disable */
 export interface ContainerDto {
+  children?: Array<number>;
+  concern?: number;
   id?: number;
   name?: string;
-  ordering?: number;
   parent?: number;
-  units?: {[key: string]: number};
+  units?: Array<number>;
 }
