@@ -1,16 +1,15 @@
 import {CdkDragDrop, CdkDropList} from '@angular/cdk/drag-drop';
 import {AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, ViewChild} from '@angular/core';
-import {FormGroup, Validators} from '@angular/forms';
+import {Validators} from '@angular/forms';
 
 import {ContainerDto} from 'mls-coceso-api';
-import {TrackingFormBuilder, TrackingFormControl} from 'mls-common';
+import {NotificationService, TrackingFormBuilder, TrackingFormGroup} from 'mls-common';
 
-import {BehaviorSubject, Observable} from 'rxjs';
-import {switchMap} from 'rxjs/operators';
+import {BehaviorSubject, Observable, Subscription} from 'rxjs';
+import {switchMap, tap} from 'rxjs/operators';
 
 import {ContainerDataService} from '../../../services/container.data.service';
 import {DropListService} from '../../../services/drop-list.service';
-import {ContainerEditRootComponent} from '../container-root/container-root.component';
 
 @Component({
   selector: 'mls-container-edit-child',
@@ -19,13 +18,12 @@ import {ContainerEditRootComponent} from '../container-root/container-root.compo
 })
 export class ContainerEditChildComponent implements AfterViewInit, OnDestroy {
 
-  readonly form: FormGroup;
+  readonly form: TrackingFormGroup;
   editing: boolean;
 
   private readonly _id = new BehaviorSubject<number>(null);
   readonly container: Observable<ContainerDto>;
-
-  @Input() rootComponent: ContainerEditRootComponent;
+  readonly containerSubscription: Subscription;
 
   @Input() set containerId(id: number) {
     this._id.next(id);
@@ -39,17 +37,19 @@ export class ContainerEditChildComponent implements AfterViewInit, OnDestroy {
 
   @ViewChild('nameInput') nameInput: HTMLInputElement;
 
-  constructor(private readonly containerService: ContainerDataService, private readonly dropListService: DropListService,
-              private readonly cdr: ChangeDetectorRef, fb: TrackingFormBuilder) {
+  constructor(private readonly containerService: ContainerDataService, private readonly notificationService: NotificationService,
+              private readonly dropListService: DropListService, private readonly cdr: ChangeDetectorRef, fb: TrackingFormBuilder) {
     this.container = this._id.pipe(switchMap(id => this.containerService.getById(id)));
 
     this.unitLists = dropListService.getLists('container-units');
     this.childrenLists = dropListService.getLists('container-children');
 
     this.form = fb.group({
-      name: ['', [Validators.required, Validators.maxLength(100)]]
+      name: ['', [Validators.required, Validators.maxLength(60)]]
     });
-    this.container.subscribe(c => (this.form.controls.name as TrackingFormControl).setServerValue(c ? c.name : null));
+    this.containerSubscription = this.container.subscribe(c => this.form.setServerValue({
+      name: c ? c.name : ''
+    }));
   }
 
   @ViewChild('unitList') set unitList(list: CdkDropList) {
@@ -76,6 +76,7 @@ export class ContainerEditChildComponent implements AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     this.dropListService.removeList('container-units', this._unitList);
     this.dropListService.removeList('container-children', this._childrenList);
+    this.containerSubscription.unsubscribe();
   }
 
   editName() {
@@ -84,11 +85,16 @@ export class ContainerEditChildComponent implements AfterViewInit, OnDestroy {
   }
 
   submitName() {
+    if (this.form.invalid || this.form.pristine) {
+      this.editing = false;
+      return;
+    }
+
     this.containerService.updateContainer(this._id.value, {
       name: this.form.value.name
-    }).subscribe(console.log);
-
-    this.editing = false;
+    }).pipe(
+        tap(() => this.editing = false)
+    ).subscribe(this.notificationService.onError('container.update.error'));
   }
 
   createContainer() {
@@ -96,11 +102,13 @@ export class ContainerEditChildComponent implements AfterViewInit, OnDestroy {
       name: 'New container',
       parent: this._id.value
     };
-    this.containerService.createContainer(data).subscribe(() => console.log('done'));
+    this.containerService.createContainer(data)
+        .subscribe(this.notificationService.onError('container.create.error'));
   }
 
   deleteContainer() {
-    this.containerService.deleteContainer(this._id.value).subscribe(() => console.log('done'));
+    this.containerService.deleteContainer(this._id.value)
+        .subscribe(this.notificationService.onError('container.delete.error'));
   }
 
   dropUnit(event: CdkDragDrop<any>) {

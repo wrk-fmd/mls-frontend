@@ -8,7 +8,8 @@
       <div class="container-name" *ngIf="!editing" (click)="this.editName()">{{container.name}}</div>
       <form *ngIf="editing" [formGroup]="form" (submit)="submitName()">
         <mat-form-field>
-          <input matInput formControlName="name" (blur)="submitName()" #nameInput>
+          <!--suppress HtmlFormInputWithoutLabel -->
+          <input matInput formControlName="name" maxLength="60" (blur)="submitName()" #nameInput>
         </mat-form-field>
       </form>
 
