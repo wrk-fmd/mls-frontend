@@ -1,0 +1,14 @@
+﻿<mat-form-field appearance="outline">
+  <mat-label translate>{{label}}</mat-label>
+  <!--suppress HtmlFormInputWithoutLabel -->
+  <input matInput [type]="type" [formControl]="control" [autocomplete]="autocomplete"
+         [required]="required" [minlength]="min" [maxlength]="max">
+
+  <mat-hint>
+    <mls-form-server [control]="control"></mls-form-server>
+  </mat-hint>
+
+  <mat-error>
+    <mls-form-errors [control]="control"></mls-form-errors>
+  </mat-error>
+</mat-form-field>

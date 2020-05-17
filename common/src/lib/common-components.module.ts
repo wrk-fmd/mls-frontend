@@ -16,16 +16,26 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 
-import {LoginComponent, WindowComponent, WinmanComponent} from './components';
+import {
+  DialogComponent,
+  FormErrorsComponent,
+  FormMultilineComponent,
+  FormServerComponent,
+  FormTextComponent,
+  LoginComponent,
+  WindowComponent,
+  WinmanComponent
+} from './components';
 import {TrackingFormBuilder} from './forms';
-import {WindowService} from './services';
+import {NotificationService, WindowService} from './services';
 import {getLocaleId, registerTranslations} from './translations';
 
 registerLocaleData(localeDe);
 
 @NgModule({
   declarations: [
-    LoginComponent, WinmanComponent, WindowComponent
+    FormErrorsComponent, FormServerComponent, FormMultilineComponent, FormTextComponent,
+    LoginComponent, WinmanComponent, DialogComponent, WindowComponent
   ],
   imports: [
     // Angular
@@ -44,7 +54,8 @@ registerLocaleData(localeDe);
     TranslateModule.forChild()
   ],
   exports: [
-    LoginComponent, WinmanComponent, WindowComponent
+    FormErrorsComponent, FormServerComponent, FormMultilineComponent, FormTextComponent,
+    LoginComponent, WinmanComponent, DialogComponent, WindowComponent
   ],
   providers: [
     {
@@ -62,7 +73,7 @@ registerLocaleData(localeDe);
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
       useValue: {appearance: 'standard'}
     },
-    WindowService, TrackingFormBuilder
+    NotificationService, WindowService, TrackingFormBuilder
   ]
 })
 export class CommonComponentsModule {

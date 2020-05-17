@@ -1,6 +1,6 @@
 import {Injectable, Type} from '@angular/core';
+import {DialogContent} from '../components/windows/dialog/dialog.component';
 import {WindowOptions, WinmanComponent} from '../components/windows/manager/winman.component';
-import {DialogWindowContent} from '../components/windows/window/window.component';
 
 @Injectable()
 export class WindowService {
@@ -11,7 +11,7 @@ export class WindowService {
     this.component = component;
   }
 
-  open(component: Type<DialogWindowContent>, componentData?: any, options?: WindowOptions) {
+  open<T>(component: Type<DialogContent<T>>, componentData?: T, options?: WindowOptions) {
     if (this.component) {
       this.component.open(component, componentData, options);
     }
