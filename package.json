@@ -2,8 +2,8 @@
   "name": "mls-frontend",
   "version": "3.0.0-SNAPSHOT",
   "scripts": {
-    "build-modules": "ng build auth-api && ng build coceso-api && ng build stomp && ng build common && ng build auth-components && ng build coceso-components",
-    "postinstall": "ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points && npm run build-modules",
+    "build-all": "ng build auth-api && ng build coceso-api && ng build stomp && ng build common && ng build auth-components && ng build coceso-components",
+    "postinstall": "ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points",
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
