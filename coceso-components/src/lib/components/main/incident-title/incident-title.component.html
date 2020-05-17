@@ -1,11 +1,11 @@
-<mat-panel-title>{{title()}}</mat-panel-title>
+<mat-panel-title>{{title}}</mat-panel-title>
 <mat-panel-description>
   <span class="incident_type_text" [ngClass]="{'incident-blue': incident.blue}" translate>
-    incident.type.short.{{charForType()}}
+    incident.type.short.{{charForType}}
   </span>
   <span class="incident_timer" data-bind="visible: !isDone(), css: timerCss"><span data-bind="text: timer"></span>'</span>
 
-  <span class="incident_ao" *ngIf="showBo() && showAo()">
+  <span class="incident_ao" *ngIf="showBo && showAo">
           <span class="ui-icon ui-icon-arrowthick-1-e"></span>
           <span>{{incident.ao.info}}</span>
         </span>

@@ -6,7 +6,7 @@ import {DataService} from 'mls-common';
 import {WatchService} from 'mls-stomp';
 
 import {BehaviorSubject, Observable, throwError} from 'rxjs';
-import {flatMap, map, take} from 'rxjs/operators';
+import {map, switchMap} from 'rxjs/operators';
 
 @Injectable()
 export class ConcernDataService extends DataService<ConcernDto> implements Resolve<void> {
@@ -29,12 +29,13 @@ export class ConcernDataService extends DataService<ConcernDto> implements Resol
   }
 
   getActiveConcern(): Observable<ConcernDto> {
-    return this.active.pipe(flatMap(id => this.getById(id)));
+    return this.active.pipe(switchMap(id => this.getById(id)));
   }
 
   runWithConcern<T>(runnable: (concern: number) => Observable<T>): Observable<T> {
+    const c = this.active.value;
     // TODO i18n
-    return this.active.pipe(take(1), flatMap(c => c ? runnable(c) : throwError('No concern set')));
+    return c ? runnable(c) : throwError('No concern set');
   }
 
   getSections(): Observable<string[]> {

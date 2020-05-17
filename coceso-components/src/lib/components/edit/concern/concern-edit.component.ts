@@ -1,40 +1,48 @@
-import {Component} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {Component, OnDestroy} from '@angular/core';
+import {FormControl, Validators} from '@angular/forms';
 
 import {ConcernDto} from 'mls-coceso-api';
-import {TrackingFormBuilder, TrackingFormControl} from 'mls-common';
+import {NotificationService, TrackingFormBuilder, TrackingFormGroup} from 'mls-common';
+import {Subscription} from 'rxjs';
+import {finalize, tap} from 'rxjs/operators';
 
 import {ConcernDataService} from '../../../services/concern.data.service';
 
 @Component({
   selector: 'mls-concern-edit',
-  templateUrl: './concern-edit.component.html',
-  styleUrls: ['./concern-edit.component.scss']
+  templateUrl: './concern-edit.component.html'
 })
-export class ConcernEditComponent {
+export class ConcernEditComponent implements OnDestroy {
 
-  readonly form: FormGroup;
+  private readonly concernSubscription: Subscription;
+
+  readonly form: TrackingFormGroup;
   readonly sectionForm: FormControl;
   sections: string[];
 
   private loading: boolean;
 
-  constructor(private readonly concernService: ConcernDataService, fb: TrackingFormBuilder) {
+  constructor(private readonly concernService: ConcernDataService, private readonly notificationService: NotificationService,
+              fb: TrackingFormBuilder) {
     this.form = fb.group({
       name: ['', [Validators.required, Validators.maxLength(100)]],
       info: ['']
     });
     this.sectionForm = fb.control('', [Validators.required, Validators.maxLength(30)]);
 
-    this.concernService.getActiveConcern().subscribe(concern => this.setData(concern));
+    this.concernSubscription = this.concernService.getActiveConcern().subscribe(concern => this.setConcern(concern));
   }
 
-  private setData(concern: ConcernDto) {
+  ngOnDestroy() {
+    this.concernSubscription.unsubscribe();
+  }
+
+  private setConcern(concern: ConcernDto) {
     concern = concern || {};
-
-    (this.form.controls.name as TrackingFormControl).setServerValue(concern.name || '');
-    (this.form.controls.info as TrackingFormControl).setServerValue(concern.info || '');
-
+    this.form.setServerValue({
+      name: concern.name || '',
+      info: concern.info || ''
+    });
     this.sections = concern.sections ? concern.sections.sort() : [];
   }
 
@@ -48,16 +56,9 @@ export class ConcernEditComponent {
       name: this.form.value.name,
       info: this.form.value.info
     };
-    this.concernService.updateConcern(data).subscribe(
-        () => {
-          this.loading = false;
-        },
-        error => {
-          this.loading = false;
-          // TODO
-          console.log(error);
-        }
-    );
+    this.concernService.updateConcern(data).pipe(
+        finalize(() => this.loading = false)
+    ).subscribe(this.notificationService.onError('concern.update.error'));
   }
 
   addSection(section: string) {
@@ -70,30 +71,20 @@ export class ConcernEditComponent {
       name: section
     };
 
-    this.concernService.addSection(data).subscribe(
-        () => {
-          this.loading = false;
-          this.sectionForm.reset();
-        },
-        error => {
-          this.loading = false;
-          // TODO
-          console.log(error);
-        }
-    );
+    this.concernService.addSection(data).pipe(
+        tap(() => this.sectionForm.reset()),
+        finalize(() => this.loading = false)
+    ).subscribe(this.notificationService.onError('concern.section.error'));
   }
 
   removeSection(section: string) {
+    if (!section || this.loading) {
+      return;
+    }
+
     this.loading = true;
-    this.concernService.removeSection(section).subscribe(
-        () => {
-          this.loading = false;
-        },
-        error => {
-          this.loading = false;
-          // TODO
-          console.log(error);
-        }
-    );
+    this.concernService.removeSection(section).pipe(
+        finalize(() => this.loading = false)
+    ).subscribe(this.notificationService.onError('concern.section.error'));
   }
 }

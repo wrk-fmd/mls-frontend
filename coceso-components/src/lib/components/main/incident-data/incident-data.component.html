@@ -1,33 +1,44 @@
-<dl class="incident-data-list">
-  <ng-container *ngIf="showBo()">
-    <dt translate>incident.bo</dt>
-    <dd><span class="pre">{{incident.bo.info}}</span></dd>
-  </ng-container>
+<mat-expansion-panel *ngIf="_incident | async as incident" class="incident-data" [(expanded)]="expanded"
+                     cdkDropList (cdkDropListDropped)="dropUnit($event)">
+  <mat-expansion-panel-header>
+    <mat-panel-title class="incident-title">
+      <span class="incident-type" [ngClass]="{'incident-blue': incident.blue}" translate>
+        incident.type.short.{{typeChar | async}}
+      </span>
+      <span class="incident-timer" *ngIf="timer | async as timer" [ngClass]="timer.css">{{timer.elapsed}}'</span>
+      <span>{{title | async}}</span>
+      <span class="incident-subtitle" *ngIf="subtitle | async as subtitle">&#x2794; {{subtitle}}</span>
 
-  <ng-container *ngIf="showAo()">
-    <dt translate>incident.ao</dt>
-    <dd><span class="pre">{{incident.ao.info}}</span></dd>
-  </ng-container>
+    </mat-panel-title>
+  </mat-expansion-panel-header>
 
-  <ng-container *ngIf="incident.info">
-    <dt translate>incident.info</dt>
-    <dd><span class="pre">{{incident.info}}</span></dd>
-  </ng-container>
+  <dl class="incident-data-list">
+    <ng-container *ngIf="showBo | async">
+      <dt translate>incident.bo</dt>
+      <dd><span class="pre">{{incident.bo.info}}</span></dd>
+    </ng-container>
 
-  <dt translate>incident.state.label</dt>
-  <dd translate>incident.state.{{incident.state}}</dd>
+    <ng-container *ngIf="showAo | async">
+      <dt translate>incident.ao</dt>
+      <dd><span class="pre">{{incident.ao.info}}</span></dd>
+    </ng-container>
 
-  <ng-container *ngFor="let task of incident.units">
-    <dt>{{unitCall(task) | async}}</dt>
-    <dd>
-      <span translate>task.state.{{task.state}}</span>
-      <button mat-button (click)="nextState(task)">TODO icon next</button>
-    </dd>
-  </ng-container>
-</dl>
+    <ng-container *ngIf="incident.caller">
+      <dt translate>incident.callerShort</dt>
+      <dd>{{incident.caller}}</dd>
+    </ng-container>
 
-<p>
-  <button mat-button (click)="openForm()">main.incident.list.openForm</button>
-  <button mat-button (click)="addJournalEntry()">main.incident.list.addLog</button>
-  <button mat-button (click)="openJournal()">main.incident.list.openDashboard</button>
-</p>
+    <ng-container *ngIf="incident.info">
+      <dt translate>incident.info</dt>
+      <dd><span class="pre">{{incident.info}}</span></dd>
+    </ng-container>
+
+    <coceso-main-incident-task *ngFor="let task of incident.units" [task]="task"></coceso-main-incident-task>
+  </dl>
+
+  <p>
+    <button mat-button (click)="openForm()">{{'incident.list.openForm' | translate}}</button>
+    <button mat-button (click)="addJournalEntry()">{{'incident.list.addJournalEntry' | translate}}</button>
+    <button mat-button (click)="openJournal()">{{'incident.list.openJournal' | translate}}</button>
+  </p>
+</mat-expansion-panel>

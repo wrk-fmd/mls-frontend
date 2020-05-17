@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {InjectableRxStompConfig, RxStompService} from '@stomp/ng2-stompjs';
 
 import {TokenService} from 'mls-auth-api';
-import {ConcernDto, IncidentDto, UnitDto} from 'mls-coceso-api';
+import {ConcernDto, ContainerDto, IncidentDto, UnitDto} from 'mls-coceso-api';
 
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
@@ -55,5 +55,9 @@ export class WatchService {
 
   watchUnits(concern: number): Observable<UnitDto | DeletionDto | ReplayStartDto> {
     return this.watch<UnitDto>('units', concern);
+  }
+
+  watchContainers(concern: number): Observable<ContainerDto | DeletionDto | ReplayStartDto> {
+    return this.watch<ContainerDto>('containers', concern);
   }
 }

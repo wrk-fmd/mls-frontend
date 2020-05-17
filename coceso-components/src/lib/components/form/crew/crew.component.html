@@ -1,0 +1,15 @@
+﻿<mat-chip-list #crewList>
+  <mat-chip *ngFor="let member of crew" [removable]="true" (removed)="removeMember(member)">
+    {{getName(member)}}
+    <mat-icon matChipRemove>cancel</mat-icon>
+  </mat-chip>
+</mat-chip-list>
+
+<mat-form-field appearance="outline">
+  <mat-label translate>unit.crew.add</mat-label>
+  <!--suppress HtmlFormInputWithoutLabel -->
+  <input matInput [formControl]="form" [matChipInputFor]="crewList" [matAutocomplete]="autocomplete" #input>
+  <mat-autocomplete #autocomplete="matAutocomplete" (optionSelected)="addMember($event.option.value)">
+    <mat-option *ngFor="let person of staff | async" [value]="person">{{getName(person)}}</mat-option>
+  </mat-autocomplete>
+</mat-form-field>

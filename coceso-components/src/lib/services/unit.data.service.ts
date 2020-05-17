@@ -37,6 +37,36 @@ export class UnitDataService extends DataService<UnitDto> implements OnDestroy {
     );
   }
 
+  assignCrewMember(unit: number, member: number): Observable<null> {
+    return this.concernService.runWithConcern(
+        concern => this.endpoint.assignCrewMember({concern, unit, member})
+    );
+  }
+
+  removeCrewMember(unit: number, member: number): Observable<null> {
+    return this.concernService.runWithConcern(
+        concern => this.endpoint.removeCrewMember({concern, unit, member})
+    );
+  }
+
+  sendHome(unit: number): Observable<null> {
+    return this.concernService.runWithConcern(
+        concern => this.endpoint.sendHome({concern, unit})
+    );
+  }
+
+  standby(unit: number): Observable<null> {
+    return this.concernService.runWithConcern(
+        concern => this.endpoint.standby({concern, unit})
+    );
+  }
+
+  holdPosition(unit: number): Observable<null> {
+    return this.concernService.runWithConcern(
+        concern => this.endpoint.holdPosition({concern, unit})
+    );
+  }
+
   protected compare(a: UnitDto, b: UnitDto): number {
     if (a.call !== b.call) {
       return a.call < b.call ? -1 : 1;

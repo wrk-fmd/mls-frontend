@@ -1,0 +1,37 @@
+<div class="container" *ngIf="container | async as container" cdkDrag [cdkDragData]="container.id">
+  <div class="mat-elevation-z2">
+    <div class="container-placeholder" *cdkDragPlaceholder>
+      <div></div>
+    </div>
+
+    <div class="container-header" cdkDragHandle>
+      <div class="container-name" *ngIf="!editing" (click)="this.editName()">{{container.name}}</div>
+      <form *ngIf="editing" [formGroup]="form" (submit)="submitName()">
+        <mat-form-field>
+          <input matInput formControlName="name" (blur)="submitName()" #nameInput>
+        </mat-form-field>
+      </form>
+
+      <div class="fill-remaining-space"></div>
+
+      <button mat-icon-button (click)="deleteContainer()">
+        <mat-icon>remove</mat-icon>
+      </button>
+      <button mat-icon-button (click)="createContainer()">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+
+    <div class="container-content">
+      <div class="container-units" cdkDropList cdkDropListOrientation="horizontal" [cdkDropListConnectedTo]="unitLists | async"
+           (cdkDropListDropped)="dropUnit($event)" #unitList>
+        <mls-container-edit-unit *ngFor="let id of container.units" [unitId]="id"></mls-container-edit-unit>
+      </div>
+
+      <div class="container-children" cdkDropList [cdkDropListConnectedTo]="childrenLists | async"
+           (cdkDropListDropped)="dropContainer($event)" #childrenList>
+        <mls-container-edit-child *ngFor="let id of container.children" [containerId]="id"></mls-container-edit-child>
+      </div>
+    </div>
+  </div>
+</div>

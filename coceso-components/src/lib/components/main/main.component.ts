@@ -1,9 +1,9 @@
 import {AfterViewInit, Component, OnDestroy, ViewChild} from '@angular/core';
 import {WindowService, WinmanComponent} from 'mls-common';
 import {Observable, Subscription} from 'rxjs';
-import {flatMap, map} from 'rxjs/operators';
+import {map} from 'rxjs/operators';
 import {ConcernDataService} from '../../services/concern.data.service';
-import {IncidentFormComponent, IncidentListComponent, UnitListComponent} from './main';
+import {IncidentFormComponent, IncidentListComponent, UnitHierarchyComponent, UnitListComponent} from './main';
 
 @Component({
   selector: 'mls-coceso-main',
@@ -30,9 +30,8 @@ export class MainComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.windowService.setComponent(this.winmanComponent);
-    this.createIncident();
-    // this.showUnits();
-    // this.showActiveIncidents();
+    this.showUnitsHierarchy();
+    this.showActiveIncidents();
   }
 
   ngOnDestroy(): void {
@@ -44,7 +43,7 @@ export class MainComponent implements AfterViewInit, OnDestroy {
   }
 
   showUnitsHierarchy() {
-    // TODO
+    this.windowService.open(UnitHierarchyComponent);
   }
 
   showUnitsAlarm() {
@@ -64,7 +63,7 @@ export class MainComponent implements AfterViewInit, OnDestroy {
   }
 
   createRelocation() {
-    this.windowService.open(IncidentFormComponent, {type: 'Relocation'});
+    this.windowService.open(IncidentFormComponent, {type: 'Position'});
   }
 
   showAllIncidents() {

@@ -1,0 +1,21 @@
+:host ::ng-deep {
+  .mat-chip-list-wrapper {
+    margin-bottom: 0;
+  }
+
+  input.mat-chip-input {
+    width: 100%;
+    margin: 0;
+    flex: initial;
+  }
+
+  .mat-form-field-suffix {
+    top: 0;
+  }
+
+  .mat-select-value {
+    max-width: unset;
+    position: relative;
+    top: -3px;
+  }
+}

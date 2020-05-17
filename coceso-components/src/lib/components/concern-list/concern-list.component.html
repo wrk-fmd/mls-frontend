@@ -7,10 +7,9 @@
     <mat-card-title translate>concern.create.header</mat-card-title>
     <mat-card-content>
       <form [formGroup]="form" (ngSubmit)="create()">
-        <mat-form-field class="concern-name-input">
-          <mat-label translate>concern.name</mat-label>
-          <input matInput formControlName="name" required maxlength="100">
-        </mat-form-field>
+        <div class="concern-name-input">
+          <mls-form-text [control]="form.controls.name" label="concern.name" [required]="true" [max]="100"></mls-form-text>
+        </div>
 
         <button mat-flat-button color="primary" [disabled]="createDisabled">
           {{'concern.create.submit' | translate}}

@@ -65,7 +65,8 @@ export default {
       header: 'Ambulanz bearbeiten',
       submit: 'Änderungen speichern',
       sections: 'Abschnitte',
-      units: 'Einheiten bearbeiten'
+      units: 'Einheiten bearbeiten',
+      containers: 'Hierarchie bearbeiten'
     }
   },
   incident: {
@@ -75,17 +76,20 @@ export default {
     blue: 'Sondersignal',
     priority: 'Priorisiert',
     caller: 'Berufer / Kontaktdaten',
-    casusNr: 'Transport-/Casusnummer',
+    callerShort: 'Berufer',
+    casus: 'Transport-/Casusnummer',
+    patient: 'Patient',
     type: {
       label: 'Typ',
       Task: 'Auftrag',
       Transport: 'Abtransport',
-      Relocation: 'Verlegung',
+      Position: 'Standort',
       short: {
         Task: 'A',
         TaskBlue: 'E',
         Transport: 'T',
         Relocation: 'V',
+        Position: 'S',
         ToHome: 'Einr'
       }
     },
@@ -95,11 +99,19 @@ export default {
       Demand: 'Nachforderung',
       Working: 'In Arbeit',
       Done: 'Abgeschlossen'
+    },
+    list: {
+      openForm: 'Bearbeiten',
+      addJournalEntry: 'Journaleintrag hinzufügen',
+      openJournal: 'Protokoll'
     }
   },
   unit: {
     call: 'Rufname',
     info: 'Info',
+    home: 'Zuhause',
+    portable: 'Disponierbar',
+    properties: 'Eigenschaften',
     state: {
       set: 'Status setzen',
       READY: 'Einsatzbereit',
@@ -110,6 +122,14 @@ export default {
       label: 'Typ',
       Portable: 'Mobileinheit',
       Officer: 'Führungskraft'
+    },
+    crew: {
+      label: 'Mannschaft',
+      add: 'Mannschaft hinzufügen'
+    },
+    form: {
+      add: 'Einheit erstellen',
+      edit: 'Einheit bearbeiten'
     },
     actions: {
       label: 'Aktionen',
@@ -134,7 +154,25 @@ export default {
       AAO: 'AAO'
     }
   },
+  container: {
+    unassigned: 'Nicht zugeordnete Einheiten'
+  },
+  contact: {
+    label: 'Kontakte',
+    add: 'Kontakt hinzufügen',
+    type: {
+      label: 'Kontakttyp',
+      phone: 'Telefon',
+      kenwood: 'Kenwood',
+      tetra: 'Tetra'
+    }
+  },
   radio: {
     send: 'Selektivruf senden'
+  },
+  validation: {
+    contact: {
+      type: 'Kontakttyp muss ausgewählt werden'
+    }
   }
 };

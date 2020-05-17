@@ -3,15 +3,8 @@
     <mat-card class="mat-elevation-z4">
       <mat-card-title translate>concern.edit.header</mat-card-title>
       <mat-card-content>
-        <mat-form-field>
-          <mat-label translate>concern.name</mat-label>
-          <input matInput formControlName="name" required maxlength="100">
-        </mat-form-field>
-
-        <mat-form-field>
-          <mat-label translate>concern.info</mat-label>
-          <textarea matInput formControlName="info" rows="4"></textarea>
-        </mat-form-field>
+        <mls-form-text [control]="form.controls.name" label="concern.name" [required]="true" [max]="100"></mls-form-text>
+        <mls-form-multiline [control]="form.controls.info" label="concern.info"></mls-form-multiline>
       </mat-card-content>
 
       <mat-card-actions>

@@ -1,45 +1,63 @@
 import {Component, Input} from '@angular/core';
-import {IncidentDto, IncidentTypeDto, TaskDto, TaskStateDto, UnitEndpointService} from 'mls-coceso-api';
-import {BehaviorSubject, combineLatest, Observable, Subject} from 'rxjs';
-import {flatMap, map} from 'rxjs/operators';
 
+import {IncidentDto, IncidentTypeDto, TaskDto, TaskStateDto} from 'mls-coceso-api';
+
+import {BehaviorSubject, Observable, Subject} from 'rxjs';
+import {map, switchMap} from 'rxjs/operators';
+
+import {IncidentHelper} from '../../../helpers/incident.helper';
+import {ClockService} from '../../../services/clock.service';
 import {IncidentDataService} from '../../../services/incident.data.service';
 
 @Component({
   selector: 'coceso-main-unit-task',
-  templateUrl: './unit-task.component.html',
-  styleUrls: ['./unit-task.component.scss'],
-  host: {'[className]': 'css'}
+  templateUrl: './unit-task.component.html'
 })
 export class UnitTaskComponent {
 
   private readonly _task: Subject<TaskDto> = new BehaviorSubject(null);
-  readonly incident: Observable<IncidentDto>;
-  readonly css: Observable<string>;
-  readonly icon: Observable<string>;
-  readonly type: Observable<string>;
-  readonly state: Observable<string>;
+  readonly options: Observable<TaskDisplayOptions>;
+  readonly elapsed: Observable<number>;
 
   @Input() set task(value: TaskDto) {
     this._task.next(value);
   }
 
-  constructor(private readonly unitService: UnitEndpointService, private readonly incidentService: IncidentDataService) {
-    this.incident = this._task.pipe(flatMap(t => t ? incidentService.getById(t.incident) : null));
-    this.css = this.incident.pipe(map(i => this.cssForType(i)));
-    this.icon = this.incident.pipe(map(i => this.iconForType(i)));
-    this.type = this.incident.pipe(map(i => this.charForType(i)));
-    this.state = combineLatest([this._task, this.incident]).pipe(map(([t, i]) => this.stateForType(t, i)));
+  constructor(private readonly incidentService: IncidentDataService, private readonly incidentHelper: IncidentHelper,
+              private readonly clockService: ClockService) {
+    this.options = this._task.pipe(switchMap(t => this.loadOptions(t)));
+    this.elapsed = this._task.pipe(switchMap(t => clockService.elapsedMinutes(t.updated)));
   }
 
-  private cssForType(incident: IncidentDto): string {
-    if (!incident || !incident.type) {
+  private loadOptions(task: TaskDto): Observable<TaskDisplayOptions> {
+    return task ? this.incidentService.getById(task.incident).pipe(map(i => this.buildOptions(task, i))) : null;
+  }
+
+  private buildOptions(task: TaskDto, incident: IncidentDto): TaskDisplayOptions {
+    if (!task || !incident) {
+      return null;
+    }
+
+    return {
+      css: this.cssForType(task, incident),
+      icon: this.iconForType(task, incident),
+      type: this.charForType(task, incident),
+      state: this.stateForType(task, incident),
+    };
+  }
+
+  private cssForType(task: TaskDto, incident: IncidentDto): string {
+    if (!incident.type) {
       return '';
     }
 
     let type;
-    if (incident.type === IncidentTypeDto.Task) {
+    if (this.incidentHelper.isTaskOrTransport(incident)) {
       type = incident.blue ? 'TaskBlue' : 'Task';
+    } else if (this.incidentHelper.isRelocation(task, incident)) {
+      type = 'Relocation';
+    } else if (this.incidentHelper.isHoldPosition(task, incident)) {
+      type = 'HoldPosition';
     } else {
       type = incident.type;
     }
@@ -47,52 +65,53 @@ export class UnitTaskComponent {
     return `unit-task-${type}`;
   }
 
-  private iconForType(incident: IncidentDto): string {
-    if (!incident) {
-      return null;
+  private iconForType(task: TaskDto, incident: IncidentDto): string {
+    if (this.incidentHelper.isHoldPosition(task, incident)) {
+      return 'adjust';
     }
-
-    switch (incident.type) {
-      case IncidentTypeDto.HoldPosition:
-        return 'adjust';
-      case IncidentTypeDto.Standby:
-        return 'pause';
+    if (incident.type === IncidentTypeDto.Standby) {
+      return 'pause';
     }
 
     return null;
   }
 
-  private charForType(incident: IncidentDto): string {
-    if (!incident) {
+  private charForType(task: TaskDto, incident: IncidentDto): string {
+    if (incident.type === IncidentTypeDto.Standby) {
+      // Only display icon for standby
       return null;
     }
 
-    switch (incident.type) {
-      case IncidentTypeDto.Task:
-        return incident.blue ? 'TaskBlue' : 'Task';
-      case IncidentTypeDto.Transport:
-      case IncidentTypeDto.Relocation:
-      case IncidentTypeDto.ToHome:
-        return incident.type;
+    if (this.incidentHelper.isHoldPosition(task, incident)) {
+      // Only display icon if at position already
+      return null;
+    }
+    if (this.incidentHelper.isRelocation(task, incident)) {
+      // Display character if on way to position
+      return 'Relocation';
     }
 
-    return null;
+    // Just display the standard character for everything else
+    return this.incidentHelper.shortType(incident);
   }
 
   private stateForType(task: TaskDto, incident: IncidentDto): string {
-    if (!task) {
+    if (this.incidentHelper.isHoldPosition(task, incident)) {
+      // Do not display the state if at position already
       return null;
     }
-    if (!incident) {
-      return task.state;
-    }
-
-    switch (incident.type) {
-      case IncidentTypeDto.HoldPosition:
-      case IncidentTypeDto.Standby:
-        return task.state === TaskStateDto.Assigned ? task.state : null;
+    if (incident.type === IncidentTypeDto.Standby && task.state === TaskStateDto.AAO) {
+      // Do not display the state if at standby
+      return null;
     }
 
     return task.state;
   }
+}
+
+interface TaskDisplayOptions {
+  css: string;
+  icon: string;
+  type: string;
+  state: string;
 }

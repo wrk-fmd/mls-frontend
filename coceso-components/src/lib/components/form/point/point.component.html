@@ -1,0 +1,13 @@
+﻿<mat-form-field appearance="outline">
+  <mat-label translate>{{label}}</mat-label>
+  <!--suppress HtmlFormInputWithoutLabel -->
+  <textarea matInput [formControl]="control" [required]="required" rows="3"></textarea>
+
+  <mat-hint>
+    <mls-form-server [control]="control"></mls-form-server>
+  </mat-hint>
+
+  <mat-error>
+    <mls-form-errors [control]="control"></mls-form-errors>
+  </mat-error>
+</mat-form-field>

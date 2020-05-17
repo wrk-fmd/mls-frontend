@@ -1,7 +1,10 @@
-import {Component, Input, OnInit, Output} from '@angular/core';
-import {IncidentDto, TaskDto, UnitDto} from 'mls-coceso-api';
-import {DialogWindowContent} from 'mls-common';
-import {BehaviorSubject, Observable, Subject} from 'rxjs';
+import {Component, OnDestroy} from '@angular/core';
+import {TranslateService} from '@ngx-translate/core';
+
+import {UnitDto} from 'mls-coceso-api';
+import {DialogContent} from 'mls-common';
+
+import {Observable, ReplaySubject, Subscription} from 'rxjs';
 
 import {UnitDataService} from '../../../services/unit.data.service';
 
@@ -10,55 +13,31 @@ import {UnitDataService} from '../../../services/unit.data.service';
   templateUrl: './unit-list.component.html',
   styleUrls: ['./unit-list.component.scss']
 })
-export class UnitListComponent implements DialogWindowContent, OnInit {
+export class UnitListComponent implements DialogContent, OnDestroy {
+
+  readonly windowTitle = new ReplaySubject<string>(1);
+  readonly taskTitle = new ReplaySubject<string>(1);
 
   units: Observable<UnitDto[]>;
+  private readonly unitsSubscription: Subscription;
 
-  @Input() data: any;
-
-  @Output() windowTitle: Subject<string> = new BehaviorSubject('Units');
-  @Output() taskTitle: Subject<string> = new BehaviorSubject('Units');
-
-  constructor(private readonly unitService: UnitDataService) {
+  constructor(private readonly unitService: UnitDataService, private readonly translateService: TranslateService) {
     this.units = this.unitService.getAll();
+    this.unitsSubscription = this.units.subscribe(units => this.updateTitles(units));
   }
 
-  ngOnInit() {
+  ngOnDestroy() {
+    this.unitsSubscription.unsubscribe();
   }
 
-  title(incident: IncidentDto): string {
-    return incident.bo && incident.info;
+  set data(_) {
   }
 
-  showBo(incident: IncidentDto): boolean {
-    return !!incident.bo;
-  }
+  private updateTitles(units: UnitDto[]) {
+    const prefix = this.translateService.instant('main.nav.units.overview');
 
-  showAo(incident: IncidentDto): boolean {
-    return !!incident.ao;
+    // TODO Unit counts
+    this.windowTitle.next(prefix);
+    this.taskTitle.next(prefix);
   }
-
-  unitCall(task: TaskDto): string {
-    return task.unit + '';
-  }
-
-  nextState(task: TaskDto): void {
-    // TODO
-  }
-
-  openForm(incident: IncidentDto): void {
-    // TODO
-  }
-
-  addLog(incident: IncidentDto): void {
-    // TODO
-  }
-
-  openDashboard(incident: IncidentDto): void {
-    // TODO
-  }
-
-  // incidentTitle(incident: IncidentDto) {
-  //   return incident.bo;
-  // }
 }

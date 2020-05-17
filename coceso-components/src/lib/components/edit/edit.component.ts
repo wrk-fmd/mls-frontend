@@ -4,8 +4,7 @@ import {Observable} from 'rxjs';
 import {ConcernDataService} from '../../services/concern.data.service';
 
 @Component({
-  templateUrl: './edit.component.html',
-  styleUrls: ['./edit.component.scss']
+  templateUrl: './edit.component.html'
 })
 export class EditComponent {
 

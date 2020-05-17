@@ -1,4 +1,73 @@
-.incident-data-list {
+:host {
+  // The component structure breaks the default CSS for expansion panels, remove the wrong border radius
+
+  &:not(:first-of-type) ::ng-deep .mat-expansion-panel {
+    border-top-left-radius: initial;
+    border-top-right-radius: initial;
+  }
+
+  &:not(:last-of-type) ::ng-deep .mat-expansion-panel {
+    border-bottom-left-radius: initial;
+    border-bottom-right-radius: initial;
+  }
+}
+
+.incident-data ::ng-deep {
+  &.cdk-drop-list-dragging {
+    overflow: hidden;
+  }
+
+  .cdk-drag-placeholder {
+    display: none;
+  }
+}
+
+.incident-title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  > * {
+    margin-right: 0.5em;
+  }
+
+  .incident-type {
+    width: 25px;
+    text-align: center;
+
+    &.incident-blue {
+      height: 22px;
+      padding-top: 1px;
+      background: url("/assets/bluelight.png");
+      //background-color: #0064cd;
+      color: #ffffff;
+      font-weight: bold;
+      text-align: center;
+    }
+  }
+
+  .incident-timer {
+    min-width: 2em;
+    text-align: center;
+
+    &.timer-warning {
+      font-weight: bold;
+      color: #aa6708;
+    }
+
+    &.timer-danger {
+      font-weight: bold;
+      color: #cd0a0a;
+    }
+  }
+
+  .incident-subtitle {
+    font-size: .9em;
+    color: #999;
+  }
+}
+
+.incident-data-list ::ng-deep {
   dt {
     width: 100px;
     float: left;

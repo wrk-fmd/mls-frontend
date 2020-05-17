@@ -1,21 +1,22 @@
-<li class="unit-entry">
-  <button *ngIf="unit.portable" class="unit-entry-button" [mat-menu-trigger-for]="unitMenu">
-    <!--  <button *ngIf="unit.portable" class="unit-state" [mat-menu-trigger-for]="unitMenu" (contextmenu)="openMenu($event)">-->
-    <span [ngClass]="['unit-state', stateCss()]">{{unit.call}}</span>
-    <span *ngIf="!hasIncident()" [ngClass]="['unit-state', isFree() ? 'unit-state-free' : stateCss()]">
+<li class="unit-entry" cdkDropList [cdkDropListConnectedTo]="incidentDropLists | async">
+  <button *ngIf="unit.portable" class="unit-entry-button" [mat-menu-trigger-for]="unitMenu" (contextmenu)="openMenu($event)"
+          cdkDrag [cdkDragData]="{type: 'unit', id: unit.id}" (cdkDragDropped)="dropped($event)">
+    <span [ngClass]="['unit-state', stateCss]">{{unit.call}}</span>
+    <span *ngIf="!hasIncident()" [ngClass]="['unit-state', isFree() ? 'unit-state-free' : stateCss]">
       <mat-icon *ngIf="isHome()">home</mat-icon>
       <mat-icon *ngIf="!isHome()">error</mat-icon>
     </span>
     <coceso-main-unit-task *ngFor="let task of unit.incidents" [task]="task"></coceso-main-unit-task>
   </button>
-  <button *ngIf="!unit.portable" class="unit-state" [mat-menu-trigger-for]="unitMenu" (contextmenu)="openMenu($event)">
-    <span [className]="stateCss()">{{unit.call}}</span>
+
+  <button *ngIf="!unit.portable" class="unit-entry-button" [mat-menu-trigger-for]="unitMenu" (contextmenu)="openMenu($event)">
+    <span [ngClass]="['unit-state', stateCss]">{{unit.call}}</span>
   </button>
 
-  <mat-menu #unitMenu="matMenu">
+  <mat-menu class="mat-menu-small" #unitMenu="matMenu">
     <button mat-menu-item disabled translate>unit.state.set</button>
     <ng-container *ngFor="let state of states">
-      <button mat-menu-item *ngIf="allowState(state)" (click)="setState(state)" translate>unit.state.{{state}}</button>
+      <button mat-menu-item (click)="setState(state)" translate>unit.state.{{state}}</button>
     </ng-container>
 
     <ng-container *ngIf="showActions()">

@@ -1,0 +1,9 @@
+<ng-container *ngIf="_task | async as task">
+  <dt>{{unitCall | async}}</dt>
+  <dd>
+    <span translate>task.state.{{task.state}}</span>
+    <button mat-button (click)="nextState()">
+      <mat-icon>arrow_right</mat-icon>
+    </button>
+  </dd>
+</ng-container>

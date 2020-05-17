@@ -1,84 +1,89 @@
-import {Component, Input, OnInit, Output} from '@angular/core';
-import {FormGroup} from '@angular/forms';
+import {Component, OnDestroy} from '@angular/core';
+import {Validators} from '@angular/forms';
 import {TranslateService} from '@ngx-translate/core';
 
-import {IncidentDto, IncidentStateDto, IncidentTypeDto} from 'mls-coceso-api';
-import {DialogActionButton, DialogWindowContent, TrackingFormBuilder, TrackingFormControl} from 'mls-common';
+import {IncidentClosedReasonDto, IncidentDto, IncidentTypeDto} from 'mls-coceso-api';
+import {DialogContent, NotificationService, TrackingFormBuilder, TrackingFormGroup} from 'mls-common';
 
-import {BehaviorSubject, Subject, Subscription} from 'rxjs';
+import {BehaviorSubject, ReplaySubject, Subscription} from 'rxjs';
+import {switchMap, tap} from 'rxjs/operators';
 
 import {IncidentHelper} from '../../../helpers/incident.helper';
 import {IncidentDataService} from '../../../services/incident.data.service';
 
 @Component({
-  templateUrl: './incident-form.component.html',
-  styleUrls: ['./incident-form.component.scss']
+  templateUrl: './incident-form.component.html'
 })
-export class IncidentFormComponent implements DialogWindowContent, OnInit {
+export class IncidentFormComponent implements DialogContent<IncidentDto>, OnDestroy {
 
-  @Input() data: IncidentDto;
+  readonly windowTitle = new ReplaySubject<string>(1);
+  readonly taskTitle = new ReplaySubject<string>(1);
 
-  @Output() windowTitle: Subject<string> = new BehaviorSubject('Create incident');
-  @Output() taskTitle: Subject<string> = new BehaviorSubject('Create incident');
+  private readonly id = new BehaviorSubject<number>(null);
+  private readonly incidentSubscription: Subscription;
+  private type: IncidentTypeDto;
 
-  private readonly saveButton: DialogActionButton = {label: 'ok', action: () => this.save(), disabled: true};
-  @Output() actions = [
-    this.saveButton
-  ];
-
-  private subscription: Subscription;
-  private id: number;
-  private incident: IncidentDto;
-
-  form: FormGroup;
+  form: TrackingFormGroup;
 
   constructor(private readonly incidentService: IncidentDataService, private readonly incidentHelper: IncidentHelper,
-              private readonly translateService: TranslateService, fb: TrackingFormBuilder) {
+              private readonly notificationService: NotificationService, private readonly translateService: TranslateService,
+              fb: TrackingFormBuilder) {
     this.form = fb.group({
-      type: [null],
-      options: [[]],
-      state: [IncidentStateDto.Open],
+      type: [null, Validators.required],
+      closed: [IncidentClosedReasonDto.Open],
       bo: [''],
       ao: [''],
-      info: [''],
-      caller: [''],
-      casusNr: [''],
-      section: ['']
+      info: ['', null, null, true],
+      caller: ['', Validators.maxLength(100)],
+      casusNr: ['', Validators.maxLength(100)],
+      section: [null],
+      options: [[]]
     });
 
-    this.form.statusChanges.subscribe(() => this.onFormUpdated());
+    this.incidentSubscription = this.id
+        .pipe(switchMap(id => incidentService.getById(id)))
+        .subscribe(incident => this.setIncident(incident));
   }
 
-  ngOnInit(): void {
-    if (this.data) {
-      this.incident = this.data;
-      if (this.data.id) {
-        this.loadData(this.data.id);
-      } else {
-        Object.keys(this.data).forEach(name => this.setValue(name, this.data[name], false, false));
-        this.onFormUpdated();
-        this.updateTitles();
-      }
-    } else {
-      this.incident = {};
+  ngOnDestroy() {
+    this.incidentSubscription.unsubscribe();
+  }
+
+  set data(data) {
+    this.type = data ? data.type : null;
+
+    const id = data ? data.id : null;
+    this.id.next(id);
+
+    if (!id) {
+      this.form.setServerValue({
+        type: null,
+        closed: IncidentClosedReasonDto.Open,
+        bo: '',
+        ao: '',
+        info: '',
+        caller: '',
+        casusNr: '',
+        section: null,
+        options: []
+      });
+    }
+
+    if (data) {
+      // Set passed values if given
+      this.form.patchValue(data);
+      this.form.markAsUntouched();
     }
   }
 
-  private loadData(id: number) {
-    this.id = id;
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
-    this.subscription = this.incidentService.getById(id).subscribe(incident => this.setData(incident));
-  }
-
-  private setData(incident: IncidentDto) {
-    this.incident = incident;
-    this.updateTitles();
+  private setIncident(incident: IncidentDto) {
+    this.updateTitles(incident);
 
     if (!incident) {
       return;
     }
+
+    this.type = incident.type as IncidentTypeDto;
 
     const options = [];
     if (incident.blue) {
@@ -88,51 +93,34 @@ export class IncidentFormComponent implements DialogWindowContent, OnInit {
       options.push('priority');
     }
 
-    this.setValue('type', incident.type);
-    this.setValue('options', options);
-    this.setValue('state', incident.state);
-    this.setValue('bo', incident.bo ? incident.bo.info : '');
-    this.setValue('ao', incident.ao ? incident.ao.info : '');
-    this.setValue('info', incident.info, true);
-    this.setValue('caller', incident.caller);
-    this.setValue('casusNr', incident.casusNr);
-    this.setValue('section', incident.section);
-
-    this.onFormUpdated();
+    this.form.setServerValue({
+      type: incident.type,
+      closed: incident.closed || IncidentClosedReasonDto.Open,
+      bo: incident.bo ? incident.bo.info : '',
+      ao: incident.ao ? incident.ao.info : '',
+      info: incident.info,
+      caller: incident.caller,
+      casusNr: incident.casusNr,
+      section: incident.section,
+      options
+    });
   }
 
-  private setValue(name: string, value: any, keepExisting?: boolean, setServerValue: boolean = true) {
-    if (value === undefined) {
-      return;
-    }
-
-    const control = this.form.controls[name];
-    if (setServerValue && control instanceof TrackingFormControl) {
-      control.setServerValue(value, keepExisting);
-    } else if (control) {
-      control.setValue(value);
-    }
-  }
-
-  private onFormUpdated() {
-    this.saveButton.disabled = this.form.invalid || this.form.pristine;
-  }
-
-  private updateTitles() {
-    if (this.id) {
-      const prefix = this.translateService.instant(this.form.value.type === IncidentTypeDto.Relocation
-          ? 'incident.form.editRelocation'
+  private updateTitles(incident?: IncidentDto) {
+    if (this.id.value) {
+      const prefix = this.translateService.instant(this.form.value.type === IncidentTypeDto.Position
+          ? 'incident.form.editPosition'
           : 'incident.form.editIncident'
       );
 
-      const shortTitle = this.incidentHelper.shortTitle(this.incident);
-      const fullTitle = this.incidentHelper.fullTitle(this.incident);
+      const shortTitle = this.incidentHelper.shortTitle(incident);
+      const fullTitle = this.incidentHelper.fullTitle(incident);
 
       this.windowTitle.next(shortTitle ? `${prefix}: ${shortTitle}` : prefix);
       this.taskTitle.next(fullTitle ? fullTitle : prefix);
     } else {
-      const title = this.translateService.instant(this.incident.type === IncidentTypeDto.Relocation
-          ? 'incident.form.addRelocation'
+      const title = this.translateService.instant(this.form.value.type === IncidentTypeDto.Position
+          ? 'incident.form.addPosition'
           : 'incident.form.addIncident'
       );
       this.windowTitle.next(title);
@@ -141,33 +129,43 @@ export class IncidentFormComponent implements DialogWindowContent, OnInit {
   }
 
   get types(): IncidentTypeDto[] {
-    if (this.incidentHelper.isTaskOrTransport(this.incident)) {
+    if (this.incidentHelper.isTaskOrTransport({type: this.type})) {
       return [IncidentTypeDto.Task, IncidentTypeDto.Transport];
     }
-    if (this.incident.type === IncidentTypeDto.Relocation) {
-      return [IncidentTypeDto.Relocation];
+    if (this.type === IncidentTypeDto.Position) {
+      return [IncidentTypeDto.Position];
     }
-    return [IncidentTypeDto.Task, IncidentTypeDto.Transport, IncidentTypeDto.Relocation];
+    return [IncidentTypeDto.Task, IncidentTypeDto.Transport, IncidentTypeDto.Position];
+  }
+
+  get saveDisabled(): boolean {
+    return this.form.invalid || this.form.pristine;
   }
 
   save() {
+    const options = this.form.value.options || [];
+
     const data = {
       type: this.form.value.type,
-      blue: this.form.value.options.includes('blue'),
-      priority: this.form.value.options.includes('priority'),
-      state: this.form.value.state,
+      blue: options.includes('blue'),
+      priority: options.includes('priority'),
+      closed: this.form.value.closed,
       bo: {info: this.form.value.bo},
       ao: {info: this.form.value.ao},
       info: this.form.value.info,
       caller: this.form.value.caller,
       casusNr: this.form.value.casusNr,
-      section: this.form.value.section
+      section: this.form.value.section || ''
     };
 
-    if (this.id) {
-      this.incidentService.updateIncident(this.id, data).subscribe(() => console.log('done'));
+    const incidentId = this.id.value;
+    if (incidentId) {
+      this.incidentService.updateIncident(incidentId, data)
+          .subscribe(this.notificationService.onError('incident.update.error'));
     } else {
-      this.incidentService.createIncident(data).subscribe(id => this.loadData(id));
+      this.incidentService.createIncident(data)
+          .pipe(tap(id => this.id.next(id)))
+          .subscribe(this.notificationService.onError('incident.create.error'));
     }
   }
 }

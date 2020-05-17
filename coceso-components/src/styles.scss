@@ -1,0 +1,83 @@
+.unit-entry-button {
+  display: block;
+  white-space: nowrap;
+  border: none;
+  background: none;
+  padding: 0;
+  line-height: 18px;
+  font-size: 13px;
+  border-radius: 0.25em;
+  overflow: hidden;
+  color: #555;
+
+  .unit-state {
+    padding: 0.5em;
+    display: inline-block;
+
+    &-ready {
+      background-color: #33ff66;
+    }
+
+    &-not-ready {
+      background-color: #ff9999;
+    }
+
+    &-off-duty {
+      background-color: #dddddd;
+    }
+
+    &-free {
+      background-color: #ff3333;
+      color: #ffffff;
+    }
+  }
+
+  .unit-task {
+    padding: 0.5em;
+    display: inline-block;
+
+    .task-state:not(:first-child):before {
+      content: ': ';
+    }
+
+    &-Task {
+      background-color: #9999ff;
+    }
+
+    &-TaskBlue {
+      background-color: #0064cd;
+      color: #ffffff;
+    }
+
+    &-Relocation {
+      background-color: #cc99ff;
+    }
+
+    &-HoldPosition {
+      background-color: #d83cff;
+    }
+
+    &-ToHome {
+      background-color: #99ff99;
+    }
+
+    &-Standby {
+      background-color: #ffb66c;
+    }
+  }
+
+  .mat-icon {
+    font-size: 16px;
+    vertical-align: top;
+    height: unset;
+    width: unset;
+  }
+}
+
+.mat-menu-small {
+  .mat-menu-item {
+    font-size: 13px;
+    height: 24px;
+    line-height: 24px;
+  }
+}

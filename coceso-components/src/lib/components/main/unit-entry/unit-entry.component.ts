@@ -1,12 +1,17 @@
+import {CdkDragDrop, CdkDropList} from '@angular/cdk/drag-drop';
 import {Component, Input, ViewChild} from '@angular/core';
 import {MatMenuTrigger} from '@angular/material/menu';
 
-import {IncidentDto, IncidentTypeDto, UnitDto, UnitEndpointService, UnitStateDto} from 'mls-coceso-api';
+import {IncidentDto, IncidentTypeDto, UnitDto, UnitStateDto} from 'mls-coceso-api';
+import {NotificationService, WindowService} from 'mls-common';
 
 import {combineLatest, Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
+import {DropListService} from '../../../services/drop-list.service';
 
 import {IncidentDataService} from '../../../services/incident.data.service';
+import {UnitDataService} from '../../../services/unit.data.service';
+import {UnitFormComponent} from '../unit-form/unit-form.component';
 
 @Component({
   selector: 'coceso-main-unit',
@@ -15,14 +20,50 @@ import {IncidentDataService} from '../../../services/incident.data.service';
 })
 export class UnitEntryComponent {
 
-  @Input() unit: UnitDto;
+  private _unit: UnitDto;
+
+  get unit(): UnitDto {
+    return this._unit;
+  }
+
+  @Input()
+  set unit(value: UnitDto) {
+    this.setUnit(value);
+  }
 
   @ViewChild(MatMenuTrigger)
   private unitMenu: MatMenuTrigger;
 
-  readonly states = Object.values(UnitStateDto);
+  states: UnitStateDto[];
+  stateCss: string;
 
-  constructor(private readonly unitService: UnitEndpointService, private readonly incidentService: IncidentDataService) {
+  readonly incidentDropLists: Observable<CdkDropList[]>;
+
+  constructor(private readonly unitService: UnitDataService, private readonly incidentService: IncidentDataService,
+              private readonly windowService: WindowService, private readonly notificationService: NotificationService,
+              dropListService: DropListService) {
+    this.incidentDropLists = dropListService.getLists('incidents');
+  }
+
+  private currentId(): number {
+    return this.unit ? this.unit.id : null;
+  }
+
+  private setUnit(unit: UnitDto) {
+    this._unit = unit;
+    this.states = Object.values(UnitStateDto).filter(state => state !== unit.state);
+    this.stateCss = this.buildStateCss(unit);
+  }
+
+  private buildStateCss(unit: UnitDto): string {
+    switch (unit.state) {
+      case UnitStateDto.READY:
+        return this.isStandby() ? 'unit-task-Standby' : 'unit-state-ready';
+      case UnitStateDto.NOT_READY:
+        return 'unit-state-not-ready';
+      case UnitStateDto.OFF_DUTY:
+        return 'unit-state-off-duty';
+    }
   }
 
   openMenu(event: MouseEvent) {
@@ -30,22 +71,18 @@ export class UnitEntryComponent {
     this.unitMenu.openMenu();
   }
 
-  allowState(state: UnitStateDto): boolean {
-    return this.unit.state !== state;
-  }
-
   setState(state: UnitStateDto): void {
-    this.unitService.updateUnit({
-      concern: this.unit.concern,
-      unit: this.unit.id,
-      data: {state}
-    }).subscribe(() => {
-      // TODO
-    });
+    const id = this.currentId();
+    if (!id) {
+      return;
+    }
+
+    this.unitService.updateUnit(id, {state})
+        .subscribe(this.notificationService.onError('unit.state.error'));
   }
 
   showActions(): boolean {
-    return this.unit.portable && (this.allowSendHome() || this.allowStandby() || this.allowHoldPosition());
+    return this._unit.portable && (this.allowSendHome() || this.allowStandby() || this.allowHoldPosition());
   }
 
   allowSendHome(): boolean {
@@ -54,12 +91,13 @@ export class UnitEntryComponent {
   }
 
   sendHome(): void {
-    this.unitService.sendHome({
-      concern: this.unit.concern,
-      unit: this.unit.id
-    }).subscribe(() => {
-      // TODO
-    });
+    const id = this.currentId();
+    if (!id) {
+      return;
+    }
+
+    this.unitService.sendHome(id)
+        .subscribe(this.notificationService.onError('unit.actions.error'));
   }
 
   allowStandby(): boolean {
@@ -68,12 +106,13 @@ export class UnitEntryComponent {
   }
 
   setStandby() {
-    this.unitService.standby({
-      concern: this.unit.concern,
-      unit: this.unit.id
-    }).subscribe(() => {
-      // TODO
-    });
+    const id = this.currentId();
+    if (!id) {
+      return;
+    }
+
+    this.unitService.standby(id)
+        .subscribe(this.notificationService.onError('unit.actions.error'));
   }
 
   allowHoldPosition(): boolean {
@@ -82,12 +121,13 @@ export class UnitEntryComponent {
   }
 
   setHoldPosition() {
-    this.unitService.holdPosition({
-      concern: this.unit.concern,
-      unit: this.unit.id
-    }).subscribe(() => {
-      // TODO
-    });
+    const id = this.currentId();
+    if (!id) {
+      return;
+    }
+
+    this.unitService.holdPosition(id)
+        .subscribe(this.notificationService.onError('unit.actions.error'));
   }
 
   allowSendCall(): boolean {
@@ -100,7 +140,7 @@ export class UnitEntryComponent {
   }
 
   dropdownIncidents(): Observable<IncidentDto[]> {
-    const tasks = this.unit.incidents || [];
+    const tasks = this._unit.incidents || [];
     return combineLatest(tasks.map(t => this.incidentService.getById(t.incident))).pipe(
         map(incidents => incidents.filter(i => this.showInDropdown(i))),
         map(incidents => incidents.length > 0 ? incidents : null)
@@ -111,8 +151,12 @@ export class UnitEntryComponent {
     return incident && (
         incident.type === IncidentTypeDto.Task ||
         incident.type === IncidentTypeDto.Transport ||
-        incident.type === IncidentTypeDto.Relocation
+        incident.type === IncidentTypeDto.Position
     );
+  }
+
+  dropped(event: CdkDragDrop<any>): void {
+    console.log(event);
   }
 
   createIncident(): void {
@@ -136,22 +180,14 @@ export class UnitEntryComponent {
   }
 
   editUnit(): void {
-    // TODO
+    const id = this.currentId();
+    if (id) {
+      this.windowService.open(UnitFormComponent, {id});
+    }
   }
 
   showJournal(): void {
     // TODO
-  }
-
-  stateCss() {
-    switch (this.unit.state) {
-      case UnitStateDto.READY:
-        return this.isStandby() ? 'unit-state-standby' : 'unit-state-ready';
-      case UnitStateDto.NOT_READY:
-        return 'unit-state-not-ready';
-      case UnitStateDto.OFF_DUTY:
-        return 'unit-state-off-duty';
-    }
   }
 
   private isStandby(): boolean {
@@ -160,14 +196,14 @@ export class UnitEntryComponent {
   }
 
   hasIncident(): boolean {
-    return this.unit.incidents && this.unit.incidents.length > 0;
+    return this._unit.incidents && this._unit.incidents.length > 0;
   }
 
   isFree(): boolean {
-    return this.unit.portable && this.unit.state !== UnitStateDto.OFF_DUTY && !this.hasIncident() && !this.isHome();
+    return this._unit.portable && this._unit.state !== UnitStateDto.OFF_DUTY && !this.hasIncident() && !this.isHome();
   }
 
   isHome(): boolean {
-    return this.unit.home && this.unit.position && this.unit.home.info === this.unit.position.info;
+    return this._unit.home && this._unit.position && this._unit.home.info === this._unit.position.info;
   }
 }

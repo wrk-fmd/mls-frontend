@@ -1,9 +1,15 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {IncidentDto, TaskDto} from 'mls-coceso-api';
-import {WindowService} from 'mls-common';
-import {Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
-import {UnitDataService} from '../../../services/unit.data.service';
+import {CdkDragDrop, CdkDropList} from '@angular/cdk/drag-drop';
+import {AfterViewInit, Component, Input, OnDestroy, ViewChild} from '@angular/core';
+
+import {IncidentDto} from 'mls-coceso-api';
+import {NotificationService, WindowService} from 'mls-common';
+
+import {BehaviorSubject, Observable} from 'rxjs';
+import {map, switchMap} from 'rxjs/operators';
+
+import {IncidentHelper, TimerData} from '../../../helpers/incident.helper';
+import {DropListService} from '../../../services/drop-list.service';
+import {TaskService} from '../../../services/task.service';
 import {IncidentFormComponent} from '../incident-form/incident-form.component';
 
 @Component({
@@ -11,34 +17,85 @@ import {IncidentFormComponent} from '../incident-form/incident-form.component';
   templateUrl: './incident-data.component.html',
   styleUrls: ['./incident-data.component.scss']
 })
-export class IncidentDataComponent implements OnInit {
+export class IncidentDataComponent implements AfterViewInit, OnDestroy {
 
-  @Input() incident: IncidentDto;
+  @ViewChild(CdkDropList) dropList: CdkDropList;
 
-  constructor(private readonly unitService: UnitDataService, private readonly windowService: WindowService) {
+  readonly _incident = new BehaviorSubject<IncidentDto>(null);
+
+  readonly title: Observable<string>;
+  readonly subtitle: Observable<string>;
+  readonly typeChar: Observable<string>;
+
+  readonly timer: Observable<TimerData>;
+
+  readonly showBo: Observable<boolean>;
+  readonly showAo: Observable<boolean>;
+
+  @Input()
+  activePanels: Set<number>;
+
+  get expanded(): boolean {
+    const id = this.currentId();
+    return id && this.activePanels && this.activePanels.has(id);
   }
 
-  ngOnInit() {
+  set expanded(value: boolean) {
+    const id = this.currentId();
+    if (!id || !this.activePanels) {
+      return;
+    }
+
+    if (value) {
+      this.activePanels.add(id);
+    } else {
+      this.activePanels.delete(id);
+    }
   }
 
-  showBo(): boolean {
-    return !!this.incident.bo;
+  @Input()
+  set incident(incident: IncidentDto) {
+    this._incident.next(incident);
   }
 
-  showAo(): boolean {
-    return !!this.incident.ao;
+  constructor(private readonly taskService: TaskService, incidentHelper: IncidentHelper, private readonly dropListService: DropListService,
+              private readonly notificationService: NotificationService, private readonly windowService: WindowService) {
+    this.title = this._incident.pipe(map(i => incidentHelper.shortTitle(i)));
+    this.subtitle = this._incident.pipe(map(i => incidentHelper.subtitle(i)));
+    this.typeChar = this._incident.pipe(map(i => incidentHelper.shortType(i)));
+
+    this.timer = this._incident.pipe(switchMap(i => incidentHelper.timer(i)));
+
+    this.showBo = this._incident.pipe(map(i => i && !incidentHelper.pointEmpty(i.bo)));
+    this.showAo = this._incident.pipe(map(i => i && !incidentHelper.pointEmpty(i.ao)));
   }
 
-  unitCall(task: TaskDto): Observable<string> {
-    return this.unitService.getById(task.unit).pipe(map(u => u ? u.call : ''));
+  ngAfterViewInit(): void {
+    this.dropListService.registerList('incidents', this.dropList);
   }
 
-  nextState(task: TaskDto): void {
-    // TODO
+  ngOnDestroy(): void {
+    this.dropListService.removeList('incidents', this.dropList);
+  }
+
+  private currentId(): number {
+    return this._incident.value ? this._incident.value.id : null;
+  }
+
+  dropUnit(event: CdkDragDrop<any>) {
+    const unit = event.item.data;
+    const incidentId = this.currentId();
+    if (unit.type === 'unit' && unit.id && incidentId) {
+      this.taskService.assign(incidentId, unit.id)
+          .subscribe(this.notificationService.onError('unit.assign'));
+    }
   }
 
   openForm(): void {
-    this.windowService.open(IncidentFormComponent, {id: this.incident.id});
+    const id = this.currentId();
+    if (id) {
+      this.windowService.open(IncidentFormComponent, {id});
+    }
   }
 
   addJournalEntry(): void {

@@ -1,0 +1,22 @@
+﻿<mat-chip-list #contactList>
+  <mat-chip *ngFor="let contact of contacts" [removable]="true" (removed)="removeContact(contact)">
+    {{'contact.type.' + contact.type | translate}}: {{contact.data}}
+    <mat-icon matChipRemove>cancel</mat-icon>
+  </mat-chip>
+</mat-chip-list>
+
+<mat-form-field [formGroup]="form" appearance="outline">
+  <mat-label translate>contact.add</mat-label>
+
+  <!--suppress HtmlFormInputWithoutLabel -->
+  <input matInput formControlName="data" [type]="inputType | async" [matChipInputFor]="contactList" (matChipInputTokenEnd)="addContact($event)">
+
+  <mat-select matSuffix formControlName="type" [placeholder]="'contact.type.label' | translate">
+    <mat-option [value]="null" disabled>{{'contact.type.label' | translate}}</mat-option>
+    <mat-option *ngFor="let type of types" [value]="type">{{'contact.type.' + type | translate}}</mat-option>
+  </mat-select>
+
+  <mat-error>
+    <mls-form-errors [control]="form.controls.data"></mls-form-errors>
+  </mat-error>
+</mat-form-field>

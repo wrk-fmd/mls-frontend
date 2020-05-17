@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 
-import {IncidentCreateDto, IncidentDto, IncidentEndpointService, IncidentUpdateDto} from 'mls-coceso-api';
+import {IncidentCreateDto, IncidentDto, IncidentEndpointService, IncidentTypeDto, IncidentUpdateDto} from 'mls-coceso-api';
 import {DataService} from 'mls-common';
 import {WatchService} from 'mls-stomp';
 
@@ -25,6 +25,12 @@ export class IncidentDataService extends DataService<IncidentDto> {
     this.concernSubscription.unsubscribe();
   }
 
+  getAll(): Observable<IncidentDto[]> {
+    return super.getAll().pipe(map(list => list.filter(i =>
+        i.type === IncidentTypeDto.Task || i.type === IncidentTypeDto.Transport || i.type === IncidentTypeDto.Position
+    )));
+  }
+
   createIncident(data: IncidentCreateDto): Observable<number> {
     return this.concernService.runWithConcern(
         concern => this.endpoint.createIncident({concern, data}).pipe(map(i => i.id))
@@ -38,12 +44,7 @@ export class IncidentDataService extends DataService<IncidentDto> {
   }
 
   protected compare(a: IncidentDto, b: IncidentDto): number {
-    if (a.state === 'Open' && b.state !== 'Open') {
-      return -1;
-    }
-    if (b.state === 'Open' && a.state !== 'Open') {
-      return 1;
-    }
+    // TODO Sort open incidents first
 
     if (a.priority && !b.priority) {
       return -1;

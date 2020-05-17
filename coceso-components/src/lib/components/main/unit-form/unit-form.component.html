@@ -1,0 +1,23 @@
+<form [formGroup]="form">
+  <mat-dialog-content>
+    <div class="form-grid">
+      <mls-form-text [control]="form.controls.call" label="unit.call" [required]="true"></mls-form-text>
+      <div></div>
+
+      <coceso-form-point [control]="form.controls.position" label="unit.position"></coceso-form-point>
+      <coceso-form-point [control]="form.controls.home" label="unit.home"></coceso-form-point>
+
+      <mls-form-multiline [control]="form.controls.info" label="unit.info" class="form-stretch"></mls-form-multiline>
+
+      <div class="form-button-group">
+        <mat-button-toggle-group formControlName="state">
+          <mat-button-toggle *ngFor="let state of states" [value]="state">{{'unit.state.' + state | translate}}</mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-flat-button color="primary" [disabled]="saveDisabled" (click)="save()">{{'form.ok' | translate}}</button>
+  </mat-dialog-actions>
+</form>

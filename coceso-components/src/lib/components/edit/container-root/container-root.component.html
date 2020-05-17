@@ -1,0 +1,31 @@
+<main *ngIf="root | async as container">
+  <mat-card class="mat-elevation-z4">
+    <mat-card-title>
+      <span translate>concern.edit.containers</span>
+      <div class="fill-remaining-space"></div>
+      <button mat-icon-button (click)="createContainer()">
+        <mat-icon>add</mat-icon>
+      </button>
+    </mat-card-title>
+    <mat-card-content>
+      <div class="container" *ngIf="container.children && container.children.length">
+        <div class="container-content">
+          <div class="container-children" cdkDropList [cdkDropListConnectedTo]="childrenLists | async"
+               (cdkDropListDropped)="dropContainer($event)" #childrenList>
+            <mls-container-edit-child *ngFor="let id of container.children" [containerId]="id"></mls-container-edit-child>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="mat-elevation-z4">
+    <mat-card-title translate>container.unassigned</mat-card-title>
+    <mat-card-content>
+      <div class="units-unassigned" cdkDropList [cdkDropListConnectedTo]="unitLists | async"
+           (cdkDropListDropped)="dropUnit($event)" cdkDropListSortingDisabled #unitList>
+        <mls-container-edit-unit *ngFor="let id of container.units" [unitId]="id"></mls-container-edit-unit>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</main>

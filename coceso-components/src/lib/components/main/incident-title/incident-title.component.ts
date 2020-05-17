@@ -1,37 +1,30 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {IncidentDto, IncidentTypeDto} from 'mls-coceso-api';
 
 @Component({
   selector: 'coceso-main-incident-title',
-  templateUrl: './incident-title.component.html',
-  styleUrls: ['./incident-title.component.scss']
+  templateUrl: './incident-title.component.html'
 })
-export class IncidentTitleComponent implements OnInit {
+export class IncidentTitleComponent {
 
   @Input() incident: IncidentDto;
 
-  constructor() {
-  }
-
-  ngOnInit() {
-  }
-
-  title(): string {
+  get title(): string {
     return this.incident.bo && this.incident.info;
   }
 
-  charForType(): string {
+  get charForType(): string {
     if (this.incident.type === IncidentTypeDto.Task && this.incident.blue) {
       return 'TaskBlue';
     }
     return this.incident.type;
   }
 
-  showBo(): boolean {
+  get showBo(): boolean {
     return !!this.incident.bo;
   }
 
-  showAo(): boolean {
+  get showAo(): boolean {
     return !!this.incident.ao;
   }
 }

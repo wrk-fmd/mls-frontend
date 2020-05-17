@@ -1,0 +1,26 @@
+.mat-card-title {
+  display: flex;
+  flex-direction: row;
+
+  .mat-icon-button {
+    height: initial;
+    width: initial;
+    line-height: initial;
+  }
+}
+
+.units-unassigned {
+  padding: 1em 0.5em;
+  min-height: 3.5em;
+  background: #eeeeee;
+}
+
+.container-placeholder {
+  padding: 0.5em 0;
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+
+  div {
+    min-height: 2em;
+    background: green;
+  }
+}
