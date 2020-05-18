@@ -1,8 +1,6 @@
 <div *ngIf="_container | async as container">
   <ul class="unit-list" *ngIf="units | async as units">
-    <ng-container *ngFor="let unit of units">
-      <coceso-main-unit [unit]="unit"></coceso-main-unit>
-    </ng-container>
+    <coceso-main-unit *ngFor="let unit of units" [unit]="unit"></coceso-main-unit>
   </ul>
 
   <mat-accordion multi *ngIf="children | async as children">

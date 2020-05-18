@@ -34,6 +34,14 @@ export class DropListGroupNameDirective<T> implements OnDestroy {
     this.items.level = level;
   }
 
+  /**
+   * Whether the list can receive items (defaults to true)
+   */
+  @Input('dropListGroupCanReceive')
+  set canReceive(canReceive: boolean) {
+    this.items.canReceive = canReceive;
+  }
+
   ngOnDestroy() {
     this.items.destroy();
   }
@@ -44,6 +52,7 @@ class NamedDropListGroupItems<T> extends Set<T> {
   static readonly groups = new Set<NamedDropListGroupItems<any>>();
   name: string;
   level = 0;
+  canReceive = true;
 
   constructor() {
     super();
@@ -53,7 +62,7 @@ class NamedDropListGroupItems<T> extends Set<T> {
   forEach(callbackfn: (value: T, value2: T, set: Set<T>) => void, thisArg?: any) {
     // This is where the magic happens: Instead of just running for the items of this group run for all groups with the same name
     [...NamedDropListGroupItems.groups.values()]
-        .filter(g => g.name === this.name)
+        .filter(g => g.canReceive && g.name === this.name)
         // Need to have inner lists first, otherwise moving into nested lists won't work
         .sort((a, b) => b.level - a.level)
         .forEach(g => g.forEachInternal(callbackfn, thisArg));

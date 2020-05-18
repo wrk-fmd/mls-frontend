@@ -12,16 +12,6 @@
   }
 }
 
-.incident-data ::ng-deep {
-  &.cdk-drop-list-dragging {
-    overflow: hidden;
-  }
-
-  .cdk-drag-placeholder {
-    display: none;
-  }
-}
-
 .incident-title {
   display: flex;
   flex-direction: row;

@@ -1,5 +1,5 @@
-import {CdkDragDrop, CdkDropList} from '@angular/cdk/drag-drop';
-import {Component, Input, ViewChild} from '@angular/core';
+import {CdkDrag, CdkDropList} from '@angular/cdk/drag-drop';
+import {Component, Input, OnDestroy, ViewChild} from '@angular/core';
 import {MatMenuTrigger} from '@angular/material/menu';
 
 import {IncidentDto, IncidentTypeDto, UnitDto, UnitStateDto} from 'mls-coceso-api';
@@ -7,7 +7,6 @@ import {NotificationService, WindowService} from 'mls-common';
 
 import {combineLatest, Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {DropListService} from '../../../services/drop-list.service';
 
 import {IncidentDataService} from '../../../services/incident.data.service';
 import {UnitDataService} from '../../../services/unit.data.service';
@@ -18,7 +17,7 @@ import {UnitFormComponent} from '../unit-form/unit-form.component';
   templateUrl: './unit-entry.component.html',
   styleUrls: ['./unit-entry.component.scss']
 })
-export class UnitEntryComponent {
+export class UnitEntryComponent implements OnDestroy {
 
   private _unit: UnitDto;
 
@@ -34,15 +33,48 @@ export class UnitEntryComponent {
   @ViewChild(MatMenuTrigger)
   private unitMenu: MatMenuTrigger;
 
+  @ViewChild(CdkDrag)
+  private cdkDrag: CdkDrag;
+
+  @ViewChild(CdkDropList)
+  set cdkDropList(list: CdkDropList) {
+    if (this.dropListSubscription) {
+      this.dropListSubscription.unsubscribe();
+      this.dropListSubscription = null;
+    }
+    if (list) {
+      this.dropListSubscription = list._dropListRef.beforeStarted.subscribe(() => this.fixDragPlaceholder());
+    }
+  }
+
+  private dropListSubscription;
+
   states: UnitStateDto[];
   stateCss: string;
 
-  readonly incidentDropLists: Observable<CdkDropList[]>;
-
   constructor(private readonly unitService: UnitDataService, private readonly incidentService: IncidentDataService,
-              private readonly windowService: WindowService, private readonly notificationService: NotificationService,
-              dropListService: DropListService) {
-    this.incidentDropLists = dropListService.getLists('incidents');
+              private readonly windowService: WindowService, private readonly notificationService: NotificationService) {
+  }
+
+  ngOnDestroy() {
+    if (this.dropListSubscription) {
+      this.dropListSubscription.unsubscribe();
+    }
+  }
+
+  private fixDragPlaceholder() {
+    // This is a workaround to keep the unit visible when dragging
+    if (!this.cdkDrag) {
+      return;
+    }
+
+    const placeholder = this.cdkDrag.getPlaceholderElement();
+    const element = this.cdkDrag.getRootElement();
+    if (placeholder && placeholder.parentNode && element) {
+      // CdkDragDrop replaces the unit button with a placeholder - we move it back where it should be
+      placeholder.parentNode.insertBefore(element, placeholder);
+      element.style.display = 'block';
+    }
   }
 
   private currentId(): number {
@@ -153,10 +185,6 @@ export class UnitEntryComponent {
         incident.type === IncidentTypeDto.Transport ||
         incident.type === IncidentTypeDto.Position
     );
-  }
-
-  dropped(event: CdkDragDrop<any>): void {
-    console.log(event);
   }
 
   createIncident(): void {

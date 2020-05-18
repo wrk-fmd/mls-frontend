@@ -1,5 +1,5 @@
-import {CdkDragDrop, CdkDropList} from '@angular/cdk/drag-drop';
-import {AfterViewInit, Component, Input, OnDestroy, ViewChild} from '@angular/core';
+import {CdkDragDrop} from '@angular/cdk/drag-drop';
+import {Component, Input} from '@angular/core';
 
 import {IncidentDto} from 'mls-coceso-api';
 import {NotificationService, WindowService} from 'mls-common';
@@ -8,7 +8,6 @@ import {BehaviorSubject, Observable} from 'rxjs';
 import {map, switchMap} from 'rxjs/operators';
 
 import {IncidentHelper, TimerData} from '../../../helpers/incident.helper';
-import {DropListService} from '../../../services/drop-list.service';
 import {TaskService} from '../../../services/task.service';
 import {IncidentFormComponent} from '../incident-form/incident-form.component';
 
@@ -17,9 +16,7 @@ import {IncidentFormComponent} from '../incident-form/incident-form.component';
   templateUrl: './incident-data.component.html',
   styleUrls: ['./incident-data.component.scss']
 })
-export class IncidentDataComponent implements AfterViewInit, OnDestroy {
-
-  @ViewChild(CdkDropList) dropList: CdkDropList;
+export class IncidentDataComponent {
 
   readonly _incident = new BehaviorSubject<IncidentDto>(null);
 
@@ -58,7 +55,7 @@ export class IncidentDataComponent implements AfterViewInit, OnDestroy {
     this._incident.next(incident);
   }
 
-  constructor(private readonly taskService: TaskService, incidentHelper: IncidentHelper, private readonly dropListService: DropListService,
+  constructor(private readonly taskService: TaskService, incidentHelper: IncidentHelper,
               private readonly notificationService: NotificationService, private readonly windowService: WindowService) {
     this.title = this._incident.pipe(map(i => incidentHelper.shortTitle(i)));
     this.subtitle = this._incident.pipe(map(i => incidentHelper.subtitle(i)));
@@ -68,14 +65,6 @@ export class IncidentDataComponent implements AfterViewInit, OnDestroy {
 
     this.showBo = this._incident.pipe(map(i => i && !incidentHelper.pointEmpty(i.bo)));
     this.showAo = this._incident.pipe(map(i => i && !incidentHelper.pointEmpty(i.ao)));
-  }
-
-  ngAfterViewInit(): void {
-    this.dropListService.registerList('incidents', this.dropList);
-  }
-
-  ngOnDestroy(): void {
-    this.dropListService.removeList('incidents', this.dropList);
   }
 
   private currentId(): number {

@@ -1,5 +1,5 @@
 <mat-dialog-content>
-  <ul class="unit-list">
+  <ul class="unit-list" cdkDropListGroup dropListGroupName="unit-assign" [dropListGroupCanReceive]="false">
     <coceso-main-unit *ngFor="let unit of units | async" [unit]="unit"></coceso-main-unit>
   </ul>
 </mat-dialog-content>

@@ -1,5 +1,5 @@
 <mat-expansion-panel *ngIf="_incident | async as incident" class="incident-data" [(expanded)]="expanded"
-                     cdkDropList (cdkDropListDropped)="dropUnit($event)">
+                     cdkDropList [cdkDropListAutoScrollDisabled]="true" (cdkDropListDropped)="dropUnit($event)">
   <mat-expansion-panel-header>
     <mat-panel-title class="incident-title">
       <span class="incident-type" [ngClass]="{'incident-blue': incident.blue}" translate>

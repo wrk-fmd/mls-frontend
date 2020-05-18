@@ -62,9 +62,7 @@ import {
   UnitTaskComponent
 } from './components';
 import {IncidentHelper, TaskHelper} from './helpers';
-import {ClockService, ConcernDataService, ContainerDataService, IncidentDataService, UnitDataService} from './services';
-import {DropListService} from './services/drop-list.service';
-import {TaskService} from './services/task.service';
+import {ClockService, ConcernDataService, ContainerDataService, IncidentDataService, TaskService, UnitDataService} from './services';
 
 @NgModule({
   declarations: [
@@ -109,7 +107,7 @@ import {TaskService} from './services/task.service';
   ],
   providers: [
     IncidentHelper, TaskHelper,
-    ClockService, DropListService, TaskService,
+    ClockService, TaskService,
     ConcernDataService, IncidentDataService, UnitDataService, ContainerDataService
   ]
 })
