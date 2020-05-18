@@ -26,6 +26,7 @@ import {
   WindowComponent,
   WinmanComponent
 } from './components';
+import {DropListGroupNameDirective} from './directives';
 import {TrackingFormBuilder} from './forms';
 import {NotificationService, WindowService} from './services';
 import {getLocaleId, registerTranslations} from './translations';
@@ -34,6 +35,7 @@ registerLocaleData(localeDe);
 
 @NgModule({
   declarations: [
+    DropListGroupNameDirective,
     FormErrorsComponent, FormServerComponent, FormMultilineComponent, FormTextComponent,
     LoginComponent, WinmanComponent, DialogComponent, WindowComponent
   ],
@@ -54,6 +56,7 @@ registerLocaleData(localeDe);
     TranslateModule.forChild()
   ],
   exports: [
+    DropListGroupNameDirective,
     FormErrorsComponent, FormServerComponent, FormMultilineComponent, FormTextComponent,
     LoginComponent, WinmanComponent, DialogComponent, WindowComponent
   ],

@@ -1,60 +1,23 @@
-import {CdkDragDrop, CdkDropList} from '@angular/cdk/drag-drop';
-import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy, ViewChild} from '@angular/core';
+import {CdkDragDrop} from '@angular/cdk/drag-drop';
+import {Component} from '@angular/core';
 
 import {ContainerDto} from 'mls-coceso-api';
 
 import {Observable} from 'rxjs';
 
 import {ContainerDataService} from '../../../services/container.data.service';
-import {DropListService} from '../../../services/drop-list.service';
 
 @Component({
   selector: 'mls-container-edit-root',
   templateUrl: './container-root.component.html',
   styleUrls: ['./container-root.component.scss']
 })
-export class ContainerEditRootComponent implements AfterViewInit, OnDestroy {
+export class ContainerEditRootComponent {
 
   readonly root: Observable<ContainerDto>;
 
-  private _unitList: CdkDropList;
-  private _childrenList: CdkDropList;
-
-  readonly unitLists: Observable<CdkDropList[]>;
-  readonly childrenLists: Observable<CdkDropList[]>;
-
-  constructor(private readonly containerService: ContainerDataService, private readonly dropListService: DropListService,
-              private readonly cdr: ChangeDetectorRef) {
+  constructor(private readonly containerService: ContainerDataService) {
     this.root = containerService.getRoot();
-
-    this.unitLists = dropListService.getLists('container-units');
-    this.childrenLists = dropListService.getLists('container-children');
-  }
-
-  @ViewChild('unitList') set unitList(list: CdkDropList) {
-    if (list !== this._unitList) {
-      this.dropListService.removeList('container-units', this._unitList);
-      this._unitList = list;
-      this.dropListService.registerList('container-units', this._unitList);
-    }
-  }
-
-  @ViewChild('childrenList') set childrenList(list: CdkDropList) {
-    if (list !== this._childrenList) {
-      this.dropListService.removeList('container-children', this._childrenList);
-      this._childrenList = list;
-      this.dropListService.registerList('container-children', this._childrenList);
-    }
-  }
-
-  ngAfterViewInit(): void {
-    // TODO Not nice, maybe try to refactor the whole thing somehow?
-    this.cdr.detectChanges();
-  }
-
-  ngOnDestroy(): void {
-    this.dropListService.removeList('container-units', this._unitList);
-    this.dropListService.removeList('container-children', this._childrenList);
   }
 
   createContainer() {
