@@ -1,5 +1,80 @@
 .dialog-window {
+  position: relative !important;
+
   .cdk-drag-handle {
     cursor: move;
+  }
+}
+
+.resize-handle {
+  position: absolute;
+  display: block;
+
+  // Position
+  &-n, &-nw, &-ne {
+    top: -5px;
+  }
+
+  &-s, &-sw, &-se {
+    bottom: -5px;
+  }
+
+  &-w, &-nw, &-sw {
+    left: -5px;
+  }
+
+  &-e, &-ne, &-se {
+    right: -5px;
+  }
+
+  // Sizes
+  &-n, &-s {
+    width: 100%;
+    height: 7px;
+    left: 0;
+  }
+
+  &-w, &-e {
+    width: 7px;
+    height: 100%;
+    top: 0;
+  }
+
+  &-nw, &-ne, &-sw, &-se {
+    width: 9px;
+    height: 9px;
+  }
+
+  // Cursors
+  &-n {
+    cursor: n-resize;
+  }
+
+  &-s {
+    cursor: s-resize;
+  }
+
+  &-w {
+    cursor: w-resize;
+  }
+
+  &-e {
+    cursor: e-resize;
+  }
+
+  &-nw {
+    cursor: nw-resize;
+  }
+
+  &-ne {
+    cursor: ne-resize;
+  }
+
+  &-sw {
+    cursor: sw-resize;
+  }
+
+  &-se {
+    cursor: se-resize;
   }
 }

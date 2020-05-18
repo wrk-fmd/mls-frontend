@@ -43,7 +43,7 @@ export class MainComponent implements AfterViewInit, OnDestroy {
   }
 
   showUnitsHierarchy() {
-    this.windowService.open(UnitHierarchyComponent);
+    this.windowService.open(UnitHierarchyComponent, null, {left: '0px', top: '0px'});
   }
 
   showUnitsAlarm() {
@@ -71,7 +71,7 @@ export class MainComponent implements AfterViewInit, OnDestroy {
   }
 
   showActiveIncidents() {
-    this.windowService.open(IncidentListComponent);
+    this.windowService.open(IncidentListComponent, null, {left: '70%', top: '0px'});
   }
 
   showDoneIncidents() {
