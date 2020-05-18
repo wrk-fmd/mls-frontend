@@ -3,7 +3,6 @@ export * from './clock/clock.component';
 export * from './incident-form/incident-form.component';
 
 export * from './incident-list/incident-list.component';
-export * from './incident-title/incident-title.component';
 export * from './incident-data/incident-data.component';
 export * from './incident-task/incident-task.component';
 
