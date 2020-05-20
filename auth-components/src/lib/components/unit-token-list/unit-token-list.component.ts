@@ -6,7 +6,7 @@ import {Subscription} from 'rxjs';
 import {UnitEndpointService, UnitTokenDto} from 'mls-auth-api';
 
 @Component({
-  selector: 'unit-token-list',
+  selector: 'mls-auth-unit-token-list',
   templateUrl: './unit-token-list.component.html',
   styleUrls: ['./unit-token-list.component.css']
 })

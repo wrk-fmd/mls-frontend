@@ -6,7 +6,7 @@ import {ContainerDataService} from '../../../services/container.data.service';
 import {UnitDataService} from '../../../services/unit.data.service';
 
 @Component({
-  selector: 'mls-container-edit-unit',
+  selector: 'coceso-edit-container-unit',
   templateUrl: './container-unit.component.html',
   styleUrls: ['./container-unit.component.scss']
 })

@@ -11,7 +11,7 @@ import {UnitDataService} from '../../../services/unit.data.service';
 import {UnitEditFormComponent} from '../unit/unit-edit-form.component';
 
 @Component({
-  selector: 'mls-units-edit',
+  selector: 'coceso-edit-units',
   templateUrl: './units-edit.component.html'
 })
 export class UnitsEditComponent implements OnInit, OnDestroy {

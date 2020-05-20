@@ -9,7 +9,7 @@ import {finalize, tap} from 'rxjs/operators';
 import {ConcernDataService} from '../../../services/concern.data.service';
 
 @Component({
-  selector: 'mls-concern-edit',
+  selector: 'coceso-edit-concern',
   templateUrl: './concern-edit.component.html'
 })
 export class ConcernEditComponent implements OnDestroy {

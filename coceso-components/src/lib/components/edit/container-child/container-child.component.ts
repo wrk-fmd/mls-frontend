@@ -11,7 +11,7 @@ import {switchMap, tap} from 'rxjs/operators';
 import {ContainerDataService} from '../../../services/container.data.service';
 
 @Component({
-  selector: 'mls-container-edit-child',
+  selector: 'coceso-edit-container-child',
   templateUrl: './container-child.component.html',
   styleUrls: ['./container-child.component.scss']
 })

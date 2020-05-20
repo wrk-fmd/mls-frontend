@@ -9,7 +9,7 @@ import {WinmanMatDialog, WinmanOverlay, WinmanOverlayContainer} from './winman.d
  * This component displays windows and a taskbar
  */
 @Component({
-  selector: 'window-manager',
+  selector: 'mls-window-manager',
   templateUrl: './winman.component.html',
   styleUrls: ['./winman.component.scss'],
   providers: [WinmanMatDialog, WinmanOverlay, WinmanOverlayContainer]

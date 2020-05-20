@@ -9,7 +9,6 @@ import {Observable, ReplaySubject, Subscription} from 'rxjs';
 import {UnitDataService} from '../../../services/unit.data.service';
 
 @Component({
-  selector: 'mls-coceso-incident-list',
   templateUrl: './unit-list.component.html',
   styleUrls: ['./unit-list.component.scss']
 })

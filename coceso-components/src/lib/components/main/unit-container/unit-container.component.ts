@@ -9,7 +9,7 @@ import {ContainerDataService} from '../../../services/container.data.service';
 import {UnitDataService} from '../../../services/unit.data.service';
 
 @Component({
-  selector: 'mls-main-unit-container',
+  selector: 'coceso-main-unit-container',
   templateUrl: './unit-container.component.html',
   styleUrls: ['./unit-container.component.scss']
 })

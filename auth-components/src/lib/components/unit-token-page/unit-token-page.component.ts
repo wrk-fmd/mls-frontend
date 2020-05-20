@@ -2,7 +2,7 @@ import {Component, Input} from '@angular/core';
 import {UnitTokenDto} from 'mls-auth-api';
 
 @Component({
-  selector: 'unit-token-page',
+  selector: 'mls-auth-unit-token-page',
   templateUrl: './unit-token-page.component.html',
   styleUrls: ['./unit-token-page.component.scss']
 })

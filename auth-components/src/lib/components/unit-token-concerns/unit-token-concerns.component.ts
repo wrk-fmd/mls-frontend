@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ConcernDto, ConcernEndpointService} from 'mls-auth-api';
 
 @Component({
-  selector: 'unit-token-concerns',
+  selector: 'mls-auth-concerns',
   templateUrl: './unit-token-concerns.component.html',
   styleUrls: ['./unit-token-concerns.component.scss']
 })

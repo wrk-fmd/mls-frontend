@@ -8,7 +8,7 @@ import {Observable} from 'rxjs';
 import {ContainerDataService} from '../../../services/container.data.service';
 
 @Component({
-  selector: 'mls-container-edit-root',
+  selector: 'coceso-edit-container-root',
   templateUrl: './container-root.component.html',
   styleUrls: ['./container-root.component.scss']
 })

@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Injectable, OnDestroy} from '@angular/core';
 
 import {ContainerCreateDto, ContainerDto, ContainerEndpointService, ContainerUpdateDto} from 'mls-coceso-api';
 import {DataService} from 'mls-common';
@@ -10,7 +10,7 @@ import {switchMap} from 'rxjs/operators';
 import {ConcernDataService} from './concern.data.service';
 
 @Injectable()
-export class ContainerDataService extends DataService<ContainerDto> {
+export class ContainerDataService extends DataService<ContainerDto> implements OnDestroy {
 
   private readonly concernSubscription: Subscription;
 

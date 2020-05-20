@@ -6,6 +6,7 @@ import {Directive, Input, OnDestroy} from '@angular/core';
  * It has to be used in addition to the cdkDropListGroup directive
  */
 @Directive({
+  // tslint:disable-next-line:directive-selector
   selector: '[dropListGroupName]',
   exportAs: 'dropListGroupName',
 })

@@ -79,7 +79,7 @@ export class WindowComponent extends DialogComponent {
 
     if (this.resizeW) {
       // West
-      left += x - this.lastX
+      left += x - this.lastX;
       width -= x - this.lastX;
     }
 

@@ -11,7 +11,7 @@
       <div class="container" *ngIf="container.children && container.children.length">
         <div class="container-content" cdkDropListGroup dropListGroupName="edit-container">
           <div class="container-children" cdkDropList (cdkDropListDropped)="dropContainer($event)">
-            <mls-container-edit-child *ngFor="let id of container.children" [containerId]="id" [level]="1"></mls-container-edit-child>
+            <coceso-edit-container-child *ngFor="let id of container.children" [containerId]="id" [level]="1"></coceso-edit-container-child>
           </div>
         </div>
       </div>
@@ -22,7 +22,7 @@
     <mat-card-title translate>container.unassigned</mat-card-title>
     <mat-card-content cdkDropListGroup dropListGroupName="edit-units">
       <div class="units-unassigned" cdkDropList (cdkDropListDropped)="dropUnit($event)" cdkDropListSortingDisabled>
-        <mls-container-edit-unit *ngFor="let id of container.units" [unitId]="id"></mls-container-edit-unit>
+        <coceso-edit-container-unit *ngFor="let id of container.units" [unitId]="id"></coceso-edit-container-unit>
       </div>
     </mat-card-content>
   </mat-card>

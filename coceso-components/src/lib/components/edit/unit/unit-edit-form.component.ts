@@ -11,7 +11,6 @@ import {flatMap, switchMap, tap} from 'rxjs/operators';
 import {UnitDataService} from '../../../services/unit.data.service';
 
 @Component({
-  selector: 'mls-unit-edit',
   templateUrl: './unit-edit-form.component.html'
 })
 export class UnitEditFormComponent implements DialogContent<any>, OnDestroy {

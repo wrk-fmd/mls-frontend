@@ -26,13 +26,13 @@
     <div class="container-content">
       <ng-container cdkDropListGroup dropListGroupName="edit-units">
         <div class="container-units" cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="dropUnit($event)">
-          <mls-container-edit-unit *ngFor="let id of container.units" [unitId]="id"></mls-container-edit-unit>
+          <coceso-edit-container-unit *ngFor="let id of container.units" [unitId]="id"></coceso-edit-container-unit>
         </div>
       </ng-container>
 
       <ng-container cdkDropListGroup dropListGroupName="edit-container" [dropListGroupLevel]="level">
         <div class="container-children" cdkDropList (cdkDropListDropped)="dropContainer($event)">
-          <mls-container-edit-child *ngFor="let id of container.children" [containerId]="id" [level]="level + 1"></mls-container-edit-child>
+          <coceso-edit-container-child *ngFor="let id of container.children" [containerId]="id" [level]="level + 1"></coceso-edit-container-child>
         </div>
       </ng-container>
     </div>

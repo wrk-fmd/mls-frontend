@@ -6,7 +6,6 @@ import {ConcernDataService} from '../../services/concern.data.service';
 import {IncidentFormComponent, IncidentListComponent, UnitHierarchyComponent, UnitListComponent} from './main';
 
 @Component({
-  selector: 'mls-coceso-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss']
 })
