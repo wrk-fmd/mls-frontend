@@ -165,38 +165,38 @@
         }
       }
     },
-    "stomp": {
+    "common-data": {
       "projectType": "library",
-      "root": "stomp",
-      "sourceRoot": "stomp/src",
+      "root": "common-data",
+      "sourceRoot": "common-data/src",
       "prefix": "lib",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
-            "tsConfig": "stomp/tsconfig.lib.json",
-            "project": "stomp/ng-package.json"
+            "tsConfig": "common-data/tsconfig.lib.json",
+            "project": "common-data/ng-package.json"
           },
           "configurations": {
             "production": {
-              "tsConfig": "stomp/tsconfig.lib.prod.json"
+              "tsConfig": "common-data/tsconfig.lib.prod.json"
             }
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "stomp/src/test.ts",
-            "tsConfig": "stomp/tsconfig.spec.json",
-            "karmaConfig": "stomp/karma.conf.js"
+            "main": "common-data/src/test.ts",
+            "tsConfig": "common-data/tsconfig.spec.json",
+            "karmaConfig": "common-data/karma.conf.js"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "stomp/tsconfig.lib.json",
-              "stomp/tsconfig.spec.json"
+              "common-data/tsconfig.lib.json",
+              "common-data/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"

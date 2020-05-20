@@ -1,17 +1,17 @@
 import {ModuleWithProviders, NgModule} from '@angular/core';
 import {InjectableRxStompConfig, RxStompService} from '@stomp/ng2-stompjs';
 
-import {WatchService} from './stomp';
+import {WatchService} from './services';
 import {StompConfiguration} from './stomp.configuration';
 
 /**
  * This module provides and configures the STOMP services
  */
 @NgModule()
-export class StompModule {
-  static forRoot(stompConfiguration: StompConfiguration): ModuleWithProviders<StompModule> {
+export class CommonDataModule {
+  static forRoot(stompConfiguration: StompConfiguration): ModuleWithProviders<CommonDataModule> {
     return {
-      ngModule: StompModule,
+      ngModule: CommonDataModule,
       providers: [
         WatchService, RxStompService, {
           provide: InjectableRxStompConfig,

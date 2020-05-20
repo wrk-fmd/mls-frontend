@@ -7,7 +7,7 @@
       "@ngx-translate/core": "ngx-translate",
       "mls-coceso-api": "mls-coceso-api",
       "mls-common": "mls-common",
-      "mls-stomp": "mls-stomp"
+      "mls-common-data": "mls-common-data"
     }
   }
 }

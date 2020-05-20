@@ -11,6 +11,6 @@
     "@ngx-translate/core": "^12.1.2",
     "mls-coceso-api": "*",
     "mls-common": "*",
-    "mls-stomp": "*"
+    "mls-common-data": "*"
   }
 }

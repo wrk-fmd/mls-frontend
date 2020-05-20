@@ -2,11 +2,12 @@ import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
 
 import {ConcernDto, ConcernEndpointService, IncidentUpdateDto, SectionCreateDto} from 'mls-coceso-api';
-import {DataService} from 'mls-common';
-import {WatchService} from 'mls-stomp';
+import {DataService} from 'mls-common-data';
 
 import {BehaviorSubject, Observable, throwError} from 'rxjs';
 import {map, switchMap} from 'rxjs/operators';
+
+import {CocesoWatchService} from './coceso.watch.service';
 
 @Injectable()
 export class ConcernDataService extends DataService<ConcernDto> implements Resolve<void> {
@@ -14,7 +15,7 @@ export class ConcernDataService extends DataService<ConcernDto> implements Resol
   private readonly active = new BehaviorSubject<number>(null);
   private readonly section = new BehaviorSubject<string>(null);
 
-  constructor(private readonly endpoint: ConcernEndpointService, watchService: WatchService) {
+  constructor(private readonly endpoint: ConcernEndpointService, watchService: CocesoWatchService) {
     super();
     this.subscribe(watchService.watchConcerns());
   }

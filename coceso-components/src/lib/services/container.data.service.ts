@@ -1,12 +1,12 @@
 import {Injectable, OnDestroy} from '@angular/core';
 
 import {ContainerCreateDto, ContainerDto, ContainerEndpointService, ContainerUpdateDto} from 'mls-coceso-api';
-import {DataService} from 'mls-common';
-import {WatchService} from 'mls-stomp';
+import {DataService} from 'mls-common-data';
 
 import {Observable, of, Subscription} from 'rxjs';
 import {switchMap} from 'rxjs/operators';
 
+import {CocesoWatchService} from './coceso.watch.service';
 import {ConcernDataService} from './concern.data.service';
 
 @Injectable()
@@ -15,7 +15,7 @@ export class ContainerDataService extends DataService<ContainerDto> implements O
   private readonly concernSubscription: Subscription;
 
   constructor(private readonly concernService: ConcernDataService, private readonly endpoint: ContainerEndpointService,
-              private readonly watchService: WatchService) {
+              private readonly watchService: CocesoWatchService) {
     super();
     this.concernSubscription = concernService.getActiveId().subscribe(concern => this.subscribeConcern(concern));
   }

@@ -19,8 +19,8 @@
       "mls-common": [
         "dist/common"
       ],
-      "mls-stomp": [
-        "dist/stomp"
+      "mls-common-data": [
+        "dist/common-data"
       ],
       "mls-auth-api": [
         "dist/auth-api"

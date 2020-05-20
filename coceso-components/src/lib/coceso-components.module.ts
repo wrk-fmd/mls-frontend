@@ -61,7 +61,15 @@ import {
   UnitTaskComponent
 } from './components';
 import {IncidentHelper, TaskHelper} from './helpers';
-import {ClockService, ConcernDataService, ContainerDataService, IncidentDataService, TaskService, UnitDataService} from './services';
+import {
+  ClockService,
+  CocesoWatchService,
+  ConcernDataService,
+  ContainerDataService,
+  IncidentDataService,
+  TaskService,
+  UnitDataService
+} from './services';
 
 @NgModule({
   declarations: [
@@ -107,7 +115,7 @@ import {ClockService, ConcernDataService, ContainerDataService, IncidentDataServ
   providers: [
     IncidentHelper, TaskHelper,
     ClockService, TaskService,
-    ConcernDataService, IncidentDataService, UnitDataService, ContainerDataService
+    CocesoWatchService, ConcernDataService, IncidentDataService, UnitDataService, ContainerDataService
   ]
 })
 export class CocesoComponentsModule {

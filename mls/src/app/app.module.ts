@@ -8,7 +8,7 @@ import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {AuthApiModule} from 'mls-auth-api';
 import {AuthLoginModule} from 'mls-auth-login';
 import {CocesoApiModule} from 'mls-coceso-api';
-import {buildWebSocketUrl, StompModule} from 'mls-stomp';
+import {buildWebSocketUrl, CommonDataModule} from 'mls-common-data';
 import {LoggerModule, NgxLoggerLevel} from 'ngx-logger';
 
 import {environment} from '../environments/environment';
@@ -35,7 +35,7 @@ const stompUrl = buildWebSocketUrl(environment.apiUrl);
     // MLS
     AuthApiModule.forRoot({rootUrl: environment.apiUrl + '/auth'}),
     CocesoApiModule.forRoot({rootUrl: environment.apiUrl + '/coceso'}),
-    StompModule.forRoot({rootUrl: stompUrl}),
+    CommonDataModule.forRoot({rootUrl: stompUrl}),
     AuthLoginModule,
     AppRoutingModule
   ],

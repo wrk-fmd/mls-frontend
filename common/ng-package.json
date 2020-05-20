@@ -4,8 +4,7 @@
   "lib": {
     "entryFile": "src/public-api.ts",
     "umdModuleIds": {
-      "@ngx-translate/core": "ngx-translate",
-      "mls-stomp": "mls-stomp"
+      "@ngx-translate/core": "ngx-translate"
     }
   }
 }

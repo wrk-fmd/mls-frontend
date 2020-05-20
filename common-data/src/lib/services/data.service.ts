@@ -1,7 +1,8 @@
 import {Injectable, OnDestroy} from '@angular/core';
-import {DeletionDto, isDeletion, isReplayStart, ReplayStartDto} from 'mls-stomp';
 import {BehaviorSubject, Observable, Subscription} from 'rxjs';
 import {auditTime, map} from 'rxjs/operators';
+
+import {DeletionDto, isDeletion, isReplayStart, ReplayStartDto} from '../models';
 
 @Injectable()
 export abstract class DataService<T extends Entity> implements OnDestroy {

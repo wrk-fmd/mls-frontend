@@ -1,11 +1,10 @@
 {
-  "name": "mls-stomp",
+  "name": "mls-common-data",
   "version": "3.0.0-SNAPSHOT",
   "private": true,
   "peerDependencies": {
     "@angular/core": "^9.0.5",
     "@stomp/ng2-stompjs": "^7.2.0",
-    "mls-auth-login": "*",
-    "mls-coceso-api": "*"
+    "mls-auth-login": "*"
   }
 }
