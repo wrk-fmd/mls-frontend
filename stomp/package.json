@@ -5,7 +5,7 @@
   "peerDependencies": {
     "@angular/core": "^9.0.5",
     "@stomp/ng2-stompjs": "^7.2.0",
-    "mls-auth-api": "*",
+    "mls-auth-login": "*",
     "mls-coceso-api": "*"
   }
 }

@@ -3,15 +3,6 @@ export default {
     cancel: 'Cancel',
     ok: 'OK'
   },
-  login: {
-    username: 'Username',
-    password: 'Password',
-    submit: 'Login',
-    errors: {
-      credentials: 'Login failed: Credentials invalid',
-      failed: 'Login failed'
-    }
-  },
   validation: {
     required: 'This field is required',
     length: 'Exactly {{requiredLength}} characters required',

@@ -5,15 +5,6 @@ export default {
     no: 'Nein',
     yes: 'Ja'
   },
-  login: {
-    username: 'Username',
-    password: 'Passwort',
-    submit: 'Einloggen',
-    errors: {
-      credentials: 'Login fehlgeschlagen: Ungültige Zugangsdaten',
-      failed: 'Login fehlgeschlagen: {{message}}'
-    }
-  },
   validation: {
     required: 'Pflichtfeld',
     length: 'Genau {{requiredLength}} Zeichen erlaubt',

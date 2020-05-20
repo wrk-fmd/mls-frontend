@@ -1,11 +1,12 @@
 import {HttpErrorResponse} from '@angular/common/http';
 import {Injectable, OnDestroy} from '@angular/core';
+
+import {AuthenticationEndpointService, AuthResponseDto} from 'mls-auth-api';
+
 import {NGXLogger} from 'ngx-logger';
 import {BehaviorSubject, Observable, Subscription} from 'rxjs';
 import {tap} from 'rxjs/operators';
 
-import {AuthResponseDto} from '../api/models';
-import {AuthenticationEndpointService} from '../api/services';
 import {TokenService} from './token.service';
 import {User} from './user';
 

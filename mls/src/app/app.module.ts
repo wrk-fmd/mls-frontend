@@ -5,9 +5,9 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 
-import {AuthApiModule, AuthModule} from 'mls-auth-api';
+import {AuthApiModule} from 'mls-auth-api';
+import {AuthLoginModule} from 'mls-auth-login';
 import {CocesoApiModule} from 'mls-coceso-api';
-import {CommonComponentsModule} from 'mls-common';
 import {buildWebSocketUrl, StompModule} from 'mls-stomp';
 import {LoggerModule, NgxLoggerLevel} from 'ngx-logger';
 
@@ -36,8 +36,7 @@ const stompUrl = buildWebSocketUrl(environment.apiUrl);
     AuthApiModule.forRoot({rootUrl: environment.apiUrl + '/auth'}),
     CocesoApiModule.forRoot({rootUrl: environment.apiUrl + '/coceso'}),
     StompModule.forRoot({rootUrl: stompUrl}),
-    AuthModule,
-    CommonComponentsModule,
+    AuthLoginModule,
     AppRoutingModule
   ],
   providers: [

@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {InjectableRxStompConfig, RxStompService} from '@stomp/ng2-stompjs';
 
-import {TokenService} from 'mls-auth-api';
+import {TokenService} from 'mls-auth-login';
 import {ConcernDto, ContainerDto, IncidentDto, UnitDto} from 'mls-coceso-api';
 
 import {Observable} from 'rxjs';

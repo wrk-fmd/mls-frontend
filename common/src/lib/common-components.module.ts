@@ -22,7 +22,6 @@ import {
   FormMultilineComponent,
   FormServerComponent,
   FormTextComponent,
-  LoginComponent,
   WindowComponent,
   WinmanComponent
 } from './components';
@@ -37,7 +36,7 @@ registerLocaleData(localeDe);
   declarations: [
     DropListGroupNameDirective,
     FormErrorsComponent, FormServerComponent, FormMultilineComponent, FormTextComponent,
-    LoginComponent, WinmanComponent, DialogComponent, WindowComponent
+    WinmanComponent, DialogComponent, WindowComponent
   ],
   imports: [
     // Angular
@@ -58,7 +57,7 @@ registerLocaleData(localeDe);
   exports: [
     DropListGroupNameDirective,
     FormErrorsComponent, FormServerComponent, FormMultilineComponent, FormTextComponent,
-    LoginComponent, WinmanComponent, DialogComponent, WindowComponent
+    WinmanComponent, DialogComponent, WindowComponent
   ],
   providers: [
     {

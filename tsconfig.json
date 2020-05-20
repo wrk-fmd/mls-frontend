@@ -28,6 +28,9 @@
       "mls-auth-components": [
         "dist/auth-components"
       ],
+      "mls-auth-login": [
+        "dist/auth-login"
+      ],
       "mls-coceso-api": [
         "dist/coceso-api"
       ],

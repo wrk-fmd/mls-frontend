@@ -1,14 +1,12 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 
-import {AuthGuard} from 'mls-auth-api';
 import {ConcernListComponent, ConcernOverviewComponent, EditComponent, MainComponent} from './components';
 import {ConcernDataService} from './services';
 
 const routes: Routes = [
   {
     path: 'concerns',
-    canActivate: [AuthGuard],
     children: [
       {path: '', component: ConcernListComponent},
       {

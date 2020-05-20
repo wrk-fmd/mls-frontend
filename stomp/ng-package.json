@@ -5,7 +5,7 @@
     "entryFile": "src/public-api.ts",
     "umdModuleIds": {
       "@stomp/ng2-stompjs": "ng2-stompjs",
-      "mls-auth-api": "mls-auth-api",
+      "mls-auth-login": "mls-auth-login",
       "mls-coceso-api": "mls-coceso-api"
     }
   }

@@ -1,7 +1,6 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {AuthGuard} from 'mls-auth-api';
-import {LoginComponent} from 'mls-common';
+import {AuthGuard, LoginComponent} from 'mls-auth-login';
 
 const routes: Routes = [
   {path: 'login', canActivate: [AuthGuard], component: LoginComponent},

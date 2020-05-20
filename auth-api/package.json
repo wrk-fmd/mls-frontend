@@ -7,9 +7,7 @@
   "private": true,
   "peerDependencies": {
     "@angular/common": "^9.0.5",
-    "@angular/core": "^9.0.5",
-    "@angular/router": "^9.0.5",
-    "ngx-logger": "^4.0.7"
+    "@angular/core": "^9.0.5"
   },
   "devDependencies": {
     "ng-swagger-gen": "^1.8.1"

@@ -2,7 +2,8 @@ import {Component} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {TranslateService} from '@ngx-translate/core';
-import {AuthService} from 'mls-auth-api';
+
+import {AuthService} from '../../services/auth.service';
 
 /**
  * TODO add validation to form
