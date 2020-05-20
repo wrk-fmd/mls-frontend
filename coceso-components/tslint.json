@@ -4,11 +4,13 @@
     "directive-selector": [
       true,
       "attribute",
+      "coceso",
       "camelCase"
     ],
     "component-selector": [
       true,
       "element",
+      ["coceso-edit", "coceso-main", "coceso-form"],
       "kebab-case"
     ]
   }

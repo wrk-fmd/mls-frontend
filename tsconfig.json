@@ -5,15 +5,12 @@
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
     "module": "esnext",
     "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
     "importHelpers": true,
-    "target": "es6",
-    "typeRoots": [
-      "node_modules/@types"
-    ],
+    "target": "es2015",
     "lib": [
       "es2018",
       "dom"
@@ -22,39 +19,25 @@
       "mls-common": [
         "dist/common"
       ],
-      "mls-common/*": [
-        "dist/common/*"
-      ],
       "mls-stomp": [
         "dist/stomp"
-      ],
-      "mls-stomp/*": [
-        "dist/stomp/*"
       ],
       "mls-auth-api": [
         "dist/auth-api"
       ],
-      "mls-auth-api/*": [
-        "dist/auth-api/*"
-      ],
       "mls-auth-components": [
         "dist/auth-components"
-      ],
-      "mls-auth-components/*": [
-        "dist/auth-components/*"
       ],
       "mls-coceso-api": [
         "dist/coceso-api"
       ],
-      "mls-coceso-api/*": [
-        "dist/coceso-api/*"
-      ],
       "mls-coceso-components": [
         "dist/coceso-components"
-      ],
-      "mls-coceso-components/*": [
-        "dist/coceso-components/*"
       ]
     }
+  },
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true
   }
 }

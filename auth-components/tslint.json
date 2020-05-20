@@ -4,12 +4,13 @@
     "directive-selector": [
       true,
       "attribute",
-      "lib",
+      "mls-auth",
       "camelCase"
     ],
     "component-selector": [
       true,
       "element",
+      "mls-auth",
       "kebab-case"
     ]
   }

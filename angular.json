@@ -28,8 +28,7 @@
               "common/src/styles.scss",
               "coceso-components/src/styles.scss"
             ],
-            "scripts": [],
-            "es5BrowserSupport": true
+            "scripts": []
           },
           "configurations": {
             "production": {
@@ -53,6 +52,11 @@
                   "type": "initial",
                   "maximumWarning": "2mb",
                   "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
                 }
               ]
             }
@@ -82,16 +86,16 @@
             "polyfills": "mls/src/polyfills.ts",
             "tsConfig": "mls/tsconfig.spec.json",
             "karmaConfig": "mls/karma.conf.js",
-            "styles": [
-              "common/src/theme.scss",
-              "common/src/styles.scss",
-              "mls/src/styles.css"
-            ],
-            "scripts": [],
             "assets": [
               "mls/src/favicon.ico",
               "mls/src/assets"
-            ]
+            ],
+            "styles": [
+              "common/src/theme.scss",
+              "common/src/styles.scss",
+              "coceso-components/src/styles.css"
+            ],
+            "scripts": []
           }
         },
         "lint": {
@@ -100,7 +104,7 @@
             "tsConfig": [
               "mls/tsconfig.app.json",
               "mls/tsconfig.spec.json",
-              "mls/e2e/tsconfig.e2e.json"
+              "mls/e2e/tsconfig.json"
             ],
             "exclude": [
               "**/node_modules/**"
@@ -132,6 +136,11 @@
           "options": {
             "tsConfig": "common/tsconfig.lib.json",
             "project": "common/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "common/tsconfig.lib.prod.json"
+            }
           }
         },
         "test": {
@@ -167,6 +176,11 @@
           "options": {
             "tsConfig": "stomp/tsconfig.lib.json",
             "project": "stomp/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "stomp/tsconfig.lib.prod.json"
+            }
           }
         },
         "test": {
@@ -202,6 +216,11 @@
           "options": {
             "tsConfig": "auth-api/tsconfig.lib.json",
             "project": "auth-api/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "auth-api/tsconfig.lib.prod.json"
+            }
           }
         },
         "test": {
@@ -237,6 +256,11 @@
           "options": {
             "tsConfig": "auth-components/tsconfig.lib.json",
             "project": "auth-components/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "auth-components/tsconfig.lib.prod.json"
+            }
           }
         },
         "test": {
@@ -272,6 +296,11 @@
           "options": {
             "tsConfig": "coceso-components/tsconfig.lib.json",
             "project": "coceso-components/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "coceso-components/tsconfig.lib.prod.json"
+            }
           }
         },
         "test": {
@@ -307,6 +336,11 @@
           "options": {
             "tsConfig": "coceso-api/tsconfig.lib.json",
             "project": "coceso-api/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "coceso-api/tsconfig.lib.prod.json"
+            }
           }
         },
         "test": {

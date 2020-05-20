@@ -1,6 +1,6 @@
 # MLS frontend
 
-There are multiple libraries based on Angular 8, bundled in one application.
+There are multiple libraries based on Angular 9, bundled in one application.
 
 All commands need to be executed from the root directory if not noted otherwise.
 
@@ -13,8 +13,8 @@ To install the Angular CLI, simply run the following command (`-g` installs it g
 
 Run `npm i` to install the required dependencies.
 
-The initial run of `npm i` will also build all libraries.
-Further changes have to be built manually using `npm run build *library*`, where `*library*` is the name of the library (i.e., the directory).
+After the initial run of `npm i`, the libraries need to be built with `npm run build-all`.
+Further changes can be built manually using `npm run build *library*`, where `*library*` is the name of the library (i.e., the directory).
 It is also possible to listen for changes in the library using `npm run build *library* -- --watch`.
 
 See the README files for the API libraries for more information on generating the API definitions (which is not required for running the application).
@@ -28,7 +28,12 @@ npm start mls
 ```
 
 Navigate to http://localhost:4200.
-The app will automatically reload if you change any of the source files.
+The app will automatically reload if you change any of the watched source files (see above).
+
+## Start the application with Docker
+
+Run `docker-compose build` and `docker-compose up` to build and start the application in an Nginx container.
+The container binds to http://localhost:8089.
 
 ## Code scaffolding
 
