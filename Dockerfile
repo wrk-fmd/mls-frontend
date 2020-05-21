@@ -17,13 +17,25 @@ RUN npm run build auth-api
 COPY ./coceso-api/ ./coceso-api/
 RUN npm run build coceso-api
 
-# Add the STOMP library and build it
-COPY ./stomp/ ./stomp/
-RUN npm run build stomp
+# Add the i18n library and build it
+COPY ./common-i18n/ ./common-i18n/
+RUN npm run build common-i18n
 
-# Add the commons library and build it
-COPY ./common/ ./common/
-RUN npm run build common
+# Add the forms library and build it
+COPY ./common-forms/ ./common-forms/
+RUN npm run build common-forms
+
+# Add the login library and build it
+COPY ./auth-login/ ./auth-login/
+RUN npm run build auth-login
+
+# Add the data library and build it
+COPY ./common-data/ ./common-data/
+RUN npm run build common-data
+
+# Add the UI library and build it
+COPY ./common-ui/ ./common-ui/
+RUN npm run build common-ui
 
 # Add the Auth service components library and build it
 COPY ./auth-components/ ./auth-components/
@@ -35,6 +47,7 @@ RUN npm run build coceso-components
 
 # Add the application and build it
 COPY ./mls/ ./mls/
+COPY ./styles/ ./styles/
 RUN npm run build mls -- --prod
 
 # Second stage: Configure nginx
