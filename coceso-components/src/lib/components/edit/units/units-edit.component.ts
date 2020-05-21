@@ -3,11 +3,11 @@ import {MatDialog} from '@angular/material/dialog';
 import {MatTableDataSource} from '@angular/material/table';
 
 import {UnitDto} from 'mls-coceso-api';
-import {DialogComponent, DialogComponentOptions} from 'mls-common';
+import {DialogComponent, DialogComponentOptions} from 'mls-common-ui';
 
 import {Subscription} from 'rxjs';
 
-import {UnitDataService} from '../../../services/unit.data.service';
+import {UnitDataService} from '../../../services';
 import {UnitEditFormComponent} from '../unit/unit-edit-form.component';
 
 @Component({

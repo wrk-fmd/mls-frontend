@@ -1,6 +1,5 @@
 import {Injectable, Type} from '@angular/core';
-import {DialogContent} from '../components/windows/dialog/dialog.component';
-import {WindowOptions, WinmanComponent} from '../components/windows/manager/winman.component';
+import {DialogContent, WindowOptions, WinmanComponent} from '../components';
 
 @Injectable()
 export class WindowService {

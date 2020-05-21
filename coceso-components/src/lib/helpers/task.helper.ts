@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {TaskDto, TaskStateDto} from 'mls-coceso-api';
-import {NotificationService} from 'mls-common';
+import {NotificationService} from 'mls-common-forms';
 import {TaskService} from '../services/task.service';
 
 @Injectable()

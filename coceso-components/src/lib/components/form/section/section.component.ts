@@ -1,8 +1,8 @@
 ﻿import {Component} from '@angular/core';
 import {FormControl} from '@angular/forms';
-import {FormBaseComponent} from 'mls-common';
+import {FormBaseComponent} from 'mls-common-forms';
 import {Observable} from 'rxjs';
-import {ConcernDataService} from '../../../services/concern.data.service';
+import {ConcernDataService} from '../../../services';
 
 @Component({
   selector: 'coceso-form-section',

@@ -23,8 +23,9 @@ import {MatTableModule} from '@angular/material/table';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatToolbarModule} from '@angular/material/toolbar';
 
-import {CommonComponentsModule} from 'mls-common';
+import {CommonFormsModule} from 'mls-common-forms';
 import {CommonI18nModule, TRANSLATE_REGISTRAR} from 'mls-common-i18n';
+import {CommonUiModule} from 'mls-common-ui';
 
 import de from '../i18n/de';
 import en from '../i18n/en';
@@ -106,8 +107,9 @@ import {
     MatTabsModule,
     MatToolbarModule,
     // MLS modules
-    CommonComponentsModule,
+    CommonFormsModule,
     CommonI18nModule,
+    CommonUiModule,
     CocesoRoutingModule
   ],
   providers: [

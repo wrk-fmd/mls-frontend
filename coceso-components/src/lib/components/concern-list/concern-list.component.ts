@@ -2,12 +2,12 @@ import {Component} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 import {ConcernDto} from 'mls-coceso-api';
-import {NotificationService} from 'mls-common';
+import {NotificationService} from 'mls-common-forms';
 
 import {Observable} from 'rxjs';
 import {finalize, map, tap} from 'rxjs/operators';
 
-import {ConcernDataService} from '../../services/concern.data.service';
+import {ConcernDataService} from '../../services';
 
 @Component({
   templateUrl: './concern-list.component.html',

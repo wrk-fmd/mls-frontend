@@ -1,7 +1,7 @@
 ﻿import {Component} from '@angular/core';
 import {FormControl} from '@angular/forms';
-import {IncidentClosedReasonDto, UnitTypeDto} from 'mls-coceso-api';
-import {FormBaseComponent} from 'mls-common';
+import {IncidentClosedReasonDto} from 'mls-coceso-api';
+import {FormBaseComponent} from 'mls-common-forms';
 
 @Component({
   selector: 'coceso-form-incident-close',

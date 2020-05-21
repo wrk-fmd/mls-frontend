@@ -2,7 +2,7 @@
 import {FormBuilder, FormControl} from '@angular/forms';
 
 import {StaffEndpointService, StaffMemberDto} from 'mls-coceso-api';
-import {AddRemoveContainer, ChangedItems} from 'mls-common';
+import {AddRemoveContainer, ChangedItems} from 'mls-common-forms';
 
 import {Observable, of} from 'rxjs';
 import {map, switchMap} from 'rxjs/operators';

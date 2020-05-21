@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {AbstractControl, AbstractControlDirective} from '@angular/forms';
-import {TrackingFormControl} from '../../../forms';
+import {TrackingFormControl} from '../../forms';
 
 @Component({
   selector: 'mls-form-server',

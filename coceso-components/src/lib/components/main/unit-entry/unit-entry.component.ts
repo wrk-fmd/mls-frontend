@@ -3,13 +3,13 @@ import {Component, Input, OnDestroy, ViewChild} from '@angular/core';
 import {MatMenuTrigger} from '@angular/material/menu';
 
 import {IncidentDto, IncidentTypeDto, UnitDto, UnitStateDto} from 'mls-coceso-api';
-import {NotificationService, WindowService} from 'mls-common';
+import {NotificationService} from 'mls-common-forms';
+import {WindowService} from 'mls-common-ui';
 
 import {combineLatest, Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 
-import {IncidentDataService} from '../../../services/incident.data.service';
-import {UnitDataService} from '../../../services/unit.data.service';
+import {IncidentDataService, UnitDataService} from '../../../services';
 import {UnitFormComponent} from '../unit-form/unit-form.component';
 
 @Component({

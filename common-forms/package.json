@@ -1,0 +1,12 @@
+{
+  "name": "mls-common-forms",
+  "version": "3.0.0-SNAPSHOT",
+  "peerDependencies": {
+    "@angular/cdk": "^9.2.4",
+    "@angular/common": "^9.1.8",
+    "@angular/core": "^9.1.8",
+    "@angular/forms": "^9.1.8",
+    "@angular/material": "^9.2.4",
+    "mls-common-i18n": "*"
+  }
+}

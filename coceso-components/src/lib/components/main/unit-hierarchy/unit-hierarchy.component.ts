@@ -2,11 +2,11 @@ import {Component, OnDestroy} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 
 import {ContainerDto} from 'mls-coceso-api';
-import {DialogContent} from 'mls-common';
+import {DialogContent} from 'mls-common-ui';
 
 import {Observable, ReplaySubject, Subscription} from 'rxjs';
 
-import {ContainerDataService} from '../../../services/container.data.service';
+import {ContainerDataService} from '../../../services';
 
 @Component({
   templateUrl: './unit-hierarchy.component.html'

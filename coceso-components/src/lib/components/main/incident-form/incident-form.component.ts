@@ -3,13 +3,14 @@ import {Validators} from '@angular/forms';
 import {TranslateService} from '@ngx-translate/core';
 
 import {IncidentClosedReasonDto, IncidentDto, IncidentTypeDto} from 'mls-coceso-api';
-import {DialogContent, NotificationService, TrackingFormBuilder, TrackingFormGroup} from 'mls-common';
+import {NotificationService, TrackingFormBuilder, TrackingFormGroup} from 'mls-common-forms';
+import {DialogContent} from 'mls-common-ui';
 
 import {BehaviorSubject, ReplaySubject, Subscription} from 'rxjs';
 import {switchMap, tap} from 'rxjs/operators';
 
-import {IncidentHelper} from '../../../helpers/incident.helper';
-import {IncidentDataService} from '../../../services/incident.data.service';
+import {IncidentHelper} from '../../../helpers';
+import {IncidentDataService} from '../../../services';
 
 @Component({
   templateUrl: './incident-form.component.html'

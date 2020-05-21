@@ -2,11 +2,12 @@ import {Component, OnDestroy} from '@angular/core';
 import {FormControl, Validators} from '@angular/forms';
 
 import {ConcernDto} from 'mls-coceso-api';
-import {NotificationService, TrackingFormBuilder, TrackingFormGroup} from 'mls-common';
+import {NotificationService, TrackingFormBuilder, TrackingFormGroup} from 'mls-common-forms';
+
 import {Subscription} from 'rxjs';
 import {finalize, tap} from 'rxjs/operators';
 
-import {ConcernDataService} from '../../../services/concern.data.service';
+import {ConcernDataService} from '../../../services';
 
 @Component({
   selector: 'coceso-edit-concern',

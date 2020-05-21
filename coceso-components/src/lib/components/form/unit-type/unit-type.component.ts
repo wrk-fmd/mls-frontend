@@ -1,7 +1,7 @@
 ﻿import {Component} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {UnitTypeDto} from 'mls-coceso-api';
-import {FormBaseComponent} from 'mls-common';
+import {FormBaseComponent} from 'mls-common-forms';
 
 @Component({
   selector: 'coceso-form-unit-type',

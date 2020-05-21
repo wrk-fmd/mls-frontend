@@ -24,8 +24,8 @@
               "mls/src/assets"
             ],
             "styles": [
-              "common/src/theme.scss",
-              "common/src/styles.scss",
+              "styles/theme.scss",
+              "styles/styles.scss",
               "coceso-components/src/styles.scss"
             ],
             "scripts": []
@@ -91,8 +91,8 @@
               "mls/src/assets"
             ],
             "styles": [
-              "common/src/theme.scss",
-              "common/src/styles.scss",
+              "styles/theme.scss",
+              "styles/styles.scss",
               "coceso-components/src/styles.css"
             ],
             "scripts": []
@@ -121,46 +121,6 @@
             "production": {
               "devServerTarget": "mls:serve:production"
             }
-          }
-        }
-      }
-    },
-    "common": {
-      "projectType": "library",
-      "root": "common",
-      "sourceRoot": "common/src",
-      "prefix": "lib",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "common/tsconfig.lib.json",
-            "project": "common/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "tsConfig": "common/tsconfig.lib.prod.json"
-            }
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "common/src/test.ts",
-            "tsConfig": "common/tsconfig.spec.json",
-            "karmaConfig": "common/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "common/tsconfig.lib.json",
-              "common/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
           }
         }
       }
@@ -205,6 +165,46 @@
         }
       }
     },
+    "common-forms": {
+      "projectType": "library",
+      "root": "common-forms",
+      "sourceRoot": "common-forms/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "common-forms/tsconfig.lib.json",
+            "project": "common-forms/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "common-forms/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "common-forms/src/test.ts",
+            "tsConfig": "common-forms/tsconfig.spec.json",
+            "karmaConfig": "common-forms/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "common-forms/tsconfig.lib.json",
+              "common-forms/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
     "common-i18n": {
       "projectType": "library",
       "root": "common-i18n",
@@ -237,6 +237,46 @@
             "tsConfig": [
               "common-i18n/tsconfig.lib.json",
               "common-i18n/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "common-ui": {
+      "projectType": "library",
+      "root": "common-ui",
+      "sourceRoot": "common-ui/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "common-ui/tsconfig.lib.json",
+            "project": "common-ui/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "common-ui/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "common-ui/src/test.ts",
+            "tsConfig": "common-ui/tsconfig.spec.json",
+            "karmaConfig": "common-ui/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "common-ui/tsconfig.lib.json",
+              "common-ui/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"

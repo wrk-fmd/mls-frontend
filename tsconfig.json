@@ -16,14 +16,17 @@
       "dom"
     ],
     "paths": {
-      "mls-common": [
-        "dist/common"
-      ],
       "mls-common-data": [
         "dist/common-data"
       ],
+      "mls-common-ui": [
+        "dist/common-ui"
+      ],
       "mls-common-i18n": [
         "dist/common-i18n"
+      ],
+      "mls-common-forms": [
+        "dist/common-forms"
       ],
       "mls-auth-api": [
         "dist/auth-api"

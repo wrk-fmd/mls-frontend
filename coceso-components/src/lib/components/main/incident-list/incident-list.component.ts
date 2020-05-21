@@ -1,9 +1,9 @@
 import {Component, Output} from '@angular/core';
 import {IncidentDto} from 'mls-coceso-api';
-import {DialogContent} from 'mls-common';
+import {DialogContent} from 'mls-common-ui';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
 
-import {IncidentDataService} from '../../../services/incident.data.service';
+import {IncidentDataService} from '../../../services';
 
 @Component({
   templateUrl: './incident-list.component.html',

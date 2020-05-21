@@ -3,12 +3,13 @@ import {Validators} from '@angular/forms';
 import {TranslateService} from '@ngx-translate/core';
 
 import {ContactDto, StaffMemberDto, UnitDto} from 'mls-coceso-api';
-import {ChangedItems, DialogContent, NotificationService, TrackingFormBuilder, TrackingFormGroup} from 'mls-common';
+import {ChangedItems, NotificationService, TrackingFormBuilder, TrackingFormGroup} from 'mls-common-forms';
+import {DialogContent} from 'mls-common-ui';
 
 import {BehaviorSubject, forkJoin, Observable, of, ReplaySubject, Subscription, throwError} from 'rxjs';
 import {flatMap, switchMap, tap} from 'rxjs/operators';
 
-import {UnitDataService} from '../../../services/unit.data.service';
+import {UnitDataService} from '../../../services';
 
 @Component({
   templateUrl: './unit-edit-form.component.html'

@@ -1,8 +1,8 @@
 import {AfterViewInit, Component, OnDestroy, ViewChild} from '@angular/core';
-import {WindowService, WinmanComponent} from 'mls-common';
+import {WindowService, WinmanComponent} from 'mls-common-ui';
 import {Observable, Subscription} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {ConcernDataService} from '../../services/concern.data.service';
+import {ConcernDataService} from '../../services';
 import {IncidentFormComponent, IncidentListComponent, UnitHierarchyComponent, UnitListComponent} from './main';
 
 @Component({

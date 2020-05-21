@@ -2,13 +2,14 @@ import {CdkDragDrop} from '@angular/cdk/drag-drop';
 import {Component, Input} from '@angular/core';
 
 import {IncidentDto} from 'mls-coceso-api';
-import {NotificationService, WindowService} from 'mls-common';
+import {NotificationService} from 'mls-common-forms';
+import {WindowService} from 'mls-common-ui';
 
 import {BehaviorSubject, Observable} from 'rxjs';
 import {map, switchMap} from 'rxjs/operators';
 
-import {IncidentHelper, TimerData} from '../../../helpers/incident.helper';
-import {TaskService} from '../../../services/task.service';
+import {IncidentHelper, TimerData} from '../../../helpers';
+import {TaskService} from '../../../services';
 import {IncidentFormComponent} from '../incident-form/incident-form.component';
 
 @Component({

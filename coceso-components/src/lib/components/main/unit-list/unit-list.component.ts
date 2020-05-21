@@ -2,11 +2,11 @@ import {Component, OnDestroy} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 
 import {UnitDto} from 'mls-coceso-api';
-import {DialogContent} from 'mls-common';
+import {DialogContent} from 'mls-common-ui';
 
 import {Observable, ReplaySubject, Subscription} from 'rxjs';
 
-import {UnitDataService} from '../../../services/unit.data.service';
+import {UnitDataService} from '../../../services';
 
 @Component({
   templateUrl: './unit-list.component.html',

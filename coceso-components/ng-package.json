@@ -6,9 +6,10 @@
     "umdModuleIds": {
       "@ngx-translate/core": "ngx-translate",
       "mls-coceso-api": "mls-coceso-api",
-      "mls-common": "mls-common",
       "mls-common-data": "mls-common-data",
-      "mls-common-i18n": "mls-common-i18n"
+      "mls-common-forms": "mls-common-forms",
+      "mls-common-i18n": "mls-common-i18n",
+      "mls-common-ui": "mls-common-ui"
     }
   }
 }

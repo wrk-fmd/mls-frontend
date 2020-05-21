@@ -3,12 +3,12 @@ import {Component, Input, OnDestroy, ViewChild} from '@angular/core';
 import {Validators} from '@angular/forms';
 
 import {ContainerDto} from 'mls-coceso-api';
-import {NotificationService, TrackingFormBuilder, TrackingFormGroup} from 'mls-common';
+import {NotificationService, TrackingFormBuilder, TrackingFormGroup} from 'mls-common-forms';
 
 import {BehaviorSubject, Observable, Subscription} from 'rxjs';
 import {switchMap, tap} from 'rxjs/operators';
 
-import {ContainerDataService} from '../../../services/container.data.service';
+import {ContainerDataService} from '../../../services';
 
 @Component({
   selector: 'coceso-edit-container-child',
