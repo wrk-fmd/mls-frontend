@@ -20,6 +20,11 @@
             "tsConfig": "mls/tsconfig.app.json",
             "aot": true,
             "assets": [
+              {
+                "glob": "**/*",
+                "input": "coceso-components/src/assets",
+                "output": "assets"
+              },
               "mls/src/favicon.ico",
               "mls/src/assets"
             ],
@@ -87,6 +92,11 @@
             "tsConfig": "mls/tsconfig.spec.json",
             "karmaConfig": "mls/karma.conf.js",
             "assets": [
+              {
+                "glob": "**/*",
+                "input": "coceso-components/src/assets",
+                "output": "assets"
+              },
               "mls/src/favicon.ico",
               "mls/src/assets"
             ],
