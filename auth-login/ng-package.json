@@ -6,7 +6,8 @@
     "umdModuleIds": {
       "@ngx-translate/core": "ngx-translate",
       "ngx-logger": "ngx-logger",
-      "mls-auth-api": "mls-auth-api"
+      "mls-auth-api": "mls-auth-api",
+      "mls-common-i18n": "mls-common-i18n"
     }
   }
 }

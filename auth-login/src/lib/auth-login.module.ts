@@ -1,6 +1,6 @@
 import {CommonModule} from '@angular/common';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
-import {NgModule} from '@angular/core';
+import {Inject, NgModule} from '@angular/core';
 
 import {ReactiveFormsModule} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
@@ -10,14 +10,14 @@ import {MatInputModule} from '@angular/material/input';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatToolbarModule} from '@angular/material/toolbar';
 
-import {TranslateModule, TranslateService} from '@ngx-translate/core';
+import {CommonI18nModule, TRANSLATE_REGISTRAR} from 'mls-common-i18n';
 import {LoggerModule} from 'ngx-logger';
+
+import de from '../i18n/de';
+import en from '../i18n/en';
 
 import {LoginComponent} from './components';
 import {AuthGuard, AuthService, TokenInterceptor, TokenService} from './services';
-
-import translationsDe from '../i18n/de';
-import translationsEn from '../i18n/en';
 
 /**
  * This module provides and configures the authentication
@@ -37,7 +37,7 @@ import translationsEn from '../i18n/en';
     MatSnackBarModule,
     MatToolbarModule,
     // Translations
-    TranslateModule.forChild(),
+    CommonI18nModule,
     // Logging
     LoggerModule.forChild(),
   ],
@@ -53,8 +53,7 @@ import translationsEn from '../i18n/en';
   ],
 })
 export class AuthLoginModule {
-  constructor(translate: TranslateService) {
-    translate.setTranslation('en', translationsEn, true);
-    translate.setTranslation('de', translationsDe, true);
+  constructor(@Inject(TRANSLATE_REGISTRAR) registerTranslations) {
+    registerTranslations({en, de});
   }
 }

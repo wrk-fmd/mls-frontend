@@ -1,9 +1,8 @@
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {PortalModule} from '@angular/cdk/portal';
 
-import {CommonModule, registerLocaleData} from '@angular/common';
-import localeDe from '@angular/common/locales/de-AT';
-import {APP_INITIALIZER, LOCALE_ID, NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {Inject, NgModule} from '@angular/core';
 import {ReactiveFormsModule} from '@angular/forms';
 
 import {MatButtonModule} from '@angular/material/button';
@@ -14,7 +13,9 @@ import {MatInputModule} from '@angular/material/input';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatToolbarModule} from '@angular/material/toolbar';
 
-import {TranslateModule, TranslateService} from '@ngx-translate/core';
+import {CommonI18nModule, TRANSLATE_REGISTRAR} from 'mls-common-i18n';
+import de from '../i18n/de';
+import en from '../i18n/en';
 
 import {
   DialogComponent,
@@ -28,9 +29,6 @@ import {
 import {DropListGroupNameDirective} from './directives';
 import {TrackingFormBuilder} from './forms';
 import {NotificationService, WindowService} from './services';
-import {getLocaleId, registerTranslations} from './translations';
-
-registerLocaleData(localeDe);
 
 @NgModule({
   declarations: [
@@ -52,7 +50,7 @@ registerLocaleData(localeDe);
     MatSnackBarModule,
     MatToolbarModule,
     // Translations
-    TranslateModule.forChild()
+    CommonI18nModule
   ],
   exports: [
     DropListGroupNameDirective,
@@ -61,17 +59,6 @@ registerLocaleData(localeDe);
   ],
   providers: [
     {
-      provide: LOCALE_ID,
-      useFactory: getLocaleId,
-      deps: [TranslateService]
-    },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: registerTranslations,
-      deps: [TranslateService],
-      multi: true
-    },
-    {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
       useValue: {appearance: 'standard'}
     },
@@ -79,4 +66,7 @@ registerLocaleData(localeDe);
   ]
 })
 export class CommonComponentsModule {
+  constructor(@Inject(TRANSLATE_REGISTRAR) registerTranslations) {
+    registerTranslations({en, de});
+  }
 }

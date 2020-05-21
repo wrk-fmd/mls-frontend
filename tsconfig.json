@@ -22,6 +22,9 @@
       "mls-common-data": [
         "dist/common-data"
       ],
+      "mls-common-i18n": [
+        "dist/common-i18n"
+      ],
       "mls-auth-api": [
         "dist/auth-api"
       ],

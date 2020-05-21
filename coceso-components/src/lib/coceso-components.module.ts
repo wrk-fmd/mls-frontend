@@ -1,6 +1,6 @@
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {CommonModule} from '@angular/common';
-import {NgModule} from '@angular/core';
+import {Inject, NgModule} from '@angular/core';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
@@ -23,12 +23,11 @@ import {MatTableModule} from '@angular/material/table';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatToolbarModule} from '@angular/material/toolbar';
 
-import {TranslateModule, TranslateService} from '@ngx-translate/core';
-
 import {CommonComponentsModule} from 'mls-common';
+import {CommonI18nModule, TRANSLATE_REGISTRAR} from 'mls-common-i18n';
 
-import translationsDe from '../i18n/de';
-import translationsEn from '../i18n/en';
+import de from '../i18n/de';
+import en from '../i18n/en';
 
 import {CocesoRoutingModule} from './coceso-routing.module';
 import {
@@ -106,10 +105,9 @@ import {
     MatTableModule,
     MatTabsModule,
     MatToolbarModule,
-    // Translations
-    TranslateModule.forChild(),
     // MLS modules
     CommonComponentsModule,
+    CommonI18nModule,
     CocesoRoutingModule
   ],
   providers: [
@@ -119,8 +117,7 @@ import {
   ]
 })
 export class CocesoComponentsModule {
-  constructor(translate: TranslateService) {
-    translate.setTranslation('en', translationsEn, true);
-    translate.setTranslation('de', translationsDe, true);
+  constructor(@Inject(TRANSLATE_REGISTRAR) registerTranslations) {
+    registerTranslations({en, de});
   }
 }

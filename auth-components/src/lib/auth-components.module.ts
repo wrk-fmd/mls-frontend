@@ -1,5 +1,5 @@
 import {CommonModule} from '@angular/common';
-import {NgModule} from '@angular/core';
+import {Inject, NgModule} from '@angular/core';
 import {ReactiveFormsModule} from '@angular/forms';
 
 import {MatButtonModule} from '@angular/material/button';
@@ -10,11 +10,11 @@ import {MatListModule} from '@angular/material/list';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatToolbarModule} from '@angular/material/toolbar';
 
-import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {QRCodeModule} from 'angularx-qrcode';
 
-import translationsDe from '../i18n/de';
-import translationsEn from '../i18n/en';
+import {CommonI18nModule, TRANSLATE_REGISTRAR} from 'mls-common-i18n';
+import de from '../i18n/de';
+import en from '../i18n/en';
 
 import {AuthRoutingModule} from './auth-routing.module';
 import {UnitTokenConcernsComponent, UnitTokenListComponent, UnitTokenPageComponent} from './components';
@@ -35,7 +35,7 @@ import {UnitTokenConcernsComponent, UnitTokenListComponent, UnitTokenPageCompone
     MatSnackBarModule,
     MatToolbarModule,
     // Translations
-    TranslateModule.forChild(),
+    CommonI18nModule,
     // QR Codes
     QRCodeModule,
     // MLS modules
@@ -44,8 +44,7 @@ import {UnitTokenConcernsComponent, UnitTokenListComponent, UnitTokenPageCompone
   providers: []
 })
 export class AuthComponentsModule {
-  constructor(translate: TranslateService) {
-    translate.setTranslation('en', translationsEn, true);
-    translate.setTranslation('de', translationsDe, true);
+  constructor(@Inject(TRANSLATE_REGISTRAR) registerTranslations) {
+    registerTranslations({en, de});
   }
 }
