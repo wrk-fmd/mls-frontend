@@ -74,3 +74,8 @@ $mls-app-warn: mat-palette($mat-red);
 
 $mls-app-theme: mat-light-theme($mls-app-primary, $mls-app-accent, $mls-app-warn);
 @include angular-material-theme($mls-app-theme);
+
+.mat-button-toggle.mat-button-toggle-checked {
+  background-color: mat-color($mls-app-primary);
+  color: mat-color($mls-app-primary, default-contrast);
+}

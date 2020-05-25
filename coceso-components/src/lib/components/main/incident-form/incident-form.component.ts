@@ -1,19 +1,21 @@
+import {CdkDragDrop} from '@angular/cdk/drag-drop';
 import {Component, OnDestroy} from '@angular/core';
-import {Validators} from '@angular/forms';
+import {FormArray, Validators} from '@angular/forms';
 import {TranslateService} from '@ngx-translate/core';
 
-import {IncidentClosedReasonDto, IncidentDto, IncidentTypeDto} from 'mls-coceso-api';
+import {IncidentClosedReasonDto, IncidentDto, IncidentTypeDto, TaskDto, TaskStateDto} from 'mls-coceso-api';
 import {NotificationService, TrackingFormBuilder, TrackingFormGroup} from 'mls-common-forms';
 import {DialogContent} from 'mls-common-ui';
 
-import {BehaviorSubject, ReplaySubject, Subscription} from 'rxjs';
-import {switchMap, tap} from 'rxjs/operators';
+import {BehaviorSubject, forkJoin, Observable, of, ReplaySubject, Subscription, throwError} from 'rxjs';
+import {flatMap, switchMap, tap} from 'rxjs/operators';
 
-import {IncidentHelper} from '../../../helpers';
-import {IncidentDataService} from '../../../services';
+import {IncidentHelper, TaskFormControl, TaskHelper} from '../../../helpers';
+import {IncidentDataService, TaskService} from '../../../services';
 
 @Component({
-  templateUrl: './incident-form.component.html'
+  templateUrl: './incident-form.component.html',
+  styleUrls: ['./incident-form.component.scss']
 })
 export class IncidentFormComponent implements DialogContent<IncidentDto>, OnDestroy {
 
@@ -22,13 +24,16 @@ export class IncidentFormComponent implements DialogContent<IncidentDto>, OnDest
 
   private readonly id = new BehaviorSubject<number>(null);
   private readonly incidentSubscription: Subscription;
-  private type: IncidentTypeDto;
+  type: IncidentTypeDto;
 
-  form: TrackingFormGroup;
+  readonly form: TrackingFormGroup;
+  units: TaskFormControl[];
 
-  constructor(private readonly incidentService: IncidentDataService, private readonly incidentHelper: IncidentHelper,
+  constructor(private readonly incidentService: IncidentDataService, private readonly taskService: TaskService,
+              private readonly incidentHelper: IncidentHelper, private readonly taskHelper: TaskHelper,
               private readonly notificationService: NotificationService, private readonly translateService: TranslateService,
               fb: TrackingFormBuilder) {
+    this.units = [];
     this.form = fb.group({
       type: [null, Validators.required],
       closed: [IncidentClosedReasonDto.Open],
@@ -38,6 +43,7 @@ export class IncidentFormComponent implements DialogContent<IncidentDto>, OnDest
       caller: ['', Validators.maxLength(100)],
       casusNr: ['', Validators.maxLength(100)],
       section: [null],
+      units: fb.array([]),
       options: [[]]
     });
 
@@ -57,6 +63,7 @@ export class IncidentFormComponent implements DialogContent<IncidentDto>, OnDest
     this.id.next(id);
 
     if (!id) {
+      this.setUnits([]);
       this.form.setServerValue({
         type: null,
         closed: IncidentClosedReasonDto.Open,
@@ -74,6 +81,9 @@ export class IncidentFormComponent implements DialogContent<IncidentDto>, OnDest
       // Set passed values if given
       this.form.patchValue(data);
       this.form.markAsUntouched();
+      if (data.units) {
+        this.setUnits(data.units);
+      }
     }
   }
 
@@ -94,6 +104,7 @@ export class IncidentFormComponent implements DialogContent<IncidentDto>, OnDest
       options.push('priority');
     }
 
+    this.setUnits(incident.units);
     this.form.setServerValue({
       type: incident.type,
       closed: incident.closed || IncidentClosedReasonDto.Open,
@@ -105,6 +116,13 @@ export class IncidentFormComponent implements DialogContent<IncidentDto>, OnDest
       section: incident.section,
       options
     });
+  }
+
+  private setUnits(units: TaskDto[]) {
+    this.units = this.taskHelper.getTaskControls(units, this.units);
+    const formArray = this.form.controls.units as FormArray;
+    formArray.clear();
+    this.units.forEach(c => formArray.push(c));
   }
 
   private updateTitles(incident?: IncidentDto) {
@@ -126,6 +144,19 @@ export class IncidentFormComponent implements DialogContent<IncidentDto>, OnDest
       );
       this.windowTitle.next(title);
       this.taskTitle.next(title);
+    }
+  }
+
+  dropUnit(event: CdkDragDrop<any>) {
+    const unit = event.item.data;
+    const incidentId = this.id.value;
+    if (unit.type === 'unit' && unit.id && incidentId && !this.units.find(c => c.unit === unit.id)) {
+      const control = new TaskFormControl({unit: unit.id, incident: incidentId});
+      this.units.push(control);
+      (this.form.controls.units as FormArray).push(control);
+
+      control.setValue(TaskStateDto.Assigned);
+      control.isNew = true;
     }
   }
 
@@ -170,11 +201,24 @@ export class IncidentFormComponent implements DialogContent<IncidentDto>, OnDest
     const incidentId = this.id.value;
     if (incidentId) {
       this.incidentService.updateIncident(incidentId, data)
+          .pipe(flatMap(() => this.saveUnits()))
           .subscribe(this.notificationService.onError('incident.update.error'));
     } else {
       this.incidentService.createIncident(data)
-          .pipe(tap(id => this.id.next(id)))
+          .pipe(tap(id => this.id.next(id)), flatMap(() => this.saveUnits()))
           .subscribe(this.notificationService.onError('incident.create.error'));
     }
+  }
+
+  private saveUnits(): Observable<any> {
+    const incidentId = this.id.value;
+    if (!incidentId) {
+      return throwError('No incident id for saving units');
+    }
+
+    const requests = this.units
+        .filter(c => c.dirty)
+        .map(c => this.taskService.setState(incidentId, c.unit, c.value));
+    return requests.length ? forkJoin(requests) : of(null);
   }
 }

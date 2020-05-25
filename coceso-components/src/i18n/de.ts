@@ -151,7 +151,8 @@ export default {
       ZBO: 'ZBO',
       ABO: 'ABO',
       ZAO: 'ZAO',
-      AAO: 'AAO'
+      AAO: 'AAO',
+      Detached: 'Entz.'
     }
   },
   container: {

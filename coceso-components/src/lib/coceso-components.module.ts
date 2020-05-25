@@ -48,6 +48,7 @@ import {
   FormUnitTypeComponent,
   IncidentDataComponent,
   IncidentFormComponent,
+  IncidentFormTaskComponent,
   IncidentListComponent,
   IncidentTaskComponent,
   MainComponent,
@@ -79,7 +80,7 @@ import {
     UnitsEditComponent, UnitEditFormComponent,
     ContainerEditRootComponent, ContainerEditChildComponent, ContainerEditUnitComponent,
     MainComponent, ClockComponent,
-    IncidentListComponent, IncidentDataComponent, IncidentTaskComponent, IncidentFormComponent,
+    IncidentListComponent, IncidentDataComponent, IncidentTaskComponent, IncidentFormComponent, IncidentFormTaskComponent,
     UnitListComponent, UnitEntryComponent, UnitTaskComponent, UnitHierarchyComponent, UnitContainerComponent, UnitFormComponent
   ],
   imports: [

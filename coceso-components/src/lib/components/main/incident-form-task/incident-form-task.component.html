@@ -1,0 +1,12 @@
+<ng-container *ngIf="control">
+  <dt>
+    <span *ngIf="showDuplicate">TODO</span>
+    <span>{{unitCall | async}}</span>
+  </dt>
+
+  <dd>
+    <mat-button-toggle-group [formControl]="control">
+      <mat-button-toggle *ngFor="let state of states" [value]="state">{{'task.state.' + state | translate}}</mat-button-toggle>
+    </mat-button-toggle-group>
+  </dd>
+</ng-container>
