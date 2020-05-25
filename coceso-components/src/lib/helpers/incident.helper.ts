@@ -22,32 +22,24 @@ export class IncidentHelper {
     return incident.type;
   }
 
-  shortTitle(incident: IncidentDto) {
-    if (!incident) {
-      return null;
-    }
-
-    if (this.isTaskOrTransport(incident)) {
-      return this.pointEmpty(incident.bo) ? this.translateService.instant('incident.boMissing') : this.trimPoint(incident.bo);
-    }
-    if (incident.type === IncidentTypeDto.Position) {
-      return this.pointEmpty(incident.ao) ? this.translateService.instant('incident.aoMissing') : this.trimPoint(incident.ao);
-    }
-    return null;
+  shortBo(incident: IncidentDto) {
+    return incident && !this.pointEmpty(incident.bo)
+        ? this.trimPoint(incident.bo)
+        : this.translateService.instant('incident.boMissing');
   }
 
-  subtitle(incident: IncidentDto) {
+  shortAo(incident: IncidentDto) {
     return this.isTaskOrTransport(incident) && !this.pointEmpty(incident.ao) ? this.trimPoint(incident.ao) : null;
   }
 
-  fullTitle(incident: IncidentDto) {
+  title(incident: IncidentDto) {
     if (!incident) {
       return null;
     }
 
-    const title = this.shortTitle(incident);
+    const bo = this.shortBo(incident);
     const type = this.translateService.instant(`incident.type.short.${this.shortType(incident)}`);
-    return title ? `${type}: ${title}` : type;
+    return bo ? `${type}: ${bo}` : type;
   }
 
   isTaskOrTransport(incident: IncidentDto): boolean {
@@ -55,11 +47,11 @@ export class IncidentHelper {
   }
 
   isRelocation(task: TaskDto, incident: IncidentDto): boolean {
-    return incident ? incident.type === IncidentTypeDto.Position && task.state !== TaskStateDto.AAO : false;
+    return incident ? incident.type === IncidentTypeDto.Position && task.state !== TaskStateDto.ABO : false;
   }
 
   isHoldPosition(task: TaskDto, incident: IncidentDto): boolean {
-    return incident ? incident.type === IncidentTypeDto.Position && task.state === TaskStateDto.AAO : false;
+    return incident ? incident.type === IncidentTypeDto.Position && task.state === TaskStateDto.ABO : false;
   }
 
   pointEmpty(point: PointDto) {

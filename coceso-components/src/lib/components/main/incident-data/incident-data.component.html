@@ -6,8 +6,8 @@
         incident.type.short.{{typeChar | async}}
       </span>
       <span class="incident-timer" *ngIf="timer | async as timer" [ngClass]="timer.css">{{timer.elapsed}}'</span>
-      <span>{{title | async}}</span>
-      <span class="incident-subtitle" *ngIf="subtitle | async as subtitle">&#x2794; {{subtitle}}</span>
+      <span>{{shortBo | async}}</span>
+      <span class="incident-subtitle" *ngIf="shortAo | async as subtitle">&#x2794; {{subtitle}}</span>
 
     </mat-panel-title>
   </mat-expansion-panel-header>

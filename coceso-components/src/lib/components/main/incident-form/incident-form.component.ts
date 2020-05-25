@@ -114,10 +114,10 @@ export class IncidentFormComponent implements DialogContent<IncidentDto>, OnDest
           : 'incident.form.editIncident'
       );
 
-      const shortTitle = this.incidentHelper.shortTitle(incident);
-      const fullTitle = this.incidentHelper.fullTitle(incident);
+      const bo = this.incidentHelper.shortBo(incident);
+      const fullTitle = this.incidentHelper.title(incident);
 
-      this.windowTitle.next(shortTitle ? `${prefix}: ${shortTitle}` : prefix);
+      this.windowTitle.next(bo ? `${prefix}: ${bo}` : prefix);
       this.taskTitle.next(fullTitle ? fullTitle : prefix);
     } else {
       const title = this.translateService.instant(this.form.value.type === IncidentTypeDto.Position
@@ -129,11 +129,19 @@ export class IncidentFormComponent implements DialogContent<IncidentDto>, OnDest
     }
   }
 
+  get isTaskOrTransport(): boolean {
+    return this.incidentHelper.isTaskOrTransport({type: this.type});
+  }
+
+  get isPosition(): boolean {
+    return this.type === IncidentTypeDto.Position;
+  }
+
   get types(): IncidentTypeDto[] {
-    if (this.incidentHelper.isTaskOrTransport({type: this.type})) {
+    if (this.isTaskOrTransport) {
       return [IncidentTypeDto.Task, IncidentTypeDto.Transport];
     }
-    if (this.type === IncidentTypeDto.Position) {
+    if (this.isPosition) {
       return [IncidentTypeDto.Position];
     }
     return [IncidentTypeDto.Task, IncidentTypeDto.Transport, IncidentTypeDto.Position];

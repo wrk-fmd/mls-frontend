@@ -14,15 +14,17 @@
       </div>
 
       <coceso-form-point [control]="form.controls.bo" label="incident.bo"></coceso-form-point>
-      <coceso-form-point [control]="form.controls.ao" label="incident.ao"></coceso-form-point>
+      <mls-form-multiline [control]="form.controls.info" label="incident.info"></mls-form-multiline>
 
       <mls-form-text [control]="form.controls.caller" label="incident.caller" [max]="100" class="form-stretch"></mls-form-text>
-      <mls-form-multiline [control]="form.controls.info" label="incident.info" class="form-stretch"></mls-form-multiline>
 
-      <mls-form-text [control]="form.controls.casusNr" label="incident.casusNr" [max]="100"></mls-form-text>
-      <coceso-form-section [control]="form.controls.section" label="concern.section"></coceso-form-section>
+      <ng-container *ngIf="isTaskOrTransport">
+        <coceso-form-point [control]="form.controls.ao" label="incident.ao"></coceso-form-point>
+        <mls-form-text [control]="form.controls.casusNr" label="incident.casusNr" [max]="100"></mls-form-text>
+      </ng-container>
 
       <coceso-form-incident-close [control]="form.controls.closed" label="incident.closed"></coceso-form-incident-close>
+      <coceso-form-section [control]="form.controls.section" label="concern.section"></coceso-form-section>
     </div>
   </mat-dialog-content>
 

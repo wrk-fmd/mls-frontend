@@ -21,8 +21,8 @@ export class IncidentDataComponent {
 
   readonly _incident = new BehaviorSubject<IncidentDto>(null);
 
-  readonly title: Observable<string>;
-  readonly subtitle: Observable<string>;
+  readonly shortBo: Observable<string>;
+  readonly shortAo: Observable<string>;
   readonly typeChar: Observable<string>;
 
   readonly timer: Observable<TimerData>;
@@ -58,8 +58,8 @@ export class IncidentDataComponent {
 
   constructor(private readonly taskService: TaskService, incidentHelper: IncidentHelper,
               private readonly notificationService: NotificationService, private readonly windowService: WindowService) {
-    this.title = this._incident.pipe(map(i => incidentHelper.shortTitle(i)));
-    this.subtitle = this._incident.pipe(map(i => incidentHelper.subtitle(i)));
+    this.shortBo = this._incident.pipe(map(i => incidentHelper.shortBo(i)));
+    this.shortAo = this._incident.pipe(map(i => incidentHelper.shortAo(i)));
     this.typeChar = this._incident.pipe(map(i => incidentHelper.shortType(i)));
 
     this.timer = this._incident.pipe(switchMap(i => incidentHelper.timer(i)));
