@@ -33,6 +33,24 @@
       <dd><span class="pre">{{incident.info}}</span></dd>
     </ng-container>
 
+    <ng-container *ngIf="incident.closed">
+      <dt translate>incident.closed.label</dt>
+      <dd>{{'incident.closed.' + incident.closed | translate}}</dd>
+    </ng-container>
+
+    <dt translate>incident.created</dt>
+    <dd>{{incident.created * 1000 | date:'mediumTime'}}</dd>
+
+    <ng-container *ngIf="incident.arrival">
+      <dt translate>incident.arrival</dt>
+      <dd>{{incident.arrival * 1000 | date:'mediumTime'}}</dd>
+    </ng-container>
+
+    <ng-container *ngIf="incident.ended">
+      <dt translate>incident.ended</dt>
+      <dd>{{incident.ended * 1000 | date:'mediumTime'}}</dd>
+    </ng-container>
+
     <coceso-main-incident-task *ngFor="let task of incident.units" [task]="task"></coceso-main-incident-task>
   </dl>
 

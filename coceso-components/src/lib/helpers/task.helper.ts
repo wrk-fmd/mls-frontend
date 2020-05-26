@@ -14,6 +14,7 @@ export class TaskHelper {
   }
 
   getTaskControls(tasks: TaskDto[], existing: TaskFormControl[]): TaskFormControl[] {
+    tasks = tasks || [];
     existing = existing || [];
 
     // Add controls for all tasks from server

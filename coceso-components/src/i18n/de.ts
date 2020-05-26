@@ -80,6 +80,9 @@ export default {
     callerShort: 'Berufer',
     casus: 'Transport-/Casusnummer',
     patient: 'Patient',
+    created: 'Erstellt',
+    arrival: 'Eingetroffen',
+    ended: 'Ende',
     type: {
       label: 'Typ',
       Task: 'Auftrag',
@@ -94,12 +97,13 @@ export default {
         ToHome: 'Einr'
       }
     },
-    state: {
+    closed: {
       label: 'Status',
       Open: 'Offen',
-      Demand: 'Nachforderung',
-      Working: 'In Arbeit',
-      Done: 'Abgeschlossen'
+      Closed: 'Abgeschlossen',
+      Cancelled: 'Storno',
+      NoPatient: 'Kein Patient',
+      NoTransport: 'Kein Transport'
     },
     list: {
       openForm: 'Bearbeiten',

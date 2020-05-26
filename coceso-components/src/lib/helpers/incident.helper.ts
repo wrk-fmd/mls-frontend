@@ -67,7 +67,8 @@ export class IncidentHelper {
       return of(null);
     }
 
-    return this.clockService.elapsedMinutes(incident.stateChange).pipe(map(elapsed => this.timerData(incident, elapsed)));
+    return this.clockService.elapsedMinutes(incident.arrival ? incident.stateChange : incident.created)
+        .pipe(map(elapsed => this.timerData(incident, elapsed)));
   }
 
   private timerData(incident: IncidentDto, elapsed: number): TimerData {
