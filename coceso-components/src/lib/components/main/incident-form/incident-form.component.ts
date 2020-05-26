@@ -14,8 +14,7 @@ import {IncidentHelper, TaskFormControl, TaskHelper} from '../../../helpers';
 import {IncidentDataService, TaskService} from '../../../services';
 
 @Component({
-  templateUrl: './incident-form.component.html',
-  styleUrls: ['./incident-form.component.scss']
+  templateUrl: './incident-form.component.html'
 })
 export class IncidentFormComponent implements DialogContent<IncidentDto>, OnDestroy {
 

@@ -10,7 +10,8 @@ import {UnitDataService} from '../../../services';
 
 @Component({
   selector: 'coceso-main-incident-form-task',
-  templateUrl: './incident-form-task.component.html'
+  templateUrl: './incident-form-task.component.html',
+  styleUrls: ['./incident-form-task.component.scss']
 })
 export class IncidentFormTaskComponent {
 

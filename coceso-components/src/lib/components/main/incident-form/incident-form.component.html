@@ -26,7 +26,7 @@
       <coceso-form-incident-close [control]="form.controls.closed" label="incident.closed"></coceso-form-incident-close>
       <coceso-form-section [control]="form.controls.section" label="concern.section"></coceso-form-section>
 
-      <dl class="form-task-list form-stretch">
+      <dl class="form-stretch">
         <coceso-main-incident-form-task *ngFor="let unit of units" [control]="unit" [type]="type">
         </coceso-main-incident-form-task>
       </dl>
