@@ -14,3 +14,5 @@ export * from './unit-entry/unit-entry.component';
 export * from './unit-task/unit-task.component';
 export * from './unit-hierarchy/unit-hierarchy.component';
 export * from './unit-container/unit-container.component';
+
+export * from './task-dialog/task-dialog.component';

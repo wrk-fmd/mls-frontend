@@ -52,6 +52,7 @@ import {
   IncidentListComponent,
   IncidentTaskComponent,
   MainComponent,
+  TaskDialogComponent,
   UnitContainerComponent,
   UnitEditFormComponent,
   UnitEntryComponent,
@@ -79,7 +80,7 @@ import {
     EditComponent, ConcernEditComponent,
     UnitsEditComponent, UnitEditFormComponent,
     ContainerEditRootComponent, ContainerEditChildComponent, ContainerEditUnitComponent,
-    MainComponent, ClockComponent,
+    MainComponent, ClockComponent, TaskDialogComponent,
     IncidentListComponent, IncidentDataComponent, IncidentTaskComponent, IncidentFormComponent, IncidentFormTaskComponent,
     UnitListComponent, UnitEntryComponent, UnitTaskComponent, UnitHierarchyComponent, UnitContainerComponent, UnitFormComponent
   ],

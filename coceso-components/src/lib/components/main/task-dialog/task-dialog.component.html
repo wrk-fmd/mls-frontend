@@ -1,0 +1,44 @@
+<div *ngIf="options | async as options">
+  <mat-dialog-content>
+    <h3>{{options.info | translate}}</h3>
+
+    <dl *ngIf="incident | async as incident">
+      <dt translate>task.state.current</dt>
+      <dd>{{'task.state.' + options.currentState | translate}}</dd>
+
+      <ng-container *ngIf="incident.bo && incident.bo.info">
+        <dt translate>incident.bo</dt>
+        <dd><span class="pre">{{incident.bo.info}}</span></dd>
+      </ng-container>
+
+      <ng-container *ngIf="incident.ao && incident.ao.info">
+        <dt translate>incident.ao</dt>
+        <dd><span class="pre">{{incident.ao.info}}</span></dd>
+      </ng-container>
+
+      <ng-container *ngIf="incident.blue">
+        <dt translate>incident.blue</dt>
+        <dd translate>form.yes</dd>
+      </ng-container>
+
+      <ng-container *ngIf="incident.caller">
+        <dt translate>incident.callerShort</dt>
+        <dd>{{incident.caller}}</dd>
+      </ng-container>
+
+      <ng-container *ngIf="incident.info">
+        <dt translate>incident.info</dt>
+        <dd><span class="pre">{{incident.info}}</span></dd>
+      </ng-container>
+
+      <ng-container *ngFor="let unit of units | async">
+        <dt>{{unit.call}}</dt>
+        <dd>{{'task.state.' + unit.state | translate}}</dd>
+      </ng-container>
+    </dl>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-flat-button color="primary" (click)="setState(options.nextState)">{{options.button | translate}}</button>
+  </mat-dialog-actions>
+</div>

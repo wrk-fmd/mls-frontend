@@ -103,6 +103,19 @@ main {
   }
 }
 
+.mat-icon-button.mat-icon-button-small {
+  line-height: 20px;
+  width: auto;
+  height: auto;
+
+  .mat-icon {
+    font-size: 20px;
+    line-height: 20px;
+    width: 20px;
+    height: 20px;
+  }
+}
+
 mat-form-field {
   width: 100%;
 
@@ -115,3 +128,26 @@ mat-form-field {
   border-color: yellow;
 }
 
+dl {
+  display: grid;
+  grid-template-columns: 100px minmax(200px, 1fr);
+  grid-gap: 0.5em 0.5em;
+  margin: 0;
+
+  > *:not(dt):not(dd) {
+    display: contents;
+  }
+
+  dt {
+    grid-column-start: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: bold;
+  }
+
+  dd {
+    grid-column-start: 2;
+    margin: 0;
+  }
+}

@@ -71,6 +71,7 @@ export default {
   },
   incident: {
     bo: 'BO',
+    boMissing: 'Kein BO',
     ao: 'AO',
     info: 'Info',
     blue: 'Sondersignal',
@@ -147,12 +148,25 @@ export default {
   },
   task: {
     state: {
+      current: 'Aktueller Status',
       Assigned: 'Zug.',
       ZBO: 'ZBO',
       ABO: 'ABO',
       ZAO: 'ZAO',
       AAO: 'AAO',
       Detached: 'Entz.'
+    },
+    dialog: {
+      next: 'Status weiterschalten?',
+      isHome: 'Eingerückt',
+      standby: {
+        send: 'Einheit auf Bereitschaft setzen?',
+        end: 'Bereitschaft der Einheit beenden?'
+      },
+      position: {
+        send: 'Einheit auf "Standort halten" setzen?',
+        end: 'Standort nicht weiter halten?'
+      }
     }
   },
   container: {

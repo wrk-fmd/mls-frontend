@@ -1,4 +1,8 @@
 .unit-entry {
   display: inline-block;
   margin: 0.25em;
+
+  .unit-entry-button {
+    cursor: pointer;
+  }
 }

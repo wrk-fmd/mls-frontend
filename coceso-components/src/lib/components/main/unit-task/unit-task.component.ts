@@ -2,12 +2,11 @@ import {Component, Input} from '@angular/core';
 
 import {IncidentDto, IncidentTypeDto, TaskDto, TaskStateDto} from 'mls-coceso-api';
 
-import {BehaviorSubject, Observable, of, Subject} from 'rxjs';
+import {BehaviorSubject, Observable, of} from 'rxjs';
 import {map, switchMap} from 'rxjs/operators';
 
-import {IncidentHelper} from '../../../helpers/incident.helper';
-import {ClockService} from '../../../services/clock.service';
-import {IncidentDataService} from '../../../services/incident.data.service';
+import {IncidentHelper, TaskHelper} from '../../../helpers';
+import {ClockService, IncidentDataService} from '../../../services';
 
 @Component({
   selector: 'coceso-main-unit-task',
@@ -15,7 +14,7 @@ import {IncidentDataService} from '../../../services/incident.data.service';
 })
 export class UnitTaskComponent {
 
-  private readonly _task: Subject<TaskDto> = new BehaviorSubject(null);
+  private readonly _task = new BehaviorSubject(null);
   readonly options: Observable<TaskDisplayOptions>;
   readonly elapsed: Observable<number>;
 
@@ -24,9 +23,14 @@ export class UnitTaskComponent {
   }
 
   constructor(private readonly incidentService: IncidentDataService, private readonly incidentHelper: IncidentHelper,
-              private readonly clockService: ClockService) {
+              private readonly taskHelper: TaskHelper, private readonly clockService: ClockService) {
     this.options = this._task.pipe(switchMap(t => this.loadOptions(t)));
     this.elapsed = this._task.pipe(switchMap(t => clockService.elapsedMinutes(t.updated)));
+  }
+
+  nextState(event: Event): void {
+    event.stopPropagation();
+    this.taskHelper.nextState(this._task.value);
   }
 
   private loadOptions(task: TaskDto): Observable<TaskDisplayOptions> {
