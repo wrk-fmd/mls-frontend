@@ -8,7 +8,7 @@ export interface IncidentDto {
   bo?: PointDto;
   caller?: string;
   casusNr?: string;
-  closed?: 'Open' | 'Closed' | 'Cancelled' | 'NoPatient' | 'NoTransport';
+  closed?: 'Active' | 'Closed' | 'Cancelled' | 'NoPatient' | 'NoTransport';
   concern?: number;
   created?: number;
   ended?: number;

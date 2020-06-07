@@ -7,6 +7,8 @@ import {AddRemoveContainer, ChangedItems} from 'mls-common-forms';
 import {Observable, of} from 'rxjs';
 import {map, switchMap} from 'rxjs/operators';
 
+import {StaffHelper} from '../../../helpers';
+
 @Component({
   selector: 'coceso-form-crew',
   templateUrl: './crew.component.html',
@@ -25,7 +27,7 @@ export class FormCrewComponent {
   form: FormControl;
   staff: Observable<StaffMemberDto[]>;
 
-  constructor(private readonly staffService: StaffEndpointService, fb: FormBuilder) {
+  constructor(private readonly staffService: StaffEndpointService, private readonly staffHelper: StaffHelper, fb: FormBuilder) {
     this.form = fb.control('');
     this.staff = this.form.valueChanges.pipe(switchMap(filter => this.loadStaff(filter)));
   }
@@ -47,11 +49,7 @@ export class FormCrewComponent {
   }
 
   getName(member: StaffMemberDto): string {
-    let name = `${member.lastname} ${member.firstname}`;
-    if (member.personnelId.length) {
-      name = `${name} (${member.personnelId.join(', ')})`;
-    }
-    return name.trim();
+    return this.staffHelper.getName(member);
   }
 
   addMember(member: StaffMemberDto) {

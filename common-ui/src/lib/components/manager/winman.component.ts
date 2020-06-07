@@ -45,7 +45,7 @@ export class WinmanComponent implements AfterViewInit {
       panelClass: 'dialog-window',
       hasBackdrop: false,
       disableClose: true,
-      position: {left: options.left, top: options.top},
+      position: options,
       data: {component, componentData}
     });
 
@@ -102,5 +102,7 @@ export interface WindowOptions {
   width?: string;
   height?: string;
   left?: string;
+  right?: string;
   top?: string;
+  bottom?: string;
 }

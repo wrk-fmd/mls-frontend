@@ -1,0 +1,25 @@
+<form [formGroup]="form" *ngIf="incident">
+  <mat-dialog-content>
+    <div class="form-grid">
+      <mls-form-multiline [control]="form.controls.text" label="message.text" class="form-stretch" [rows]="10" [required]="true">
+      </mls-form-multiline>
+
+      <mat-form-field class="form-stretch">
+        <mat-label translate>message.recipients.label</mat-label>
+
+        <mat-button-toggle-group *ngIf="showModeForm" formControlName="mode">
+          <mat-button-toggle *ngFor="let mode of modes" [value]="mode">{{'incident.message.mode.' + mode | translate}}</mat-button-toggle>
+        </mat-button-toggle-group>
+
+        <mat-chip-list [selectable]="false">
+          <mat-chip *ngIf="!units.length" translate>message.recipients.none</mat-chip>
+          <mat-chip *ngFor="let task of units">{{task.unitData ? task.unitData.call : ''}}</mat-chip>
+        </mat-chip-list>
+      </mat-form-field>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-flat-button color="primary" [disabled]="saveDisabled" (click)="save()">{{title}}</button>
+  </mat-dialog-actions>
+</form>

@@ -13,7 +13,7 @@ export class TaskHelper {
   constructor(private readonly dialog: MatDialog) {
   }
 
-  getTaskControls(tasks: TaskDto[], existing: TaskFormControl[]): TaskFormControl[] {
+  getTaskControls<T extends TaskDto>(tasks: T[], existing: TaskFormControl<T>[], withServerValue: boolean): TaskFormControl<T>[] {
     tasks = tasks || [];
     existing = existing || [];
 
@@ -22,16 +22,16 @@ export class TaskHelper {
       const control = existing.find(c => c.matches(task));
       if (!control) {
         // Add a new control if none already exists
-        return new TaskFormControl(task);
+        return new TaskFormControl(task, withServerValue);
       }
 
       // Update the existing control
-      control.setServerValue(task.state);
+      control.setTask(task, withServerValue);
       control.isNew = false;
       return control;
     });
 
-    // Add all controls that are still marked as new (i.e., unsafed local changes)
+    // Add all controls that are still marked as new (i.e., unsaved local changes)
     controls.push(...existing.filter(c => c.isNew));
     return controls;
   }
@@ -65,19 +65,22 @@ export class TaskHelper {
   }
 }
 
-export class TaskFormControl extends TrackingFormControl {
+export class TaskFormControl<T extends TaskDto> extends TrackingFormControl {
 
-  readonly incident: number;
-  readonly unit: number;
   isNew: boolean;
 
-  constructor(task: TaskDto) {
-    super(task.state, null, null);
-    this.incident = task.incident;
-    this.unit = task.unit;
+  constructor(public task: T, withServerValue: boolean) {
+    super(TaskStateDto.Detached, null, null);
+    this.isNew = !withServerValue;
+    withServerValue ? this.setServerValue(task.state) : this.setValue(task.state);
+  }
+
+  setTask(task: T, withServerValue: boolean) {
+    this.task = task;
+    withServerValue ? this.setServerValue(task.state) : this.setValue(task.state);
   }
 
   matches(task: TaskDto): boolean {
-    return this.incident === task.incident && this.unit === task.unit;
+    return (!this.task.incident || this.task.incident === task.incident) && (!this.task.unit || this.task.unit === task.unit);
   }
 }

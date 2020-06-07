@@ -1,10 +1,9 @@
 import {ComponentPortal, Portal} from '@angular/cdk/portal';
 import {Component, ComponentRef, Inject, Type, ViewEncapsulation} from '@angular/core';
-import {ThemePalette} from '@angular/material/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 import {Observable, ReplaySubject} from 'rxjs';
-import {map, switchMap} from 'rxjs/operators';
+import {switchMap} from 'rxjs/operators';
 
 /**
  * This component acts as a wrapper for content displayed in a dialog window
@@ -48,17 +47,6 @@ export class DialogComponentOptions<T> {
 
   /** The data passed to the content component */
   componentData?: T;
-}
-
-/**
- * A button displayed in the actions section of the dialog window
- */
-export interface DialogActionButton {
-  label: string;
-  action: () => void;
-  color?: ThemePalette;
-  filled?: boolean;
-  disabled?: boolean;
 }
 
 /**

@@ -1,0 +1,5 @@
+<ng-container *ngIf="contact">
+  {{'contact.type.' + contact.type | translate}}:
+  <a *ngIf="link" [href]="link">{{contact.data}}</a>
+  <span *ngIf="!link">{{contact.data}}</span>
+</ng-container>

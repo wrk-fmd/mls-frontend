@@ -1,24 +1,24 @@
-<mat-expansion-panel *ngIf="_incident | async as incident" class="incident-data" [(expanded)]="expanded"
+<mat-expansion-panel *ngIf="incident" class="incident-data" [(expanded)]="expanded"
                      cdkDropList [cdkDropListAutoScrollDisabled]="true" (cdkDropListDropped)="dropUnit($event)">
   <mat-expansion-panel-header>
-    <mat-panel-title class="incident-title">
+    <mat-panel-title class="incident-title" [ngClass]="{'incident-highlighted': isHighlighted, 'incident-priority': incident.priority}">
       <span class="incident-type" [ngClass]="{'incident-blue': incident.blue}" translate>
-        incident.type.short.{{typeChar | async}}
+        incident.type.short.{{typeChar}}
       </span>
       <span class="incident-timer" *ngIf="timer | async as timer" [ngClass]="timer.css">{{timer.elapsed}}'</span>
-      <span>{{shortBo | async}}</span>
-      <span class="incident-subtitle" *ngIf="shortAo | async as subtitle">&#x2794; {{subtitle}}</span>
+      <span>{{shortBo}}</span>
+      <span class="incident-subtitle" *ngIf="shortAo as subtitle">&#x2794; {{subtitle}}</span>
 
     </mat-panel-title>
   </mat-expansion-panel-header>
 
   <dl>
-    <ng-container *ngIf="showBo | async">
+    <ng-container *ngIf="showBo">
       <dt translate>incident.bo</dt>
       <dd><span class="pre">{{incident.bo.info}}</span></dd>
     </ng-container>
 
-    <ng-container *ngIf="showAo | async">
+    <ng-container *ngIf="showAo">
       <dt translate>incident.ao</dt>
       <dd><span class="pre">{{incident.ao.info}}</span></dd>
     </ng-container>
@@ -51,7 +51,15 @@
       <dd>{{incident.ended * 1000 | date:'mediumTime'}}</dd>
     </ng-container>
 
-    <coceso-main-incident-task *ngFor="let task of incident.units" [task]="task"></coceso-main-incident-task>
+    <ng-container *ngFor="let task of incident.units">
+      <dt>{{task.unitData ? task.unitData.call : ''}}</dt>
+      <dd>
+        <span translate>task.state.{{task.state}}</span>
+        <button mat-icon-button class="mat-icon-button-small" (click)="nextState(task)">
+          <mat-icon>arrow_right</mat-icon>
+        </button>
+      </dd>
+    </ng-container>
   </dl>
 
   <p>

@@ -1,15 +1,16 @@
 import {CdkDragDrop} from '@angular/cdk/drag-drop';
-import {Component, Input} from '@angular/core';
+import {Component, Input, Predicate} from '@angular/core';
 
-import {IncidentDto} from 'mls-coceso-api';
+import {IncidentDto, TaskDto} from 'mls-coceso-api';
 import {NotificationService} from 'mls-common-forms';
 import {WindowService} from 'mls-common-ui';
 
-import {BehaviorSubject, Observable} from 'rxjs';
-import {map, switchMap} from 'rxjs/operators';
+import {Observable} from 'rxjs';
 
-import {IncidentHelper, TimerData} from '../../../helpers';
-import {TaskService} from '../../../services';
+import {IncidentHelper, TaskHelper, TimerData} from '../../../helpers';
+import {IncidentWithUnits} from '../../../models';
+import {TaskDataService} from '../../../services';
+
 import {IncidentFormComponent} from '../incident-form/incident-form.component';
 
 @Component({
@@ -19,72 +20,92 @@ import {IncidentFormComponent} from '../incident-form/incident-form.component';
 })
 export class IncidentDataComponent {
 
-  readonly _incident = new BehaviorSubject<IncidentDto>(null);
+  private _incident: IncidentWithUnits;
+  private _highlighted: Predicate<IncidentDto>;
 
-  readonly shortBo: Observable<string>;
-  readonly shortAo: Observable<string>;
-  readonly typeChar: Observable<string>;
+  shortBo: string;
+  shortAo: string;
+  typeChar: string;
 
-  readonly timer: Observable<TimerData>;
+  timer: Observable<TimerData>;
 
-  readonly showBo: Observable<boolean>;
-  readonly showAo: Observable<boolean>;
+  showBo: boolean;
+  showAo: boolean;
+
+  isHighlighted: boolean;
+
+  @Input()
+  set highlighted(highlighted: Predicate<IncidentDto>) {
+    this._highlighted = highlighted;
+    this.isHighlighted = highlighted && this.incident && highlighted(this.incident);
+  }
 
   @Input()
   activePanels: Set<number>;
 
   get expanded(): boolean {
-    const id = this.currentId();
-    return id && this.activePanels && this.activePanels.has(id);
+    return this.id && this.activePanels && this.activePanels.has(this.id);
   }
 
   set expanded(value: boolean) {
-    const id = this.currentId();
-    if (!id || !this.activePanels) {
+    if (!this.id || !this.activePanels) {
       return;
     }
 
     if (value) {
-      this.activePanels.add(id);
+      this.activePanels.add(this.id);
     } else {
-      this.activePanels.delete(id);
+      this.activePanels.delete(this.id);
     }
   }
 
+  get incident(): IncidentWithUnits {
+    return this._incident;
+  }
+
   @Input()
-  set incident(incident: IncidentDto) {
-    this._incident.next(incident);
+  set incident(incident: IncidentWithUnits) {
+    this._incident = incident;
+    this.setIncident(incident);
   }
 
-  constructor(private readonly taskService: TaskService, incidentHelper: IncidentHelper,
+  constructor(private readonly taskService: TaskDataService,
+              private readonly incidentHelper: IncidentHelper, private readonly taskHelper: TaskHelper,
               private readonly notificationService: NotificationService, private readonly windowService: WindowService) {
-    this.shortBo = this._incident.pipe(map(i => incidentHelper.shortBo(i)));
-    this.shortAo = this._incident.pipe(map(i => incidentHelper.shortAo(i)));
-    this.typeChar = this._incident.pipe(map(i => incidentHelper.shortType(i)));
-
-    this.timer = this._incident.pipe(switchMap(i => incidentHelper.timer(i)));
-
-    this.showBo = this._incident.pipe(map(i => i && !incidentHelper.pointEmpty(i.bo)));
-    this.showAo = this._incident.pipe(map(i => i && !incidentHelper.pointEmpty(i.ao)));
   }
 
-  private currentId(): number {
-    return this._incident.value ? this._incident.value.id : null;
+  private get id(): number {
+    return this.incident ? this.incident.id : null;
+  }
+
+  private setIncident(incident: IncidentDto) {
+    this.shortBo = this.incidentHelper.shortBo(incident);
+    this.shortAo = this.incidentHelper.shortAo(incident);
+    this.typeChar = this.incidentHelper.shortType(incident);
+
+    this.timer = this.incidentHelper.timer(incident);
+
+    this.showBo = incident && !this.incidentHelper.pointEmpty(incident.bo);
+    this.showAo = incident && !this.incidentHelper.pointEmpty(incident.ao);
+
+    this.isHighlighted = this._highlighted && incident && this._highlighted(incident);
   }
 
   dropUnit(event: CdkDragDrop<any>) {
     const unit = event.item.data;
-    const incidentId = this.currentId();
-    if (unit.type === 'unit' && unit.id && incidentId) {
-      this.taskService.assign(incidentId, unit.id)
+    if (unit.type === 'unit' && unit.id && this.id) {
+      this.taskService.assign(this.id, unit.id)
           .subscribe(this.notificationService.onError('unit.assign'));
     }
   }
 
+  nextState(task: TaskDto): void {
+    this.taskHelper.nextState(task);
+  }
+
   openForm(): void {
-    const id = this.currentId();
-    if (id) {
-      this.windowService.open(IncidentFormComponent, {id});
+    if (this.id) {
+      this.windowService.open(IncidentFormComponent, {id: this.id});
     }
   }
 

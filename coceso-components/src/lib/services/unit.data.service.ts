@@ -1,28 +1,20 @@
-import {Injectable, OnDestroy} from '@angular/core';
+import {Injectable} from '@angular/core';
 
-import {UnitCreateDto, UnitDto, UnitEndpointService, UnitUpdateDto} from 'mls-coceso-api';
+import {SendMessageDto, UnitCreateDto, UnitDto, UnitEndpointService, UnitUpdateDto} from 'mls-coceso-api';
 import {DataService} from 'mls-common-data';
 
-import {Observable, Subscription} from 'rxjs';
-import {map} from 'rxjs/operators';
+import {Observable, of} from 'rxjs';
+import {map, switchMap} from 'rxjs/operators';
 
 import {CocesoWatchService} from './coceso.watch.service';
 import {ConcernDataService} from './concern.data.service';
 
 @Injectable()
-export class UnitDataService extends DataService<UnitDto> implements OnDestroy {
-
-  private readonly concernSubscription: Subscription;
+export class UnitDataService extends DataService<UnitDto> {
 
   constructor(private readonly concernService: ConcernDataService, private readonly endpoint: UnitEndpointService,
-              private readonly watchService: CocesoWatchService) {
-    super();
-    this.concernSubscription = concernService.getActiveId().subscribe(concern => this.subscribeConcern(concern));
-  }
-
-  ngOnDestroy(): void {
-    super.ngOnDestroy();
-    this.concernSubscription.unsubscribe();
+              watchService: CocesoWatchService) {
+    super(concernService.getActiveId().pipe(switchMap(c => c ? watchService.watchUnits(c) : of())));
   }
 
   createUnit(data: UnitCreateDto): Observable<number> {
@@ -67,19 +59,16 @@ export class UnitDataService extends DataService<UnitDto> implements OnDestroy {
     );
   }
 
-  protected compare(a: UnitDto, b: UnitDto): number {
-    if (a.call !== b.call) {
-      return a.call < b.call ? -1 : 1;
-    }
-
-    return super.compare(a, b);
+  sendMessage(unit: number, data: SendMessageDto) {
+    return this.concernService.runWithConcern(
+        concern => this.endpoint.sendMessage({concern, unit, data})
+    );
   }
 
-  private subscribeConcern(concern: number) {
-    if (concern) {
-      this.subscribe(this.watchService.watchUnits(concern));
-    } else {
-      this.unsubscribe();
-    }
+  protected defaultSort(): ((a: UnitDto, b: UnitDto) => number)[] {
+    return [
+      (a, b) => a.call.localeCompare(b.call),
+      ...super.defaultSort()
+    ];
   }
 }

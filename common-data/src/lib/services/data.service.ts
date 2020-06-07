@@ -2,44 +2,40 @@ import {Injectable, OnDestroy} from '@angular/core';
 import {BehaviorSubject, Observable, Subscription} from 'rxjs';
 import {auditTime, map} from 'rxjs/operators';
 
-import {DeletionDto, isDeletion, isReplayStart, ReplayStartDto} from '../models';
+import {DeletionDto, isDeletion, isReplayStart, ListOptions, ReplayStartDto} from '../models';
 
 @Injectable()
 export abstract class DataService<T extends Entity> implements OnDestroy {
 
-  private subscription: Subscription;
-
+  private readonly subscription: Subscription;
   private readonly data: BehaviorSubject<Map<number, T>>;
-  private readonly list: Observable<T[]>;
 
-  protected constructor() {
+  protected constructor(dataSource: Observable<T | DeletionDto | ReplayStartDto>) {
     this.data = new BehaviorSubject(new Map());
-    this.list = this.data.pipe(auditTime(50), map(data => Array.from(data.values()).sort(this.compare)));
-  }
-
-  ngOnDestroy(): void {
-    this.unsubscribe();
-  }
-
-  protected subscribe(dataSource: Observable<T | DeletionDto | ReplayStartDto>) {
-    this.unsubscribe();
     this.subscription = dataSource.subscribe(item => this.handleUpdate(item));
   }
 
-  protected unsubscribe() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-      this.subscription = null;
-    }
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
     this.clear();
   }
 
-  protected compare(a: T, b: T): number {
-    return a.id - b.id;
+  public getAll(options?: ListOptions<T>): Observable<T[]> {
+    options = options || new ListOptions();
+    options.addSort(...this.defaultSort());
+
+    return this.data.pipe(
+        auditTime(50),
+        map(data => options.apply([...data.values()]))
+    );
   }
 
-  public getAll(): Observable<T[]> {
-    return this.list;
+  protected defaultSort(): ((a: T, b: T) => number)[] {
+    return [(a, b) => b.id - a.id];
+  }
+
+  public getData(): Observable<Map<number, T>> {
+    return this.data;
   }
 
   public getById(id: number): Observable<T> {

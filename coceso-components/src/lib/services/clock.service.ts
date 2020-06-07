@@ -25,7 +25,17 @@ export class ClockService {
   }
 
   elapsedMinutes(sinceTimestamp: number): Observable<number> {
+    return this.elapsed(sinceTimestamp, 60);
+  }
+
+  elapsedSeconds(sinceTimestamp: number): Observable<number> {
+    return this.elapsed(sinceTimestamp, 1);
+  }
+
+  private elapsed(sinceTimestamp: number, unit: number) {
     sinceTimestamp = sinceTimestamp * 1000;
-    return this.timestamp.pipe(map(current => current > sinceTimestamp ? Math.floor((current - sinceTimestamp) / 60000) : 0));
+    return this.timestamp.pipe(
+        map(current => current > sinceTimestamp ? Math.floor((current - sinceTimestamp) / (unit * 1000)) : 0)
+    );
   }
 }

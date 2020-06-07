@@ -8,6 +8,7 @@ import { ContainerEndpointService } from './services/container-endpoint.service'
 import { IncidentEndpointService } from './services/incident-endpoint.service';
 import { TaskEndpointService } from './services/task-endpoint.service';
 import { JournalEndpointService } from './services/journal-endpoint.service';
+import { MessageEndpointService } from './services/message-endpoint.service';
 import { PatientEndpointService } from './services/patient-endpoint.service';
 import { UnitEndpointService } from './services/unit-endpoint.service';
 import { LoggingEndpointService } from './services/logging-endpoint.service';
@@ -33,6 +34,7 @@ import { SystemEndpointService } from './services/system-endpoint.service';
     IncidentEndpointService,
     TaskEndpointService,
     JournalEndpointService,
+    MessageEndpointService,
     PatientEndpointService,
     UnitEndpointService,
     LoggingEndpointService,

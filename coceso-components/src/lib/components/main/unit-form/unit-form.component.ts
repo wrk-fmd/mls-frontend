@@ -6,13 +6,16 @@ import {ContactDto, StaffMemberDto, UnitDto, UnitStateDto} from 'mls-coceso-api'
 import {NotificationService, TrackingFormBuilder, TrackingFormGroup} from 'mls-common-forms';
 import {DialogContent} from 'mls-common-ui';
 
-import {BehaviorSubject, ReplaySubject, Subscription} from 'rxjs';
-import {switchMap} from 'rxjs/operators';
+import {BehaviorSubject, Observable, ReplaySubject, Subscription} from 'rxjs';
+import {shareReplay, switchMap} from 'rxjs/operators';
+import {StaffHelper} from '../../../helpers/staff.helper';
 
-import {UnitDataService} from '../../../services';
+import {UnitWithIncidents} from '../../../models';
+import {TaskDataService, UnitDataService} from '../../../services';
 
 @Component({
-  templateUrl: './unit-form.component.html'
+  templateUrl: './unit-form.component.html',
+  styleUrls: ['./unit-form.component.scss']
 })
 export class UnitFormComponent implements DialogContent<any>, OnDestroy {
 
@@ -24,12 +27,15 @@ export class UnitFormComponent implements DialogContent<any>, OnDestroy {
   private readonly id = new BehaviorSubject<number>(null);
   private readonly unitSubscription: Subscription;
 
+  readonly unit: Observable<UnitWithIncidents>;
+
   form: TrackingFormGroup;
   contacts: ContactDto[];
   crew: StaffMemberDto[];
 
-  constructor(private readonly unitService: UnitDataService, private readonly translateService: TranslateService,
-              private readonly notificationService: NotificationService, fb: TrackingFormBuilder) {
+  constructor(private readonly unitService: UnitDataService, taskService: TaskDataService, private readonly staffHelper: StaffHelper,
+              private readonly translateService: TranslateService, private readonly notificationService: NotificationService,
+              fb: TrackingFormBuilder) {
     this.form = fb.group({
       call: ['', Validators.required],
       state: [null, Validators.required],
@@ -38,9 +44,12 @@ export class UnitFormComponent implements DialogContent<any>, OnDestroy {
       position: ['']
     });
 
-    this.unitSubscription = this.id
-        .pipe(switchMap(id => unitService.getById(id)))
-        .subscribe(unit => this.setUnit(unit));
+    this.unit = this.id.pipe(
+        switchMap(id => taskService.getUnit(id)),
+        shareReplay(1)
+    );
+
+    this.unitSubscription = this.unit.subscribe(unit => this.setUnit(unit));
   }
 
   ngOnDestroy() {
@@ -74,6 +83,10 @@ export class UnitFormComponent implements DialogContent<any>, OnDestroy {
   private buildTitle(unit): string {
     const prefix = this.translateService.instant('unit.form.edit');
     return unit ? `${prefix}: ${unit.call}` : prefix;
+  }
+
+  getName(member: StaffMemberDto): string {
+    return this.staffHelper.getName(member);
   }
 
   get saveDisabled(): boolean {

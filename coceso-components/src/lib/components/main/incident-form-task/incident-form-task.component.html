@@ -1,12 +1,22 @@
 <ng-container *ngIf="control">
   <dt>
-    <span *ngIf="showDuplicate">TODO</span>
-    <span>{{unitCall | async}}</span>
+    <span>{{unit.call || ''}}</span>
   </dt>
 
   <dd>
     <mat-button-toggle-group [formControl]="control">
       <mat-button-toggle *ngFor="let state of states" [value]="state">{{'task.state.' + state | translate}}</mat-button-toggle>
     </mat-button-toggle-group>
+
+    <div *ngIf="!control.isNew" class="task-actions">
+      <button mat-icon-button class="mat-icon-button-small" [disabled]="sendAlarmDisabled"
+              [color]="sendAlarmColor" [matTooltip]="sendAlarmTooltip" (click)="openSendAlarmForm()">
+        <mat-icon>message</mat-icon>
+      </button>
+      <button *ngIf="showSendCasus" mat-icon-button class="mat-icon-button-small" [disabled]="sendCasusDisabled"
+              [color]="sendCasusColor" [matTooltip]="sendCasusTooltip" (click)="openSendCasusForm()">
+        <mat-icon>local_hospital</mat-icon>
+      </button>
+    </div>
   </dd>
 </ng-container>

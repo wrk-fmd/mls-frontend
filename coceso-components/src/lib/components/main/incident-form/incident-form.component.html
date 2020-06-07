@@ -20,20 +20,29 @@
 
       <ng-container *ngIf="isTaskOrTransport">
         <coceso-form-point [control]="form.controls.ao" label="incident.ao"></coceso-form-point>
-        <mls-form-text [control]="form.controls.casusNr" label="incident.casusNr" [max]="100"></mls-form-text>
+        <mls-form-text [control]="form.controls.casusNr" label="incident.casus" [max]="100"></mls-form-text>
       </ng-container>
 
       <coceso-form-incident-close [control]="form.controls.closed" label="incident.closed.label"></coceso-form-incident-close>
       <coceso-form-section [control]="form.controls.section" label="concern.section"></coceso-form-section>
 
       <dl class="form-stretch">
-        <coceso-main-incident-form-task *ngFor="let unit of units" [control]="unit" [type]="type">
+        <coceso-main-incident-form-task *ngFor="let unit of units" [control]="unit" [states]="states"
+                                        [sendAlarmDisabled]="sendAlarmDisabled"
+                                        [showSendCasus]="true" [sendCasusDisabled]="sendCasusDisabled">
         </coceso-main-incident-form-task>
       </dl>
     </div>
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">
+    <button mat-flat-button [disabled]="sendAlarmDisabled" (click)="openSendAlarmForm()">
+      {{'incident.message.title.ALARM' | translate}}
+    </button>
+    <button mat-flat-button [disabled]="sendCasusDisabled" (click)="openSendCasusForm()">
+      {{'incident.message.title.CASUS' | translate}}
+    </button>
+
     <button mat-flat-button color="primary" [disabled]="saveDisabled" (click)="save()">{{'form.ok' | translate}}</button>
   </mat-dialog-actions>
 </form>

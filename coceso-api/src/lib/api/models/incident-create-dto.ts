@@ -6,7 +6,7 @@ export interface IncidentCreateDto {
   bo?: PointDto;
   caller?: string;
   casusNr?: string;
-  closed?: 'Open' | 'Closed' | 'Cancelled' | 'NoPatient' | 'NoTransport';
+  closed?: 'Active' | 'Closed' | 'Cancelled' | 'NoPatient' | 'NoTransport';
   info?: string;
   priority?: boolean;
   section?: string;

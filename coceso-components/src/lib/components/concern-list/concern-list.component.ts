@@ -2,10 +2,11 @@ import {Component} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 import {ConcernDto} from 'mls-coceso-api';
+import {ListOptions} from 'mls-common-data';
 import {NotificationService} from 'mls-common-forms';
 
 import {Observable} from 'rxjs';
-import {finalize, map, tap} from 'rxjs/operators';
+import {finalize, tap} from 'rxjs/operators';
 
 import {ConcernDataService} from '../../services';
 
@@ -26,15 +27,8 @@ export class ConcernListComponent {
     this.form = fb.group({
       name: ['', [Validators.required, Validators.maxLength(100)]]
     });
-    this.open = this.getFiltered(false);
-    this.closed = this.getFiltered(true);
-  }
-
-  private getFiltered(closed: boolean): Observable<ConcernDto[]> {
-    return this.concernService.getAll().pipe(
-        map(concerns => concerns.filter(c => c.closed === closed)),
-        map(concerns => concerns.length ? concerns : null)
-    );
+    this.open = concernService.getAll(new ListOptions<ConcernDto>(true).addFilters(c => !c.closed));
+    this.closed = concernService.getAll(new ListOptions<ConcernDto>(true).addFilters(c => c.closed));
   }
 
   get createDisabled(): boolean {

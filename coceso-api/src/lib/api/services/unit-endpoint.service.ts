@@ -12,6 +12,7 @@ import { UnitBriefDto } from '../models/unit-brief-dto';
 import { UnitCreateDto } from '../models/unit-create-dto';
 import { UnitBatchCreateDto } from '../models/unit-batch-create-dto';
 import { UnitUpdateDto } from '../models/unit-update-dto';
+import { SendMessageDto } from '../models/send-message-dto';
 
 /**
  * Unit Endpoint
@@ -27,6 +28,7 @@ class UnitEndpointService extends __BaseService {
   static readonly removeUnitPath = '/concerns/{concern}/units/{unit}';
   static readonly assignCrewMemberPath = '/concerns/{concern}/units/{unit}/crew/{member}';
   static readonly removeCrewMemberPath = '/concerns/{concern}/units/{unit}/crew/{member}';
+  static readonly sendMessagePath = '/concerns/{concern}/units/{unit}/message';
   static readonly holdPositionPath = '/concerns/{concern}/units/{unit}/tasks/holdPosition';
   static readonly sendHomePath = '/concerns/{concern}/units/{unit}/tasks/home';
   static readonly standbyPath = '/concerns/{concern}/units/{unit}/tasks/standby';
@@ -356,6 +358,54 @@ class UnitEndpointService extends __BaseService {
   }
 
   /**
+   * @param params The `UnitEndpointService.SendMessageParams` containing the following parameters:
+   *
+   * - `unit`: unit
+   *
+   * - `data`: data
+   *
+   * - `concern`: concern
+   */
+  sendMessageResponse(params: UnitEndpointService.SendMessageParams): __Observable<__StrictHttpResponse<null>> {
+    let __params = this.newParams();
+    let __headers = new HttpHeaders();
+    let __body: any = null;
+
+    __body = params.data;
+
+    let req = new HttpRequest<any>(
+      'PUT',
+      this.rootUrl + `/concerns/${params.concern}/units/${params.unit}/message`,
+      __body,
+      {
+        headers: __headers,
+        params: __params,
+        responseType: 'json'
+      });
+
+    return this.http.request<any>(req).pipe(
+      __filter(_r => _r instanceof HttpResponse),
+      __map((_r) => {
+        return _r as __StrictHttpResponse<null>;
+      })
+    );
+  }
+  /**
+   * @param params The `UnitEndpointService.SendMessageParams` containing the following parameters:
+   *
+   * - `unit`: unit
+   *
+   * - `data`: data
+   *
+   * - `concern`: concern
+   */
+  sendMessage(params: UnitEndpointService.SendMessageParams): __Observable<null> {
+    return this.sendMessageResponse(params).pipe(
+      __map(_r => _r.body as null)
+    );
+  }
+
+  /**
    * @param params The `UnitEndpointService.HoldPositionParams` containing the following parameters:
    *
    * - `unit`: unit
@@ -591,6 +641,27 @@ module UnitEndpointService {
      * member
      */
     member: number;
+
+    /**
+     * concern
+     */
+    concern: number;
+  }
+
+  /**
+   * Parameters for sendMessage
+   */
+  export interface SendMessageParams {
+
+    /**
+     * unit
+     */
+    unit: number;
+
+    /**
+     * data
+     */
+    data: SendMessageDto;
 
     /**
      * concern

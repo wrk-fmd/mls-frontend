@@ -29,4 +29,8 @@ export class CocesoWatchService {
   watchContainers(concern: number): Observable<ContainerDto | DeletionDto | ReplayStartDto> {
     return this.watchService.watch<ContainerDto>('containers', concern);
   }
+
+  watchMessages(): Observable<any | DeletionDto | ReplayStartDto> {
+    return this.watchService.watch<any>('messages');
+  }
 }

@@ -9,6 +9,7 @@ import { map as __map, filter as __filter } from 'rxjs/operators';
 
 import { PageStaffMemberDto } from '../models/page-staff-member-dto';
 import { StaffMemberDto } from '../models/staff-member-dto';
+import { StaffMemberCreateDto } from '../models/staff-member-create-dto';
 import { StaffMemberUpdateDto } from '../models/staff-member-update-dto';
 
 /**
@@ -19,7 +20,7 @@ import { StaffMemberUpdateDto } from '../models/staff-member-update-dto';
 })
 class StaffEndpointService extends __BaseService {
   static readonly getAllStaffPath = '/staff';
-  static readonly uploadPath = '/staff';
+  static readonly createStaffMemberPath = '/staff';
   static readonly updateStaffMemberPath = '/staff/{staffMember}';
   static readonly removeStaffMemberPath = '/staff/{staffMember}';
 
@@ -108,14 +109,14 @@ class StaffEndpointService extends __BaseService {
   }
 
   /**
-   * @param body body
+   * @param data data
    * @return OK
    */
-  uploadResponse(body: string): __Observable<__StrictHttpResponse<Array<StaffMemberDto>>> {
+  createStaffMemberResponse(data: StaffMemberCreateDto): __Observable<__StrictHttpResponse<StaffMemberDto>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
-    __body = body;
+    __body = data;
     let req = new HttpRequest<any>(
       'POST',
       this.rootUrl + `/staff`,
@@ -129,17 +130,17 @@ class StaffEndpointService extends __BaseService {
     return this.http.request<any>(req).pipe(
       __filter(_r => _r instanceof HttpResponse),
       __map((_r) => {
-        return _r as __StrictHttpResponse<Array<StaffMemberDto>>;
+        return _r as __StrictHttpResponse<StaffMemberDto>;
       })
     );
   }
   /**
-   * @param body body
+   * @param data data
    * @return OK
    */
-  upload(body: string): __Observable<Array<StaffMemberDto>> {
-    return this.uploadResponse(body).pipe(
-      __map(_r => _r.body as Array<StaffMemberDto>)
+  createStaffMember(data: StaffMemberCreateDto): __Observable<StaffMemberDto> {
+    return this.createStaffMemberResponse(data).pipe(
+      __map(_r => _r.body as StaffMemberDto)
     );
   }
 

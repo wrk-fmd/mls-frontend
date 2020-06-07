@@ -9,7 +9,7 @@ import {BehaviorSubject, combineLatest, Observable, of} from 'rxjs';
 import {map, shareReplay, switchMap, tap} from 'rxjs/operators';
 
 import {IncidentHelper} from '../../../helpers/incident.helper';
-import {IncidentDataService, TaskService, UnitDataService} from '../../../services';
+import {IncidentDataService, TaskDataService, UnitDataService} from '../../../services';
 
 @Component({
   selector: 'coceso-main-task-dialog',
@@ -29,7 +29,7 @@ export class TaskDialogComponent implements DialogContent<TaskDto> {
   }
 
   constructor(incidentService: IncidentDataService, private readonly unitService: UnitDataService,
-              private readonly taskService: TaskService, private readonly incidentHelper: IncidentHelper,
+              private readonly taskService: TaskDataService, private readonly incidentHelper: IncidentHelper,
               private readonly notificationService: NotificationService, private readonly dialog: MatDialogRef<any>) {
     const data = this._task.pipe(switchMap(task =>
         task ? combineLatest([incidentService.getById(task.incident), unitService.getById(task.unit)]) : of([])

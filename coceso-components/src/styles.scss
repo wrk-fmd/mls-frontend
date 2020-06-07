@@ -81,3 +81,17 @@
     line-height: 24px;
   }
 }
+
+.mat-accordion {
+  // The component structure breaks the default CSS for expansion panels, remove the wrong border radius
+
+  > :not(:first-of-type) .mat-expansion-panel {
+    border-top-left-radius: initial !important;
+    border-top-right-radius: initial !important;
+  }
+
+  > :not(:last-of-type) .mat-expansion-panel {
+    border-bottom-left-radius: initial !important;
+    border-bottom-right-radius: initial !important;
+  }
+}

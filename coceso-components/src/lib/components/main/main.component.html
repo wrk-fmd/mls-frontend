@@ -1,5 +1,7 @@
 <mat-toolbar color="primary">
-  <h2 translate>coceso.header</h2>
+  <div>
+    <h2 translate>coceso.header</h2>
+  </div>
 
   <ul class="nav">
     <!-- Units -->
@@ -11,27 +13,27 @@
 
       <mat-menu #unitMenu="matMenu">
         <button mat-menu-item (click)="showUnits()">
-          <mat-icon>assignment</mat-icon>
+          <mat-icon>group</mat-icon>
           <span translate>main.nav.units.overview</span>
         </button>
 
         <button mat-menu-item (click)="showUnitsHierarchy()">
-          <mat-icon>assignment</mat-icon>
+          <mat-icon>group</mat-icon>
           <span translate>main.nav.units.hierarchy</span>
         </button>
 
         <button mat-menu-item (click)="showUnitsAlarm()">
-          <mat-icon>assignment</mat-icon>
+          <mat-icon>campaign</mat-icon>
           <span translate>main.nav.units.alarm</span>
         </button>
 
         <button mat-menu-item (click)="showUnitsAvailable()">
-          <mat-icon>assignment</mat-icon>
+          <mat-icon>how_to_reg</mat-icon>
           <span translate>main.nav.units.available</span>
         </button>
 
         <button mat-menu-item (click)="showUnitsFree()">
-          <mat-icon>assignment</mat-icon>
+          <mat-icon>emoji_people</mat-icon>
           <span translate>main.nav.units.free</span>
         </button>
       </mat-menu>
@@ -62,14 +64,36 @@
           <span translate>main.nav.incidents.showAll</span>
         </button>
 
-        <button mat-menu-item (click)="showActiveIncidents()">
+        <button mat-menu-item (click)="showActiveTasks()">
           <mat-icon>list</mat-icon>
-          <span translate>main.nav.incidents.showActive</span>
+          <span translate>main.nav.incidents.showActiveTasks</span>
+        </button>
+
+        <button mat-menu-item (click)="showActivePositions()">
+          <mat-icon>adjust</mat-icon>
+          <span translate>main.nav.incidents.showActivePositions</span>
+        </button>
+
+        <button mat-menu-item (click)="showHighlightedIncidents()">
+          <mat-icon>schedule</mat-icon>
+          <span translate>main.nav.incidents.showHighlightedIncidents</span>
         </button>
 
         <button mat-menu-item (click)="showDoneIncidents()">
-          <mat-icon>list</mat-icon>
+          <mat-icon>done_all</mat-icon>
           <span translate>main.nav.incidents.showDone</span>
+        </button>
+
+        <mat-divider></mat-divider>
+
+        <button mat-menu-item (click)="showAllTransports()">
+          <mat-icon>local_shipping</mat-icon>
+          <span translate>main.nav.incidents.showAllTransports</span>
+        </button>
+
+        <button mat-menu-item (click)="showHighlightedTransports()">
+          <mat-icon>local_shipping</mat-icon>
+          <span translate>main.nav.incidents.showHighlightedTransports</span>
         </button>
       </mat-menu>
     </li>
@@ -97,9 +121,9 @@
           <span translate>main.nav.windows.showPatients</span>
         </button>
 
-        <button mat-menu-item (click)="showRadioCalls()">
+        <button mat-menu-item (click)="showMessages()">
           <mat-icon>call</mat-icon>
-          <span translate>main.nav.windows.showRadioCalls</span>
+          <span translate>main.nav.windows.showMessages</span>
         </button>
 
         <mat-divider></mat-divider>
@@ -151,6 +175,69 @@
   </ul>
 
   <div class="fill-remaining-space"></div>
+
+  <ul class="nav">
+    <li>
+      <button mat-icon-button [matTooltip]="'main.nav.incidents.createIncident' | translate" (click)="createIncident()">
+        <mat-icon>add_circle</mat-icon>
+      </button>
+    </li>
+
+    <li>
+      <button mat-icon-button [matTooltip]="'main.nav.incidents.createRelocation' | translate" (click)="createRelocation()">
+        <mat-icon>send</mat-icon>
+      </button>
+    </li>
+
+    <li>
+      <button mat-icon-button [matTooltip]="'main.nav.windows.addJournalEntry' | translate" (click)="addJournalEntry()">
+        <mat-icon>note_add</mat-icon>
+      </button>
+    </li>
+  </ul>
+
+  <div class="fill-remaining-space"></div>
+
+  <ul class="nav">
+    <li>
+      <button mat-icon-button [matTooltip]="'main.nav.connected' | translate">
+        <mat-icon *ngIf="connected">cloud_queue</mat-icon>
+        <mat-icon *ngIf="!connected" color="accent">cloud_off</mat-icon>
+      </button>
+    </li>
+
+    <li>
+      <button mat-icon-button [matTooltip]="'main.nav.incidents.showHighlightedIncidents' | translate" (click)="showHighlightedIncidents()">
+        <mat-icon [matBadge]="highlightedIncidents | async" matBadgeColor="accent">schedule</mat-icon>
+      </button>
+    </li>
+
+    <li>
+      <button mat-icon-button [matTooltip]="'main.nav.incidents.showHighlightedTransports' | translate"
+              (click)="showHighlightedTransports()">
+        <mat-icon [matBadge]="highlightedTransports | async" matBadgeColor="accent">local_shipping</mat-icon>
+      </button>
+    </li>
+
+    <li>
+      <button mat-icon-button [matTooltip]="'main.nav.units.alarm' | translate" (click)="showUnitsAlarm()">
+        <mat-icon [matBadge]="alarmUnits | async" matBadgeColor="accent">campaign</mat-icon>
+      </button>
+    </li>
+
+    <li>
+      <button mat-icon-button [matTooltip]="'main.nav.units.free' | translate" (click)="showUnitsFree()">
+        <mat-icon [matBadge]="freeUnits | async" matBadgeColor="accent">emoji_people</mat-icon>
+      </button>
+    </li>
+
+    <li *ngIf="concern | async as concern">
+      <button mat-icon-button [matTooltip]="concern.name" (click)="showInfo(concern.info)">
+        <mat-icon>help</mat-icon>
+      </button>
+    </li>
+  </ul>
+
   <coceso-main-clock></coceso-main-clock>
 </mat-toolbar>
 

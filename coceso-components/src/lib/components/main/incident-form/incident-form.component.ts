@@ -3,15 +3,17 @@ import {Component, OnDestroy} from '@angular/core';
 import {FormArray, Validators} from '@angular/forms';
 import {TranslateService} from '@ngx-translate/core';
 
-import {IncidentClosedReasonDto, IncidentDto, IncidentTypeDto, TaskDto, TaskStateDto} from 'mls-coceso-api';
+import {AlarmTypeDto, IncidentClosedReasonDto, IncidentDto, IncidentTypeDto, TaskStateDto} from 'mls-coceso-api';
 import {NotificationService, TrackingFormBuilder, TrackingFormGroup} from 'mls-common-forms';
-import {DialogContent} from 'mls-common-ui';
+import {DialogContent, WindowService} from 'mls-common-ui';
 
 import {BehaviorSubject, forkJoin, Observable, of, ReplaySubject, Subscription, throwError} from 'rxjs';
 import {flatMap, switchMap, tap} from 'rxjs/operators';
 
 import {IncidentHelper, TaskFormControl, TaskHelper} from '../../../helpers';
-import {IncidentDataService, TaskService} from '../../../services';
+import {IncidentWithUnits, TaskWithUnit} from '../../../models';
+import {IncidentDataService, TaskDataService} from '../../../services';
+import {IncidentMessageFormComponent} from '../incident-message-form/incident-message-form.component';
 
 @Component({
   templateUrl: './incident-form.component.html'
@@ -24,18 +26,22 @@ export class IncidentFormComponent implements DialogContent<IncidentDto>, OnDest
   private readonly id = new BehaviorSubject<number>(null);
   private readonly incidentSubscription: Subscription;
   type: IncidentTypeDto;
+  states: TaskStateDto[];
 
   readonly form: TrackingFormGroup;
-  units: TaskFormControl[];
+  units: TaskFormControl<TaskWithUnit>[];
 
-  constructor(private readonly incidentService: IncidentDataService, private readonly taskService: TaskService,
+  hasUnits = true;
+  hasCasus = true;
+
+  constructor(private readonly incidentService: IncidentDataService, private readonly taskService: TaskDataService,
               private readonly incidentHelper: IncidentHelper, private readonly taskHelper: TaskHelper,
-              private readonly notificationService: NotificationService, private readonly translateService: TranslateService,
-              fb: TrackingFormBuilder) {
+              private readonly windowService: WindowService, private readonly notificationService: NotificationService,
+              private readonly translateService: TranslateService, fb: TrackingFormBuilder) {
     this.units = [];
     this.form = fb.group({
       type: [null, Validators.required],
-      closed: [IncidentClosedReasonDto.Open],
+      closed: [IncidentClosedReasonDto.Active],
       bo: [''],
       ao: [''],
       info: ['', null, null, true],
@@ -47,7 +53,7 @@ export class IncidentFormComponent implements DialogContent<IncidentDto>, OnDest
     });
 
     this.incidentSubscription = this.id
-        .pipe(switchMap(id => incidentService.getById(id)))
+        .pipe(switchMap(id => taskService.getIncident(id)))
         .subscribe(incident => this.setIncident(incident));
   }
 
@@ -57,15 +63,16 @@ export class IncidentFormComponent implements DialogContent<IncidentDto>, OnDest
 
   set data(data) {
     this.type = data ? data.type : null;
+    this.states = this.taskHelper.statesForType(this.type);
 
     const id = data ? data.id : null;
     this.id.next(id);
 
     if (!id) {
-      this.setUnits([]);
+      this.setUnits([], true);
       this.form.setServerValue({
         type: null,
-        closed: IncidentClosedReasonDto.Open,
+        closed: IncidentClosedReasonDto.Active,
         bo: '',
         ao: '',
         info: '',
@@ -81,19 +88,22 @@ export class IncidentFormComponent implements DialogContent<IncidentDto>, OnDest
       this.form.patchValue(data);
       this.form.markAsUntouched();
       if (data.units) {
-        this.setUnits(data.units);
+        this.setUnits(data.units, false);
       }
     }
   }
 
-  private setIncident(incident: IncidentDto) {
+  private setIncident(incident: IncidentWithUnits) {
     this.updateTitles(incident);
 
     if (!incident) {
+      this.hasUnits = false;
+      this.hasCasus = false;
       return;
     }
 
     this.type = incident.type as IncidentTypeDto;
+    this.states = this.taskHelper.statesForType(this.type);
 
     const options = [];
     if (incident.blue) {
@@ -103,10 +113,10 @@ export class IncidentFormComponent implements DialogContent<IncidentDto>, OnDest
       options.push('priority');
     }
 
-    this.setUnits(incident.units);
+    this.setUnits(incident.units, true);
     this.form.setServerValue({
       type: incident.type,
-      closed: incident.closed || IncidentClosedReasonDto.Open,
+      closed: incident.closed || IncidentClosedReasonDto.Active,
       bo: incident.bo ? incident.bo.info : '',
       ao: incident.ao ? incident.ao.info : '',
       info: incident.info,
@@ -115,10 +125,13 @@ export class IncidentFormComponent implements DialogContent<IncidentDto>, OnDest
       section: incident.section,
       options
     });
+
+    this.hasUnits = incident.units && incident.units.length > 0;
+    this.hasCasus = this.incidentHelper.hasCasusNr(incident);
   }
 
-  private setUnits(units: TaskDto[]) {
-    this.units = this.taskHelper.getTaskControls(units, this.units);
+  private setUnits(units: TaskWithUnit[], withServerValue: boolean) {
+    this.units = this.taskHelper.getTaskControls(units, this.units, withServerValue);
     const formArray = this.form.controls.units as FormArray;
     formArray.clear();
     this.units.forEach(c => formArray.push(c));
@@ -149,13 +162,10 @@ export class IncidentFormComponent implements DialogContent<IncidentDto>, OnDest
   dropUnit(event: CdkDragDrop<any>) {
     const unit = event.item.data;
     const incidentId = this.id.value;
-    if (unit.type === 'unit' && unit.id && incidentId && !this.units.find(c => c.unit === unit.id)) {
-      const control = new TaskFormControl({unit: unit.id, incident: incidentId});
+    if (unit.type === 'unit' && unit.id && incidentId && !this.units.find(c => c.task.unit === unit.id)) {
+      const control = new TaskFormControl({unit: unit.id, incident: incidentId, state: TaskStateDto.Assigned}, false);
       this.units.push(control);
       (this.form.controls.units as FormArray).push(control);
-
-      control.setValue(TaskStateDto.Assigned);
-      control.isNew = true;
     }
   }
 
@@ -175,6 +185,26 @@ export class IncidentFormComponent implements DialogContent<IncidentDto>, OnDest
       return [IncidentTypeDto.Position];
     }
     return [IncidentTypeDto.Task, IncidentTypeDto.Transport, IncidentTypeDto.Position];
+  }
+
+  get sendAlarmDisabled(): boolean {
+    return this.form.dirty || !this.hasUnits;
+  }
+
+  openSendAlarmForm() {
+    if (this.id.value) {
+      this.windowService.open(IncidentMessageFormComponent, {incident: this.id.value, type: AlarmTypeDto.ALARM});
+    }
+  }
+
+  get sendCasusDisabled(): boolean {
+    return this.form.dirty || !this.hasUnits || !this.hasCasus;
+  }
+
+  openSendCasusForm() {
+    if (this.id.value) {
+      this.windowService.open(IncidentMessageFormComponent, {incident: this.id.value, type: AlarmTypeDto.CASUS});
+    }
   }
 
   get saveDisabled(): boolean {
@@ -217,7 +247,7 @@ export class IncidentFormComponent implements DialogContent<IncidentDto>, OnDest
 
     const requests = this.units
         .filter(c => c.dirty)
-        .map(c => this.taskService.setState(incidentId, c.unit, c.value));
+        .map(c => this.taskService.setState(incidentId, c.task.unit, c.value));
     return requests.length ? forkJoin(requests) : of(null);
   }
 }

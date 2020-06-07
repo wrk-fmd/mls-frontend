@@ -1,42 +1,77 @@
-import {Component, OnDestroy} from '@angular/core';
+import {Component, Predicate} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
-
-import {UnitDto} from 'mls-coceso-api';
+import {ListOptions} from 'mls-common-data';
 import {DialogContent} from 'mls-common-ui';
 
-import {Observable, ReplaySubject, Subscription} from 'rxjs';
+import {BehaviorSubject, combineLatest, Observable, ReplaySubject} from 'rxjs';
+import {map, shareReplay, switchMap} from 'rxjs/operators';
 
-import {UnitDataService} from '../../../services';
+import {UnitHelper} from '../../../helpers';
+import {UnitWithIncidents} from '../../../models';
+import {TaskDataService} from '../../../services';
 
 @Component({
   templateUrl: './unit-list.component.html',
   styleUrls: ['./unit-list.component.scss']
 })
-export class UnitListComponent implements DialogContent, OnDestroy {
+export class UnitListComponent implements DialogContent<UnitListOptions> {
 
-  readonly windowTitle = new ReplaySubject<string>(1);
+  readonly windowTitle: Observable<string>;
   readonly taskTitle = new ReplaySubject<string>(1);
 
-  units: Observable<UnitDto[]>;
-  private readonly unitsSubscription: Subscription;
+  units: Observable<UnitWithIncidents[]>;
+  private readonly filter = new BehaviorSubject<Predicate<UnitWithIncidents>>(null);
 
-  constructor(private readonly unitService: UnitDataService, private readonly translateService: TranslateService) {
-    this.units = this.unitService.getAll();
-    this.unitsSubscription = this.units.subscribe(units => this.updateTitles(units));
+  constructor(private readonly taskService: TaskDataService, private readonly unitHelper: UnitHelper,
+              private readonly translateService: TranslateService) {
+    this.units = this.filter.pipe(
+        switchMap(filter => this.loadUnits(filter)),
+        shareReplay(1)
+    );
+
+    this.windowTitle = combineLatest([this.units, this.taskTitle]).pipe(
+        map(([units, titlePrefix]) => `${titlePrefix} (${units.length})`)
+    );
   }
 
-  ngOnDestroy() {
-    this.unitsSubscription.unsubscribe();
+  private loadUnits(filter: Predicate<UnitWithIncidents>): Observable<UnitWithIncidents[]> {
+    const options = new ListOptions<UnitWithIncidents>();
+    if (filter) {
+      options.addFilters(filter);
+    }
+    return this.taskService.getUnits(options);
   }
 
-  set data(_) {
-  }
+  set data(data: UnitListOptions) {
+    data = data || {};
 
-  private updateTitles(units: UnitDto[]) {
-    const prefix = this.translateService.instant('main.nav.units.overview');
+    let filterPredicate = null;
+    let titlePrefix = 'main.nav.units.overview';
 
-    // TODO Unit counts
-    this.windowTitle.next(prefix);
-    this.taskTitle.next(prefix);
+    switch (data.filter) {
+      case UnitListFilter.ALARM:
+        filterPredicate = u => this.unitHelper.hasAssigned(u);
+        titlePrefix = 'main.nav.units.alarm';
+        break;
+      case UnitListFilter.FREE:
+        filterPredicate = u => this.unitHelper.isFree(u);
+        titlePrefix = 'main.nav.units.free';
+        break;
+      case UnitListFilter.AVAILABLE:
+        filterPredicate = u => this.unitHelper.isAvailable(u);
+        titlePrefix = 'main.nav.units.available';
+        break;
+    }
+
+    this.filter.next(filterPredicate);
+    this.taskTitle.next(this.translateService.instant(titlePrefix));
   }
+}
+
+export interface UnitListOptions {
+  filter?: UnitListFilter;
+}
+
+export enum UnitListFilter {
+  ALARM, FREE, AVAILABLE
 }

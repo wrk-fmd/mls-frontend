@@ -3,6 +3,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {IncidentDto, IncidentTypeDto, PointDto, TaskDto, TaskStateDto} from 'mls-coceso-api';
 import {Observable, of} from 'rxjs';
 import {map} from 'rxjs/operators';
+import {TaskWithIncident} from '../models/unit-with-incidents';
 import {ClockService} from '../services/clock.service';
 
 @Injectable()
@@ -40,6 +41,44 @@ export class IncidentHelper {
     const bo = this.shortBo(incident);
     const type = this.translateService.instant(`incident.type.short.${this.shortType(incident)}`);
     return bo ? `${type}: ${bo}` : type;
+  }
+
+  dropdownIncidents(incidents: TaskWithIncident[]): DropdownIncident[] {
+    if (!incidents) {
+      return null;
+    }
+
+    const dropdownIncidents = incidents.filter(t => this.showInDropdown(t)).map(t => ({
+      id: t.incident,
+      title: this.title(t.incidentData)
+    }));
+    return dropdownIncidents.length ? dropdownIncidents : null;
+  }
+
+  private showInDropdown(task: TaskWithIncident): boolean {
+    return task && task.incidentData &&
+        task.incidentData.type !== IncidentTypeDto.ToHome && task.incidentData.type !== IncidentTypeDto.Standby;
+  }
+
+  isHighlighted(incident: IncidentDto): boolean {
+    if (!incident || incident.closed) {
+      return false;
+    }
+
+    // TODO This needs to consider required unit types when implemented
+    return !incident.units || !incident.units.length;
+  }
+
+  isHighlightedTransport(incident: IncidentDto): boolean {
+    if (!incident || incident.closed || incident.type !== IncidentTypeDto.Transport) {
+      return false;
+    }
+
+    return this.pointEmpty(incident.ao) || !this.hasCasusNr(incident);
+  }
+
+  hasCasusNr(incident: IncidentDto): boolean {
+    return incident && incident.casusNr && !!incident.casusNr.trim();
   }
 
   isTaskOrTransport(incident: IncidentDto): boolean {
@@ -95,4 +134,9 @@ export class IncidentHelper {
 export interface TimerData {
   elapsed: number;
   css: string;
+}
+
+export interface DropdownIncident {
+  id: number;
+  title: string;
 }

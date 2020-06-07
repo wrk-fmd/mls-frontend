@@ -11,6 +11,7 @@ import { IncidentDto } from '../models/incident-dto';
 import { IncidentBriefDto } from '../models/incident-brief-dto';
 import { IncidentCreateDto } from '../models/incident-create-dto';
 import { IncidentUpdateDto } from '../models/incident-update-dto';
+import { SendAlarmDto } from '../models/send-alarm-dto';
 
 /**
  * Incident Endpoint
@@ -21,7 +22,9 @@ import { IncidentUpdateDto } from '../models/incident-update-dto';
 class IncidentEndpointService extends __BaseService {
   static readonly getAllIncidentsPath = '/concerns/{concern}/incidents';
   static readonly createIncidentPath = '/concerns/{concern}/incidents';
+  static readonly getAlarmTemplatesPath = '/concerns/{concern}/incidents/templates/alarm';
   static readonly updateIncidentPath = '/concerns/{concern}/incidents/{incident}';
+  static readonly sendAlarmPath = '/concerns/{concern}/incidents/{incident}/alarm';
   static readonly assignPatientPath = '/concerns/{concern}/incidents/{incident}/patients/{patient}';
 
   constructor(
@@ -115,6 +118,42 @@ class IncidentEndpointService extends __BaseService {
   }
 
   /**
+   * @param concern concern
+   * @return OK
+   */
+  getAlarmTemplatesResponse(concern: number): __Observable<__StrictHttpResponse<{[key: string]: string}>> {
+    let __params = this.newParams();
+    let __headers = new HttpHeaders();
+    let __body: any = null;
+
+    let req = new HttpRequest<any>(
+      'GET',
+      this.rootUrl + `/concerns/${concern}/incidents/templates/alarm`,
+      __body,
+      {
+        headers: __headers,
+        params: __params,
+        responseType: 'json'
+      });
+
+    return this.http.request<any>(req).pipe(
+      __filter(_r => _r instanceof HttpResponse),
+      __map((_r) => {
+        return _r as __StrictHttpResponse<{[key: string]: string}>;
+      })
+    );
+  }
+  /**
+   * @param concern concern
+   * @return OK
+   */
+  getAlarmTemplates(concern: number): __Observable<{[key: string]: string}> {
+    return this.getAlarmTemplatesResponse(concern).pipe(
+      __map(_r => _r.body as {[key: string]: string})
+    );
+  }
+
+  /**
    * @param params The `IncidentEndpointService.UpdateIncidentParams` containing the following parameters:
    *
    * - `incident`: incident
@@ -158,6 +197,54 @@ class IncidentEndpointService extends __BaseService {
    */
   updateIncident(params: IncidentEndpointService.UpdateIncidentParams): __Observable<null> {
     return this.updateIncidentResponse(params).pipe(
+      __map(_r => _r.body as null)
+    );
+  }
+
+  /**
+   * @param params The `IncidentEndpointService.SendAlarmParams` containing the following parameters:
+   *
+   * - `incident`: incident
+   *
+   * - `data`: data
+   *
+   * - `concern`: concern
+   */
+  sendAlarmResponse(params: IncidentEndpointService.SendAlarmParams): __Observable<__StrictHttpResponse<null>> {
+    let __params = this.newParams();
+    let __headers = new HttpHeaders();
+    let __body: any = null;
+
+    __body = params.data;
+
+    let req = new HttpRequest<any>(
+      'PUT',
+      this.rootUrl + `/concerns/${params.concern}/incidents/${params.incident}/alarm`,
+      __body,
+      {
+        headers: __headers,
+        params: __params,
+        responseType: 'json'
+      });
+
+    return this.http.request<any>(req).pipe(
+      __filter(_r => _r instanceof HttpResponse),
+      __map((_r) => {
+        return _r as __StrictHttpResponse<null>;
+      })
+    );
+  }
+  /**
+   * @param params The `IncidentEndpointService.SendAlarmParams` containing the following parameters:
+   *
+   * - `incident`: incident
+   *
+   * - `data`: data
+   *
+   * - `concern`: concern
+   */
+  sendAlarm(params: IncidentEndpointService.SendAlarmParams): __Observable<null> {
+    return this.sendAlarmResponse(params).pipe(
       __map(_r => _r.body as null)
     );
   }
@@ -243,6 +330,27 @@ module IncidentEndpointService {
      * data
      */
     data: IncidentUpdateDto;
+
+    /**
+     * concern
+     */
+    concern: number;
+  }
+
+  /**
+   * Parameters for sendAlarm
+   */
+  export interface SendAlarmParams {
+
+    /**
+     * incident
+     */
+    incident: number;
+
+    /**
+     * data
+     */
+    data: SendAlarmDto;
 
     /**
      * concern

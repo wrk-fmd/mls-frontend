@@ -1,12 +1,14 @@
-<div *ngIf="_container | async as container">
-  <ul class="unit-list" *ngIf="units | async as units">
+<div>
+  <ul class="unit-list" *ngIf="container.unitsData as units">
     <coceso-main-unit *ngFor="let unit of units" [unit]="unit"></coceso-main-unit>
   </ul>
 
-  <mat-accordion multi *ngIf="children | async as children">
+  <mat-accordion multi *ngIf="container.childrenData as children">
     <mat-expansion-panel class="container-panel mat-elevation-z4" *ngFor="let child of children" expanded>
       <mat-expansion-panel-header>
-        <mat-panel-title>{{child.name}}</mat-panel-title>
+        <mat-panel-title>
+          {{child.name}} ({{child.availableUnits}}/{{child.totalUnits}})
+        </mat-panel-title>
       </mat-expansion-panel-header>
 
       <coceso-main-unit-container [container]="child"></coceso-main-unit-container>

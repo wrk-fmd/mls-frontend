@@ -26,8 +26,13 @@ body {
 
 .mat-toolbar {
   &.mat-toolbar-single-row {
+    flex-wrap: wrap;
     height: unset;
-    padding: 0.5em 1em;
+    padding: 0.5em;
+  }
+
+  > * {
+    margin: 0 0.5em;
   }
 
   .concern-name:before {
@@ -38,13 +43,7 @@ body {
     list-style: none;
     display: flex;
     flex-direction: row;
-    flex: 1 1 auto;
-    margin: 0 1em;
     padding: 0;
-
-    &:last-child {
-      margin-right: 0;
-    }
 
     li {
       display: inline-block;
@@ -58,6 +57,10 @@ main {
 
 .fill-remaining-space {
   flex: 1 1 auto;
+}
+
+.snackbar-multiline .mat-simple-snackbar > span {
+  white-space: pre-wrap;
 }
 
 .mat-card {

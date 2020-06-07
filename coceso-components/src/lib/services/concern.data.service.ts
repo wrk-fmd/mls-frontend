@@ -16,8 +16,7 @@ export class ConcernDataService extends DataService<ConcernDto> implements Resol
   private readonly section = new BehaviorSubject<string>(null);
 
   constructor(private readonly endpoint: ConcernEndpointService, watchService: CocesoWatchService) {
-    super();
-    this.subscribe(watchService.watchConcerns());
+    super(watchService.watchConcerns());
   }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): void {
@@ -79,11 +78,10 @@ export class ConcernDataService extends DataService<ConcernDto> implements Resol
     );
   }
 
-  protected compare(a: ConcernDto, b: ConcernDto): number {
-    if (a.name !== b.name) {
-      return a.name < b.name ? -1 : 1;
-    }
-
-    return super.compare(a, b);
+  protected defaultSort(): ((a: ConcernDto, b: ConcernDto) => number)[] {
+    return [
+      (a, b) => a.name.localeCompare(b.name),
+      ...super.defaultSort()
+    ];
   }
 }

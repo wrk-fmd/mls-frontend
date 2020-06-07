@@ -1,6 +1,11 @@
 .filter-panel {
   margin-bottom: 1em;
 
+  .filter-active {
+    font-weight: bold;
+    color: #cd0a0a;
+  }
+
   .filter-group {
     margin-bottom: 1em;
 

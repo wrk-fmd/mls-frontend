@@ -20,7 +20,7 @@ export class DropListGroupNameDirective<T> implements OnDestroy {
   }
 
   /**
-   * The group name for spporting multiple groups in the same DOM tree
+   * The group name for supporting multiple groups in the same DOM tree
    */
   @Input('dropListGroupName')
   set name(name: string) {

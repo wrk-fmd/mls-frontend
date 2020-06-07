@@ -1,11 +1,10 @@
-<li class="unit-entry">
+<li class="unit-entry" *ngIf="unit">
   <cdk-drop-list *ngIf="unit.portable">
     <button class="unit-entry-button" [mat-menu-trigger-for]="unitMenu" (contextmenu)="openMenu($event)"
             cdkDrag [cdkDragData]="{type: 'unit', id: unit.id}">
       <span [ngClass]="['unit-state', stateCss]">{{unit.call}}</span>
-      <span *ngIf="!hasIncident()" [ngClass]="['unit-state', isFree() ? 'unit-state-free' : stateCss]">
-        <mat-icon *ngIf="isHome()">home</mat-icon>
-        <mat-icon *ngIf="!isHome()">error</mat-icon>
+      <span *ngIf="!hasIncident" [ngClass]="['unit-state', isFree ? 'unit-state-free' : stateCss]">
+        <mat-icon>{{isHome ? 'home' : 'error'}}</mat-icon>
       </span>
       <coceso-main-unit-task *ngFor="let task of unit.incidents" [task]="task"></coceso-main-unit-task>
       <span *cdkDragPlaceholder></span>
@@ -22,36 +21,30 @@
       <button mat-menu-item (click)="setState(state)" translate>unit.state.{{state}}</button>
     </ng-container>
 
-    <ng-container *ngIf="showActions()">
+    <ng-container *ngIf="showActions">
       <mat-divider></mat-divider>
       <button mat-menu-item disabled translate>unit.actions.label</button>
-      <button mat-menu-item *ngIf="allowSendHome()" (click)="sendHome()" translate>unit.actions.sendHome</button>
-      <button mat-menu-item *ngIf="allowStandby()" (click)="setStandby()" translate>unit.actions.standby</button>
-      <button mat-menu-item *ngIf="allowHoldPosition()" (click)="setHoldPosition()" translate>unit.actions.holdPosition</button>
-    </ng-container>
-
-    <ng-container *ngIf="allowSendCall()">
-      <mat-divider></mat-divider>
-      <button mat-menu-item (click)="sendCall()" translate>radio.send</button>
-    </ng-container>
-
-    <ng-container *ngIf="dropdownIncidents() | async as incidents">
-      <mat-divider></mat-divider>
-      <button mat-menu-item disabled translate>unit.incidents</button>
-      <button mat-menu-item *ngFor="let incident of incidents">
-        TODO
-      </button>
-      <!--      <a href="#" data-bind="click: incident() && incident().openForm, html: incident() && incident().dropdownTitle"></a>-->
+      <button mat-menu-item *ngIf="allowSendHome" (click)="sendHome()" translate>unit.actions.sendHome</button>
+      <button mat-menu-item *ngIf="allowStandby" (click)="setStandby()" translate>unit.actions.standby</button>
+      <button mat-menu-item *ngIf="allowHoldPosition" (click)="setHoldPosition()" translate>unit.actions.holdPosition</button>
     </ng-container>
 
     <mat-divider></mat-divider>
-    <button mat-menu-item *ngIf="unit.portable" (click)="createIncident()" translate>unit.actions.createIncident</button>
+    <button mat-menu-item (click)="openMessageForm()" translate>unit.message.title</button>
+
+    <ng-container *ngIf="dropdownIncidents">
+      <mat-divider></mat-divider>
+      <button mat-menu-item disabled translate>unit.incidents</button>
+      <button mat-menu-item *ngFor="let incident of dropdownIncidents" (click)="openIncident(incident.id)">{{incident.title}}</button>
+    </ng-container>
+
+    <mat-divider></mat-divider>
+    <button mat-menu-item *ngIf="unit.portable" (click)="createTask()" translate>unit.actions.createIncident</button>
     <button mat-menu-item *ngIf="unit.portable" (click)="createRelocation()" translate>unit.actions.createRelocation</button>
     <button mat-menu-item (click)="reportIncident()" translate>unit.actions.reportIncident</button>
     <button mat-menu-item (click)="addJournalEntry()" translate>unit.actions.addJournalEntry</button>
 
     <mat-divider></mat-divider>
-    <button mat-menu-item (click)="showDetails()" translate>unit.actions.showDetails</button>
     <button mat-menu-item (click)="editUnit()" translate>unit.actions.editUnit</button>
     <button mat-menu-item (click)="showJournal()" translate>unit.actions.showJournal</button>
   </mat-menu>

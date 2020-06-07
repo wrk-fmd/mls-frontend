@@ -1,0 +1,15 @@
+.mat-expansion-panel-header[aria-disabled=true] {
+  color: inherit;
+}
+
+mat-panel-title {
+  display: initial;
+}
+
+.message-emergency {
+    color: #cd0a0a !important;
+}
+
+dl {
+  grid-template-columns: 200px minmax(200px, 1fr);
+}

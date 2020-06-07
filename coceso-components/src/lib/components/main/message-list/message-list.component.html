@@ -1,0 +1,20 @@
+<mat-dialog-content>
+  <mat-form-field *ngIf="channels | async as channels" appearance="outline">
+    <mat-label translate>message.received.channels.label</mat-label>
+    <mat-select (valueChange)="setChannel($event)">
+      <mat-option [value]="null">{{'message.received.channels.all' | translate}}</mat-option>
+      <mat-option *ngFor="let channel of channels" [value]="channel">{{channel.name}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <ng-container *ngIf="messages | async as messages">
+    <div *ngIf="messages.length" class="last-message">
+      <coceso-main-message-entry [data]="messages[0]" [isLast]="true"></coceso-main-message-entry>
+    </div>
+
+    <mat-accordion>
+      <coceso-main-message-entry *ngFor="let message of messages" [data]="message" [activePanels]="activePanels">
+      </coceso-main-message-entry>
+    </mat-accordion>
+  </ng-container>
+</mat-dialog-content>

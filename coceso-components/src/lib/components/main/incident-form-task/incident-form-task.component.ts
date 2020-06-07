@@ -1,12 +1,14 @@
-import {Component, Input} from '@angular/core';
+import {formatDate} from '@angular/common';
+import {Component, Inject, Input, LOCALE_ID} from '@angular/core';
+import {ThemePalette} from '@angular/material/core';
+import {TranslateService} from '@ngx-translate/core';
 
-import {IncidentTypeDto, TaskStateDto} from 'mls-coceso-api';
+import {AlarmTypeDto, TaskStateDto, UnitDto} from 'mls-coceso-api';
+import {WindowService} from 'mls-common-ui';
 
-import {BehaviorSubject, Observable, of} from 'rxjs';
-import {map, switchMap} from 'rxjs/operators';
-
-import {TaskFormControl, TaskHelper} from '../../../helpers';
-import {UnitDataService} from '../../../services';
+import {TaskFormControl} from '../../../helpers';
+import {TaskWithUnit} from '../../../models/incident-with-units';
+import {IncidentMessageFormComponent} from '../incident-message-form/incident-message-form.component';
 
 @Component({
   selector: 'coceso-main-incident-form-task',
@@ -15,38 +17,89 @@ import {UnitDataService} from '../../../services';
 })
 export class IncidentFormTaskComponent {
 
-  private _control: TaskFormControl;
+  private _control: TaskFormControl<TaskWithUnit>;
 
-  @Input() set control(value: TaskFormControl) {
+  @Input() set control(value: TaskFormControl<TaskWithUnit>) {
     this._control = value;
-    this.unit.next(value ? value.unit : null);
   }
 
-  get control(): TaskFormControl {
+  get control(): TaskFormControl<TaskWithUnit> {
     return this._control;
   }
 
   @Input()
-  type: IncidentTypeDto;
+  states: TaskStateDto[];
 
   @Input()
   showDuplicate: boolean;
 
-  private readonly unit = new BehaviorSubject(null);
-  readonly unitCall: Observable<string>;
+  @Input()
+  sendAlarmDisabled: boolean;
 
-  constructor(private readonly unitService: UnitDataService, private readonly taskHelper: TaskHelper) {
-    this.unitCall = this.unit.pipe(switchMap(unit => this.loadUnitCall(unit)));
+  @Input()
+  showSendCasus: boolean;
+
+  @Input()
+  sendCasusDisabled: boolean;
+
+  private readonly translations;
+
+  constructor(private readonly windowService: WindowService, translateService: TranslateService,
+              @Inject(LOCALE_ID) private readonly locale: string) {
+    // Load the translations only once instead of at every change
+    this.translations = translateService.instant([
+      'incident.message.title.ALARM', 'incident.message.sent.ALARM',
+      'incident.message.title.CASUS', 'incident.message.sent.CASUS'
+    ]);
   }
 
-  get states(): TaskStateDto[] {
-    return this.taskHelper.statesForType(this.type);
+  get task(): TaskWithUnit {
+    return this.control ? this.control.task : {};
   }
 
-  private loadUnitCall(unit: number): Observable<string> {
-    console.log(unit);
-    return unit
-        ? this.unitService.getById(unit).pipe(map(u => u ? u.call : ''))
-        : of('');
+  get unit(): UnitDto {
+    return this.task.unitData || {};
+  }
+
+  get sendAlarmColor(): ThemePalette {
+    return this.task.alarmSent ? null : 'accent';
+  }
+
+  get sendAlarmTooltip(): string {
+    return this.getTooltip(this.task.alarmSent, AlarmTypeDto.ALARM);
+  }
+
+  get sendCasusColor(): ThemePalette {
+    return this.task.casusSent ? null : 'accent';
+  }
+
+  get sendCasusTooltip(): string {
+    return this.getTooltip(this.task.casusSent, AlarmTypeDto.CASUS);
+  }
+
+  private getTooltip(timestamp: number, type: AlarmTypeDto) {
+    return timestamp
+        ? this.translations[`incident.message.sent.${type}`] + ': ' + formatDate(timestamp * 1000, 'mediumTime', this.locale)
+        : this.translations[`incident.message.title.${type}`];
+  }
+
+  openSendAlarmForm() {
+    if (this.task.incident && this.task.unit) {
+      this.windowService.open(IncidentMessageFormComponent, {
+        incident: this.task.incident,
+        units: [this.task.unit],
+        type: AlarmTypeDto.ALARM
+      });
+    }
+  }
+
+  openSendCasusForm() {
+    if (this.task.incident && this.task.unit) {
+      this.windowService.open(IncidentMessageFormComponent, {
+        incident: this.task.incident,
+        units: [this.task.unit],
+        type: AlarmTypeDto.CASUS
+      });
+    }
   }
 }

@@ -1,12 +1,13 @@
 import {Component, Input} from '@angular/core';
 
-import {IncidentDto, IncidentTypeDto, TaskDto, TaskStateDto} from 'mls-coceso-api';
+import {IncidentTypeDto, TaskStateDto} from 'mls-coceso-api';
 
-import {BehaviorSubject, Observable, of} from 'rxjs';
-import {map, switchMap} from 'rxjs/operators';
+import {Observable, ReplaySubject} from 'rxjs';
+import {switchMap} from 'rxjs/operators';
 
 import {IncidentHelper, TaskHelper} from '../../../helpers';
-import {ClockService, IncidentDataService} from '../../../services';
+import {TaskWithIncident} from '../../../models';
+import {ClockService} from '../../../services';
 
 @Component({
   selector: 'coceso-main-unit-task',
@@ -14,43 +15,49 @@ import {ClockService, IncidentDataService} from '../../../services';
 })
 export class UnitTaskComponent {
 
-  private readonly _task = new BehaviorSubject(null);
-  readonly options: Observable<TaskDisplayOptions>;
+  _task: TaskWithIncident;
+
+  css: string;
+  icon: string;
+  type: string;
+  state: string;
+
+  private readonly updated = new ReplaySubject<number>(1);
   readonly elapsed: Observable<number>;
 
-  @Input() set task(value: TaskDto) {
-    this._task.next(value);
+  @Input() set task(value: TaskWithIncident) {
+    this._task = value;
+    this.setTask(value);
   }
 
-  constructor(private readonly incidentService: IncidentDataService, private readonly incidentHelper: IncidentHelper,
-              private readonly taskHelper: TaskHelper, private readonly clockService: ClockService) {
-    this.options = this._task.pipe(switchMap(t => this.loadOptions(t)));
-    this.elapsed = this._task.pipe(switchMap(t => clockService.elapsedMinutes(t.updated)));
+  constructor(private readonly incidentHelper: IncidentHelper, private readonly taskHelper: TaskHelper,
+              private readonly clockService: ClockService) {
+    this.elapsed = this.updated.pipe(switchMap(timestamp => clockService.elapsedMinutes(timestamp)));
   }
 
   nextState(event: Event): void {
     event.stopPropagation();
-    this.taskHelper.nextState(this._task.value);
+    this.taskHelper.nextState(this._task);
   }
 
-  private loadOptions(task: TaskDto): Observable<TaskDisplayOptions> {
-    return task ? this.incidentService.getById(task.incident).pipe(map(i => this.buildOptions(task, i))) : of(null);
-  }
-
-  private buildOptions(task: TaskDto, incident: IncidentDto): TaskDisplayOptions {
-    if (!task || !incident) {
-      return null;
+  private setTask(task: TaskWithIncident) {
+    if (!task || !task.incidentData) {
+      this.css = '';
+      this.icon = null;
+      this.type = null;
+      this.state = null;
+      this.updated.next(null);
+    } else {
+      this.css = this.cssForType(task);
+      this.icon = this.iconForType(task);
+      this.type = this.charForType(task);
+      this.state = this.stateForType(task);
+      this.updated.next(task.updated);
     }
-
-    return {
-      css: this.cssForType(task, incident),
-      icon: this.iconForType(task, incident),
-      type: this.charForType(task, incident),
-      state: this.stateForType(task, incident),
-    };
   }
 
-  private cssForType(task: TaskDto, incident: IncidentDto): string {
+  private cssForType(task: TaskWithIncident): string {
+    const incident = task.incidentData;
     if (!incident.type) {
       return '';
     }
@@ -69,7 +76,8 @@ export class UnitTaskComponent {
     return `unit-task-${type}`;
   }
 
-  private iconForType(task: TaskDto, incident: IncidentDto): string {
+  private iconForType(task: TaskWithIncident): string {
+    const incident = task.incidentData;
     if (this.incidentHelper.isHoldPosition(task, incident)) {
       return 'adjust';
     }
@@ -80,7 +88,9 @@ export class UnitTaskComponent {
     return null;
   }
 
-  private charForType(task: TaskDto, incident: IncidentDto): string {
+  private charForType(task: TaskWithIncident): string {
+    const incident = task.incidentData;
+
     if (incident.type === IncidentTypeDto.Standby) {
       // Only display icon for standby
       return null;
@@ -99,23 +109,18 @@ export class UnitTaskComponent {
     return this.incidentHelper.shortType(incident);
   }
 
-  private stateForType(task: TaskDto, incident: IncidentDto): string {
+  private stateForType(task: TaskWithIncident): string {
+    const incident = task.incidentData;
+
     if (this.incidentHelper.isHoldPosition(task, incident)) {
       // Do not display the state if at position already
       return null;
     }
-    if (incident.type === IncidentTypeDto.Standby && task.state === TaskStateDto.AAO) {
+    if (incident.type === IncidentTypeDto.Standby && task.state === TaskStateDto.ABO) {
       // Do not display the state if at standby
       return null;
     }
 
     return task.state;
   }
-}
-
-interface TaskDisplayOptions {
-  css: string;
-  icon: string;
-  type: string;
-  state: string;
 }

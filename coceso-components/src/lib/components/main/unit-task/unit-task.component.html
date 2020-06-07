@@ -1,6 +1,6 @@
-<span *ngIf="options | async as options" [ngClass]="['unit-task', options.css]" (click)="nextState($event)">
-  <mat-icon *ngIf="options.icon">{{options.icon}}</mat-icon>
-  <span *ngIf="options.type" translate>incident.type.short.{{options.type}}</span>
-  <span *ngIf="options.state" class="task-state" translate>task.state.{{options.state}}</span>
+<span *ngIf="_task" [ngClass]="['unit-task', css]" (click)="nextState($event)">
+  <mat-icon *ngIf="icon">{{icon}}</mat-icon>
+  <span *ngIf="type" translate>incident.type.short.{{type}}</span>
+  <span *ngIf="state" class="task-state" translate>task.state.{{state}}</span>
   <span> ({{elapsed | async}}')</span>
 </span>

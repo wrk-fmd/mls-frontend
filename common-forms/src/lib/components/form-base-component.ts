@@ -1,5 +1,5 @@
 ﻿import {Input} from '@angular/core';
-import {AbstractControl, FormGroup} from '@angular/forms';
+import {AbstractControl} from '@angular/forms';
 
 export abstract class FormBaseComponent<T extends AbstractControl> {
 

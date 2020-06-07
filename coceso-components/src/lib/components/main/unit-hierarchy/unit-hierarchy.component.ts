@@ -1,41 +1,33 @@
-import {Component, OnDestroy} from '@angular/core';
+import {Component} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
-
-import {ContainerDto} from 'mls-coceso-api';
 import {DialogContent} from 'mls-common-ui';
 
-import {Observable, ReplaySubject, Subscription} from 'rxjs';
+import {Observable, of} from 'rxjs';
+import {map} from 'rxjs/operators';
 
+import {ContainerWithDependencies} from '../../../models';
 import {ContainerDataService} from '../../../services';
 
 @Component({
   templateUrl: './unit-hierarchy.component.html'
 })
-export class UnitHierarchyComponent implements DialogContent, OnDestroy {
+export class UnitHierarchyComponent implements DialogContent<null> {
 
-  readonly windowTitle = new ReplaySubject<string>(1);
-  readonly taskTitle = new ReplaySubject<string>(1);
+  readonly windowTitle: Observable<string>;
+  readonly taskTitle: Observable<string>;
 
-  readonly container: Observable<ContainerDto>;
-  private readonly containerSubscription: Subscription;
+  readonly container: Observable<ContainerWithDependencies>;
 
-  constructor(private readonly containerService: ContainerDataService, private readonly translateService: TranslateService) {
-    this.container = containerService.getCompact(null);
-    this.containerSubscription = this.container.subscribe(container => this.updateTitles(container));
-  }
+  constructor(containerService: ContainerDataService, translateService: TranslateService) {
+    this.container = containerService.getRootWithDependencies();
 
-  ngOnDestroy() {
-    this.containerSubscription.unsubscribe();
+    const titlePrefix = translateService.instant('main.nav.units.hierarchy');
+    this.taskTitle = of(titlePrefix);
+    this.windowTitle = this.container.pipe(
+        map(container => container ? `${titlePrefix} (${container.availableUnits}/${container.totalUnits})` : titlePrefix)
+    );
   }
 
   set data(_) {
-  }
-
-  private updateTitles(container: ContainerDto) {
-    const prefix = this.translateService.instant('main.nav.units.hierarchy');
-
-    // TODO Unit counts
-    this.windowTitle.next(prefix);
-    this.taskTitle.next(prefix);
   }
 }

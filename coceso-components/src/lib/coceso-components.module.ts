@@ -2,8 +2,9 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
 import {CommonModule} from '@angular/common';
 import {Inject, NgModule} from '@angular/core';
 import {ReactiveFormsModule} from '@angular/forms';
-import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatBadgeModule} from '@angular/material/badge';
 import {MatButtonModule} from '@angular/material/button';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatCardModule} from '@angular/material/card';
@@ -22,6 +23,7 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatTableModule} from '@angular/material/table';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 import {CommonFormsModule} from 'mls-common-forms';
 import {CommonI18nModule, TRANSLATE_REGISTRAR} from 'mls-common-i18n';
@@ -31,11 +33,12 @@ import de from '../i18n/de';
 import en from '../i18n/en';
 
 import {CocesoRoutingModule} from './coceso-routing.module';
+
 import {
   ClockComponent,
   ConcernEditComponent,
   ConcernListComponent,
-  ConcernOverviewComponent,
+  ConcernOverviewComponent, ContactComponent,
   ContainerEditChildComponent,
   ContainerEditRootComponent,
   ContainerEditUnitComponent,
@@ -50,8 +53,10 @@ import {
   IncidentFormComponent,
   IncidentFormTaskComponent,
   IncidentListComponent,
-  IncidentTaskComponent,
+  IncidentMessageFormComponent,
   MainComponent,
+  MessageEntryComponent,
+  MessageListComponent,
   TaskDialogComponent,
   UnitContainerComponent,
   UnitEditFormComponent,
@@ -62,14 +67,18 @@ import {
   UnitsEditComponent,
   UnitTaskComponent
 } from './components';
-import {IncidentHelper, TaskHelper} from './helpers';
+import {UnitMessageFormComponent} from './components/main/unit-message-form/unit-message-form.component';
+
+import {IncidentHelper, StaffHelper, TaskHelper, UnitHelper} from './helpers';
+
 import {
   ClockService,
   CocesoWatchService,
   ConcernDataService,
   ContainerDataService,
   IncidentDataService,
-  TaskService,
+  MessageDataService,
+  TaskDataService,
   UnitDataService
 } from './services';
 
@@ -80,9 +89,11 @@ import {
     EditComponent, ConcernEditComponent,
     UnitsEditComponent, UnitEditFormComponent,
     ContainerEditRootComponent, ContainerEditChildComponent, ContainerEditUnitComponent,
-    MainComponent, ClockComponent, TaskDialogComponent,
-    IncidentListComponent, IncidentDataComponent, IncidentTaskComponent, IncidentFormComponent, IncidentFormTaskComponent,
-    UnitListComponent, UnitEntryComponent, UnitTaskComponent, UnitHierarchyComponent, UnitContainerComponent, UnitFormComponent
+    MainComponent, ClockComponent, ContactComponent, TaskDialogComponent,
+    IncidentListComponent, IncidentDataComponent, IncidentFormComponent, IncidentFormTaskComponent, IncidentMessageFormComponent,
+    UnitListComponent, UnitEntryComponent, UnitTaskComponent, UnitHierarchyComponent, UnitContainerComponent,
+    UnitFormComponent, UnitMessageFormComponent,
+    MessageListComponent, MessageEntryComponent
   ],
   imports: [
     // Angular
@@ -90,6 +101,7 @@ import {
     // Angular Material
     DragDropModule,
     MatAutocompleteModule,
+    MatBadgeModule,
     MatButtonModule,
     MatButtonToggleModule,
     MatCardModule,
@@ -108,6 +120,7 @@ import {
     MatTableModule,
     MatTabsModule,
     MatToolbarModule,
+    MatTooltipModule,
     // MLS modules
     CommonFormsModule,
     CommonI18nModule,
@@ -115,9 +128,9 @@ import {
     CocesoRoutingModule
   ],
   providers: [
-    IncidentHelper, TaskHelper,
-    ClockService, TaskService,
-    CocesoWatchService, ConcernDataService, IncidentDataService, UnitDataService, ContainerDataService
+    IncidentHelper, UnitHelper, TaskHelper, StaffHelper,
+    ClockService, CocesoWatchService,
+    ConcernDataService, IncidentDataService, UnitDataService, ContainerDataService, TaskDataService, MessageDataService
   ]
 })
 export class CocesoComponentsModule {

@@ -18,15 +18,19 @@ export default {
         createIncident: 'Neuer Vorfall',
         createRelocation: 'Neuer Standortwechsel',
         showAll: 'Alle Vorfälle',
-        showActive: 'Aktive Vorfälle',
-        showDone: 'Abgeschlossene Vorfälle'
+        showActiveTasks: 'Aktive Aufträge',
+        showActivePositions: 'Aktive Standorte',
+        showHighlightedIncidents: 'Offene Vorfälle',
+        showDone: 'Abgeschlossene Vorfälle',
+        showAllTransports: 'Alle Abtransporte',
+        showHighlightedTransports: 'Offene Abtransporte'
       },
       windows: {
         header: 'Fenster',
         showCustomJournal: 'Journaleinträge',
         addJournalEntry: 'Journaleintrag erstellen',
         showPatients: 'Patienten',
-        showRadioCalls: 'Funk',
+        showMessages: 'Funk',
         edit: 'Ambulanz bearbeiten',
         dashboard: 'Dashboard',
         showJournal: 'Log'
@@ -35,6 +39,7 @@ export default {
         header: 'Filter',
         none: 'Kein Filter'
       },
+      connected: 'Verbindungsstatus',
       quit: 'Beenden'
     }
   },
@@ -86,6 +91,7 @@ export default {
     type: {
       label: 'Typ',
       Task: 'Auftrag',
+      TaskBlue: 'Einsatz',
       Transport: 'Abtransport',
       Position: 'Standort',
       short: {
@@ -99,7 +105,7 @@ export default {
     },
     closed: {
       label: 'Status',
-      Open: 'Offen',
+      Active: 'Aktiv',
       Closed: 'Abgeschlossen',
       Cancelled: 'Storno',
       NoPatient: 'Kein Patient',
@@ -109,12 +115,28 @@ export default {
       openForm: 'Bearbeiten',
       addJournalEntry: 'Journaleintrag hinzufügen',
       openJournal: 'Protokoll'
+    },
+    message: {
+      title: {
+        default: 'Nachricht senden',
+        ALARM: 'Alarmieren',
+        CASUS: 'Casus senden'
+      },
+      mode: {
+        ALL: 'Alle',
+        UNSENT: 'Nicht gesendete'
+      },
+      sent: {
+        ALARM: 'Alarm gesendet',
+        CASUS: 'Casus gesendet'
+      }
     }
   },
   unit: {
     call: 'Rufname',
     info: 'Info',
     home: 'Zuhause',
+    position: 'Standort',
     portable: 'Disponierbar',
     properties: 'Eigenschaften',
     state: {
@@ -131,6 +153,10 @@ export default {
     crew: {
       label: 'Mannschaft',
       add: 'Mannschaft hinzufügen'
+    },
+    incidents: 'Vorfälle',
+    message: {
+      title: 'Nachricht senden'
     },
     form: {
       add: 'Einheit erstellen',
@@ -186,8 +212,21 @@ export default {
       tetra: 'Tetra'
     }
   },
-  radio: {
-    send: 'Selektivruf senden'
+  message: {
+    text: 'Text',
+    recipients: {
+      label:  'Empfänger',
+      none: 'Keine Empfänger verfügbar'
+    },
+    received: {
+      channels: {
+        label: 'Kanäle',
+        all: 'Alle Kanäle'
+      },
+      last: 'Letzte Nachricht',
+      details: 'Einheit anzeigen',
+      all: 'Alle Nachrichten'
+    }
   },
   validation: {
     contact: {
