@@ -2,15 +2,15 @@
 import { Injectable } from '@angular/core';
 
 /**
- * Global configuration for CocesoApi services
+ * Global configuration for CocesoRest services
  */
 @Injectable({
   providedIn: 'root',
 })
-export class CocesoApiConfiguration {
+export class CocesoRestConfiguration {
   rootUrl: string = '//localhost:8090/coceso';
 }
 
-export interface CocesoApiConfigurationInterface {
+export interface CocesoRestConfigurationInterface {
   rootUrl?: string;
 }

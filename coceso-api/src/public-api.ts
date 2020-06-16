@@ -2,7 +2,7 @@
  * Public API Surface of CoCeSo api
  */
 
-export * from './lib/api/coceso-api.module';
-export * from './lib/api/enums';
-export * from './lib/api/models';
-export * from './lib/api/services';
+export * from './lib/rest/coceso-rest.module';
+export * from './lib/rest/enums';
+export * from './lib/rest/models';
+export * from './lib/rest/services';

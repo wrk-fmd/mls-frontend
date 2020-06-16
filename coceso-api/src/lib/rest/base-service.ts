@@ -1,6 +1,6 @@
 /* tslint:disable */
 import { HttpClient, HttpParameterCodec, HttpParams } from '@angular/common/http';
-import { CocesoApiConfiguration } from './coceso-api-configuration';
+import { CocesoRestConfiguration } from './coceso-rest-configuration';
 
 /**
  * Custom parameter codec to correctly handle the plus sign in parameter
@@ -30,7 +30,7 @@ const PARAMETER_CODEC = new ParameterCodec();
  */
 export class BaseService {
   constructor(
-    protected config: CocesoApiConfiguration,
+    protected config: CocesoRestConfiguration,
     protected http: HttpClient
   ) {
   }

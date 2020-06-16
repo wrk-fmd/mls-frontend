@@ -1,7 +1,7 @@
 /* tslint:disable */
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
-import { CocesoApiConfiguration, CocesoApiConfigurationInterface } from './coceso-api-configuration';
+import { CocesoRestConfiguration, CocesoRestConfigurationInterface } from './coceso-rest-configuration';
 
 import { ConcernEndpointService } from './services/concern-endpoint.service';
 import { ContainerEndpointService } from './services/container-endpoint.service';
@@ -17,7 +17,7 @@ import { StaffEndpointService } from './services/staff-endpoint.service';
 import { SystemEndpointService } from './services/system-endpoint.service';
 
 /**
- * Provider for all CocesoApi services, plus CocesoApiConfiguration
+ * Provider for all CocesoRest services, plus CocesoRestConfiguration
  */
 @NgModule({
   imports: [
@@ -28,7 +28,7 @@ import { SystemEndpointService } from './services/system-endpoint.service';
   ],
   declarations: [],
   providers: [
-    CocesoApiConfiguration,
+    CocesoRestConfiguration,
     ConcernEndpointService,
     ContainerEndpointService,
     IncidentEndpointService,
@@ -43,13 +43,13 @@ import { SystemEndpointService } from './services/system-endpoint.service';
     SystemEndpointService
   ],
 })
-export class CocesoApiModule {
-  static forRoot(customParams: CocesoApiConfigurationInterface): ModuleWithProviders {
+export class CocesoRestModule {
+  static forRoot(customParams: CocesoRestConfigurationInterface): ModuleWithProviders {
     return {
-      ngModule: CocesoApiModule,
+      ngModule: CocesoRestModule,
       providers: [
         {
-          provide: CocesoApiConfiguration,
+          provide: CocesoRestConfiguration,
           useValue: {rootUrl: customParams.rootUrl}
         }
       ]
