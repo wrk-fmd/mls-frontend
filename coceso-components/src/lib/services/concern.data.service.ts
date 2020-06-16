@@ -1,13 +1,11 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
 
-import {ConcernDto, ConcernEndpointService, IncidentUpdateDto, SectionCreateDto} from 'mls-coceso-api';
+import {CocesoWatchService, ConcernDto, ConcernEndpointService, IncidentUpdateDto, SectionCreateDto} from 'mls-coceso-api';
 import {DataService} from 'mls-common-data';
 
 import {BehaviorSubject, Observable, throwError} from 'rxjs';
 import {map, switchMap} from 'rxjs/operators';
-
-import {CocesoWatchService} from './coceso.watch.service';
 
 @Injectable()
 export class ConcernDataService extends DataService<ConcernDto> implements Resolve<void> {

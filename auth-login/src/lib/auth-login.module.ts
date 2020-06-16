@@ -10,6 +10,7 @@ import {MatInputModule} from '@angular/material/input';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatToolbarModule} from '@angular/material/toolbar';
 
+import {REQUEST_TOKEN} from 'mls-common-data';
 import {CommonI18nModule, TRANSLATE_REGISTRAR} from 'mls-common-i18n';
 import {LoggerModule} from 'ngx-logger';
 
@@ -50,6 +51,11 @@ import {AuthGuard, AuthService, TokenInterceptor, TokenService} from './services
       useClass: TokenInterceptor,
       multi: true
     },
+    {
+      provide: REQUEST_TOKEN,
+      useFactory: tokenService => tokenService.requestToken,
+      deps: [TokenService]
+    }
   ],
 })
 export class AuthLoginModule {

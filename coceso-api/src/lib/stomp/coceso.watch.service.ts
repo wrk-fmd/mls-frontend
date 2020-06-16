@@ -1,9 +1,7 @@
 import {Injectable} from '@angular/core';
-
-import {ConcernDto, ContainerDto, IncidentDto, UnitDto} from 'mls-coceso-api';
 import {DeletionDto, ReplayStartDto, WatchService} from 'mls-common-data';
-
 import {Observable} from 'rxjs';
+import {ConcernDto, ContainerDto, IncidentDto, ReceivedMessageDto, UnitDto} from '../rest/models';
 
 /**
  * This service provides methods for watching data through STOMP
@@ -30,7 +28,7 @@ export class CocesoWatchService {
     return this.watchService.watch<ContainerDto>('containers', concern);
   }
 
-  watchMessages(): Observable<any | DeletionDto | ReplayStartDto> {
-    return this.watchService.watch<any>('messages');
+  watchMessages(): Observable<ReceivedMessageDto | DeletionDto | ReplayStartDto> {
+    return this.watchService.watch<ReceivedMessageDto>('messages');
   }
 }

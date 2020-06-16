@@ -73,7 +73,6 @@ import {IncidentHelper, StaffHelper, TaskHelper, UnitHelper} from './helpers';
 
 import {
   ClockService,
-  CocesoWatchService,
   ConcernDataService,
   ContainerDataService,
   IncidentDataService,
@@ -129,7 +128,7 @@ import {
   ],
   providers: [
     IncidentHelper, UnitHelper, TaskHelper, StaffHelper,
-    ClockService, CocesoWatchService,
+    ClockService,
     ConcernDataService, IncidentDataService, UnitDataService, ContainerDataService, TaskDataService, MessageDataService
   ]
 })

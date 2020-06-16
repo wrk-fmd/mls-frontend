@@ -1,12 +1,11 @@
 import {Injectable} from '@angular/core';
 
-import {SendMessageDto, UnitCreateDto, UnitDto, UnitEndpointService, UnitUpdateDto} from 'mls-coceso-api';
+import {CocesoWatchService, SendMessageDto, UnitCreateDto, UnitDto, UnitEndpointService, UnitUpdateDto} from 'mls-coceso-api';
 import {DataService} from 'mls-common-data';
 
 import {Observable, of} from 'rxjs';
 import {map, switchMap} from 'rxjs/operators';
 
-import {CocesoWatchService} from './coceso.watch.service';
 import {ConcernDataService} from './concern.data.service';
 
 @Injectable()

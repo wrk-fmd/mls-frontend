@@ -1,6 +1,13 @@
 import {Injectable} from '@angular/core';
 
-import {ContainerCreateDto, ContainerDto, ContainerEndpointService, ContainerUpdateDto, UnitStateDto} from 'mls-coceso-api';
+import {
+  CocesoWatchService,
+  ContainerCreateDto,
+  ContainerDto,
+  ContainerEndpointService,
+  ContainerUpdateDto,
+  UnitStateDto
+} from 'mls-coceso-api';
 import {DataService} from 'mls-common-data';
 
 import {combineLatest, Observable, of} from 'rxjs';
@@ -8,7 +15,6 @@ import {auditTime, map, shareReplay, switchMap} from 'rxjs/operators';
 import {UnitHelper} from '../helpers/unit.helper';
 
 import {ContainerWithDependencies, UnitWithIncidents} from '../models';
-import {CocesoWatchService} from './coceso.watch.service';
 import {ConcernDataService} from './concern.data.service';
 import {TaskDataService} from './task.data.service';
 

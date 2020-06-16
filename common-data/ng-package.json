@@ -4,8 +4,7 @@
   "lib": {
     "entryFile": "src/public-api.ts",
     "umdModuleIds": {
-      "@stomp/ng2-stompjs": "ng2-stompjs",
-      "mls-auth-login": "mls-auth-login"
+      "@stomp/ng2-stompjs": "ng2-stompjs"
     }
   }
 }

@@ -11,12 +11,13 @@ export class TokenService implements OnDestroy {
 
   private readonly storageChanges;
   readonly renewalToken: BehaviorSubject<string>;
-  private requestToken: string;
+  readonly requestToken: BehaviorSubject<string>;
 
   constructor(private logger: NGXLogger) {
     // Read existing token from LocalStorage
     const existingToken = localStorage.getItem(this.key) || null;
     this.renewalToken = new BehaviorSubject<string>(existingToken);
+    this.requestToken = new BehaviorSubject<string>(null);
 
     // Listen to changes in LocalStorage
     this.storageChanges = event => this.updateFromLocalStorage(event);
@@ -69,14 +70,14 @@ export class TokenService implements OnDestroy {
   }
 
   setRequestToken(token?: string) {
-    this.requestToken = token || null;
+    this.requestToken.next(token || null);
   }
 
   /**
    * Return the current request token
    */
   getRequestToken(): string {
-    return this.requestToken;
+    return this.requestToken.value;
   }
 
   /**

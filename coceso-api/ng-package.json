@@ -4,7 +4,8 @@
   "lib": {
     "entryFile": "src/public-api.ts",
     "umdModuleIds": {
-      "mls-coceso-api": "mls-coceso-api"
+      "@stomp/ng2-stompjs": "ng2-stompjs",
+      "mls-common-data": "mls-common-data"
     }
   }
 }

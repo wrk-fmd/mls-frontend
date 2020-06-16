@@ -1,13 +1,12 @@
 import {Injectable, OnDestroy} from '@angular/core';
 
-import {MessageChannelDto, MessageEndpointService, ReceivedMessageDto} from 'mls-coceso-api';
+import {CocesoWatchService, MessageChannelDto, MessageEndpointService, ReceivedMessageDto} from 'mls-coceso-api';
 import {DataService, ListOptions} from 'mls-common-data';
 
 import {BehaviorSubject, combineLatest, interval, Observable, Subscription} from 'rxjs';
 import {map, shareReplay} from 'rxjs/operators';
-import {UnitWithIncidents} from '../models/unit-with-incidents';
 
-import {CocesoWatchService} from './coceso.watch.service';
+import {UnitWithIncidents} from '../models/unit-with-incidents';
 import {ConcernDataService} from './concern.data.service';
 import {TaskDataService} from './task.data.service';
 
