@@ -51,8 +51,12 @@ export class WatchService {
       // STOMP was not active: Activate now
       this.stompService.activate();
     } else {
-      // STOMP was already active: Just send the new token as message
-      this.stompService.publish({destination: 'authenticate', headers: {token}, retryIfDisconnected: false});
+      try {
+        // STOMP was already active: Just send the new token as message
+        this.stompService.publish({destination: 'authenticate', headers: {token}, retryIfDisconnected: false});
+      } catch (_) {
+        // Ignore, if the socket is currently not connected the token will be sent upon reconnect
+      }
     }
   }
 
