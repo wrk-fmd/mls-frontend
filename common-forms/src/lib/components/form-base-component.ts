@@ -1,6 +1,9 @@
-﻿import {Input} from '@angular/core';
+﻿import {Component, Input} from '@angular/core';
 import {AbstractControl} from '@angular/forms';
 
+@Component({
+  template: ''
+})
 export abstract class FormBaseComponent<T extends AbstractControl> {
 
   @Input()

@@ -1,0 +1,52 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "module": "es2020",
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es2015",
+    "lib": [
+      "es2018",
+      "dom"
+    ],
+    "paths": {
+      "mls-common-data": [
+        "dist/common-data"
+      ],
+      "mls-common-ui": [
+        "dist/common-ui"
+      ],
+      "mls-common-i18n": [
+        "dist/common-i18n"
+      ],
+      "mls-common-forms": [
+        "dist/common-forms"
+      ],
+      "mls-auth-api": [
+        "dist/auth-api"
+      ],
+      "mls-auth-components": [
+        "dist/auth-components"
+      ],
+      "mls-auth-login": [
+        "dist/auth-login"
+      ],
+      "mls-coceso-api": [
+        "dist/coceso-api"
+      ],
+      "mls-coceso-components": [
+        "dist/coceso-components"
+      ]
+    }
+  },
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true
+  }
+}

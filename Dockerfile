@@ -6,7 +6,7 @@ RUN npm set unsafe-perm true
 
 # Add only configuration and run npm install to download dependencies
 # This causes Docker to use the cached dependencies instead of downloading them every time
-COPY ./package.json ./package-lock.json ./angular.json ./tsconfig.json ./
+COPY ./package.json ./package-lock.json ./angular.json ./tsconfig.json ./tsconfig.base.json ./
 RUN npm install
 
 # Add the i18n library and build it

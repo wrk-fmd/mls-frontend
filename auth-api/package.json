@@ -5,9 +5,12 @@
     "generate": "ng-swagger-gen -c swagger-gen-config.json"
   },
   "private": true,
+  "dependencies": {
+    "tslib": "^2.0.0"
+  },
   "peerDependencies": {
-    "@angular/common": "^9.0.5",
-    "@angular/core": "^9.0.5"
+    "@angular/common": "^10.0.9",
+    "@angular/core": "^10.0.9"
   },
   "devDependencies": {
     "ng-swagger-gen": "^1.8.1"

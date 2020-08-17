@@ -44,7 +44,7 @@ import { SystemEndpointService } from './services/system-endpoint.service';
   ],
 })
 export class CocesoRestModule {
-  static forRoot(customParams: CocesoRestConfigurationInterface): ModuleWithProviders {
+  static forRoot(customParams: CocesoRestConfigurationInterface): ModuleWithProviders<CocesoRestModule> {
     return {
       ngModule: CocesoRestModule,
       providers: [

@@ -26,7 +26,7 @@ import { UnitEndpointService } from './services/unit-endpoint.service';
   ],
 })
 export class AuthApiModule {
-  static forRoot(customParams: AuthApiConfigurationInterface): ModuleWithProviders {
+  static forRoot(customParams: AuthApiConfigurationInterface): ModuleWithProviders<AuthApiModule> {
     return {
       ngModule: AuthApiModule,
       providers: [

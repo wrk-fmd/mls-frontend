@@ -1,52 +1,71 @@
+/*
+  This is a "Solution Style" tsconfig.json file, and is used by editors and TypeScript’s language server to improve development experience.
+  It is not intended to be used to perform a compilation.
+
+  To learn more about this file see: https://angular.io/config/solution-tsconfig.
+*/
 {
-  "compileOnSave": false,
-  "compilerOptions": {
-    "baseUrl": "./",
-    "outDir": "./dist/out-tsc",
-    "sourceMap": true,
-    "declaration": false,
-    "downlevelIteration": true,
-    "experimentalDecorators": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "importHelpers": true,
-    "target": "es2015",
-    "lib": [
-      "es2018",
-      "dom"
-    ],
-    "paths": {
-      "mls-common-data": [
-        "dist/common-data"
-      ],
-      "mls-common-ui": [
-        "dist/common-ui"
-      ],
-      "mls-common-i18n": [
-        "dist/common-i18n"
-      ],
-      "mls-common-forms": [
-        "dist/common-forms"
-      ],
-      "mls-auth-api": [
-        "dist/auth-api"
-      ],
-      "mls-auth-components": [
-        "dist/auth-components"
-      ],
-      "mls-auth-login": [
-        "dist/auth-login"
-      ],
-      "mls-coceso-api": [
-        "dist/coceso-api"
-      ],
-      "mls-coceso-components": [
-        "dist/coceso-components"
-      ]
+  "files": [],
+  "references": [
+    {
+      "path": "./mls/tsconfig.app.json"
+    },
+    {
+      "path": "./mls/tsconfig.spec.json"
+    },
+    {
+      "path": "./common-data/tsconfig.lib.json"
+    },
+    {
+      "path": "./common-data/tsconfig.spec.json"
+    },
+    {
+      "path": "./common-forms/tsconfig.lib.json"
+    },
+    {
+      "path": "./common-forms/tsconfig.spec.json"
+    },
+    {
+      "path": "./common-i18n/tsconfig.lib.json"
+    },
+    {
+      "path": "./common-i18n/tsconfig.spec.json"
+    },
+    {
+      "path": "./common-ui/tsconfig.lib.json"
+    },
+    {
+      "path": "./common-ui/tsconfig.spec.json"
+    },
+    {
+      "path": "./auth-api/tsconfig.lib.json"
+    },
+    {
+      "path": "./auth-api/tsconfig.spec.json"
+    },
+    {
+      "path": "./auth-components/tsconfig.lib.json"
+    },
+    {
+      "path": "./auth-components/tsconfig.spec.json"
+    },
+    {
+      "path": "./auth-login/tsconfig.lib.json"
+    },
+    {
+      "path": "./auth-login/tsconfig.spec.json"
+    },
+    {
+      "path": "./coceso-components/tsconfig.lib.json"
+    },
+    {
+      "path": "./coceso-components/tsconfig.spec.json"
+    },
+    {
+      "path": "./coceso-api/tsconfig.lib.json"
+    },
+    {
+      "path": "./coceso-api/tsconfig.spec.json"
     }
-  },
-  "angularCompilerOptions": {
-    "fullTemplateTypeCheck": true,
-    "strictInjectionParameters": true
-  }
+  ]
 }
