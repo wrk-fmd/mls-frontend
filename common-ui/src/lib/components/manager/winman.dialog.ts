@@ -20,7 +20,7 @@ export class WinmanOverlay extends Overlay {
     super(
         (overlay as any)._scrollStrategies, overlayContainer, (overlay as any)._componentFactoryResolver, (overlay as any)._positionBuilder,
         (overlay as any)._keyboardDispatcher, (overlay as any)._injector, (overlay as any)._ngZone, (overlay as any)._document,
-        (overlay as any)._directionality, (overlay as any)._location
+        (overlay as any)._directionality, (overlay as any)._location, (overlay as any)._outsideClickDispatcher
     );
   }
 }
