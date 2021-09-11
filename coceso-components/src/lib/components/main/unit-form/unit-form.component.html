@@ -7,8 +7,8 @@
         </mat-button-toggle-group>
       </div>
 
-      <coceso-form-point [control]="form.controls.position" label="unit.position"></coceso-form-point>
-      <mls-form-multiline [control]="form.controls.info" label="unit.info"></mls-form-multiline>
+      <coceso-form-point [control]="form.control('position')" label="unit.position"></coceso-form-point>
+      <mls-form-multiline [control]="form.control('info')" label="unit.info"></mls-form-multiline>
     </div>
 
     <dl *ngIf="unit | async as unit">

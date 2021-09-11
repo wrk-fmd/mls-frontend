@@ -1,3 +1,4 @@
+/* eslint-disable @angular-eslint/no-input-rename */
 import {CdkDropListGroup} from '@angular/cdk/drag-drop';
 import {Directive, Input, OnDestroy} from '@angular/core';
 
@@ -6,7 +7,7 @@ import {Directive, Input, OnDestroy} from '@angular/core';
  * It has to be used in addition to the cdkDropListGroup directive
  */
 @Directive({
-  // tslint:disable-next-line:directive-selector
+  // eslint-disable-next-line @angular-eslint/directive-selector
   selector: '[dropListGroupName]',
   exportAs: 'dropListGroupName',
 })
@@ -51,7 +52,7 @@ export class DropListGroupNameDirective<T> implements OnDestroy {
 class NamedDropListGroupItems<T> extends Set<T> {
 
   static readonly groups = new Set<NamedDropListGroupItems<any>>();
-  name: string;
+  name: string | null = null;
   level = 0;
   canReceive = true;
 

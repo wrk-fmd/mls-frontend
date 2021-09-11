@@ -10,7 +10,7 @@ import {TrackingFormControl} from '../../forms';
 export class FormServerComponent {
 
   @Input()
-  private control: AbstractControlDirective | AbstractControl;
+  control?: AbstractControlDirective | AbstractControl;
 
   get show(): boolean {
     return this.control instanceof TrackingFormControl && this.control.serverChange;

@@ -1,7 +1,7 @@
 <form [formGroup]="form">
   <mat-dialog-content>
     <div class="form-grid">
-      <mls-form-multiline [control]="form.controls.text" label="message.text" class="form-stretch" [rows]="10" [required]="true">
+      <mls-form-multiline [control]="form.control('text')" label="message.text" class="form-stretch" [rows]="10" [required]="true">
       </mls-form-multiline>
 
       <mat-form-field *ngIf="units | async as units" class="form-stretch">

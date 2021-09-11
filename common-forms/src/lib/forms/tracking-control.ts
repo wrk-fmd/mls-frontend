@@ -102,6 +102,10 @@ export class TrackingFormGroup extends FormGroup implements TrackingControl {
       control.setValue(value);
     }
   }
+
+  control(name: string): FormControl {
+    return <FormControl>this.controls[name];
+  }
 }
 
 export class TrackingFormArray extends FormArray implements TrackingControl {

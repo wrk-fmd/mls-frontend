@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 
 import {ConcernDto} from 'mls-coceso-api';
 import {ListOptions} from 'mls-common-data';
@@ -17,10 +17,14 @@ import {ConcernDataService} from '../../services';
 export class ConcernListComponent {
 
   readonly form: FormGroup;
-  readonly open: Observable<ConcernDto[]>;
-  readonly closed: Observable<ConcernDto[]>;
+  readonly open: Observable<ConcernDto[] | null>;
+  readonly closed: Observable<ConcernDto[] | null>;
 
-  private loading: boolean;
+  private loading: boolean = false;
+
+  get createControl(): FormControl {
+    return <FormControl>this.form.controls.name;
+  }
 
   constructor(private readonly concernService: ConcernDataService, private readonly notificationService: NotificationService,
               fb: FormBuilder) {

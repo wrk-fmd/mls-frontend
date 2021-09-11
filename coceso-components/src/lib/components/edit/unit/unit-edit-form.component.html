@@ -1,18 +1,18 @@
 <form [formGroup]="form">
   <mat-dialog-content>
     <div class="form-grid">
-      <mls-form-text [control]="form.controls.call" label="unit.call" [required]="true"></mls-form-text>
+      <mls-form-text [control]="form.control('call')" label="unit.call" [required]="true"></mls-form-text>
       <div class="form-button-group margin-top align-right">
         <mat-button-toggle-group formControlName="options" multiple>
           <mat-button-toggle value="portable">{{'unit.portable' | translate}}</mat-button-toggle>
         </mat-button-toggle-group>
       </div>
 
-      <coceso-form-unit-type [control]="form.controls.types" label="unit.type.label"></coceso-form-unit-type>
-      <coceso-form-section [control]="form.controls.section" label="concern.section"></coceso-form-section>
+      <coceso-form-unit-type [control]="form.control('types')" label="unit.type.label"></coceso-form-unit-type>
+      <coceso-form-section [control]="form.control('section')" label="concern.section"></coceso-form-section>
 
-      <mls-form-multiline [control]="form.controls.info" label="unit.info"></mls-form-multiline>
-      <coceso-form-point [control]="form.controls.home" label="unit.home"></coceso-form-point>
+      <mls-form-multiline [control]="form.control('info')" label="unit.info"></mls-form-multiline>
+      <coceso-form-point [control]="form.control('home')" label="unit.home"></coceso-form-point>
 
       <coceso-form-contacts [contacts]="contacts" (changed)="setContactChanges($event)" class="form-stretch"></coceso-form-contacts>
       <coceso-form-crew [crew]="crew" (changed)="setCrewChanges($event)" class="form-stretch"></coceso-form-crew>

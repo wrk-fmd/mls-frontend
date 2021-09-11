@@ -1,4 +1,4 @@
-import {ComponentPortal, Portal} from '@angular/cdk/portal';
+import {CdkPortalOutletAttachedRef, ComponentPortal, Portal} from '@angular/cdk/portal';
 import {Component, ComponentRef, Inject, Type, ViewEncapsulation} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 
@@ -29,19 +29,21 @@ export class DialogComponent {
    * Set the constructed component and inject the data
    * @param componentRef The reference to the component
    */
-  setComponent(componentRef: ComponentRef<DialogContent<any>>) {
-    const component = componentRef.instance;
-    component.data = this.data.componentData;
+  setComponent(componentRef: CdkPortalOutletAttachedRef) {
+    if (componentRef instanceof ComponentRef) {
+      const component = componentRef.instance;
+      component.data = this.data.componentData;
 
-    // Connect to the component asynchronously to prevent circular changes
-    setTimeout(() => this.component.next(component), 0);
+      // Connect to the component asynchronously to prevent circular changes
+      setTimeout(() => this.component.next(component), 0);
+    }
   }
 }
 
 /**
  * The options for the dialog window
  */
-export class DialogComponentOptions<T> {
+export interface DialogComponentOptions<T> {
   /** The component type for the content */
   component: Type<DialogContent<T>>;
 

@@ -105,7 +105,7 @@ export class UnitHelper {
     return task && task.incidentData && task.incidentData.type === IncidentTypeDto.Standby;
   }
 
-  stateCss(unit: UnitWithIncidents): string {
+  stateCss(unit: UnitWithIncidents): string | null {
     if (!unit) {
       return null;
     }
@@ -118,6 +118,8 @@ export class UnitHelper {
       case UnitStateDto.OFF_DUTY:
         return 'unit-state-off-duty';
     }
+
+    return null;
   }
 
   private isStandby(unit: UnitWithIncidents): boolean {
