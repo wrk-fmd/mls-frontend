@@ -1,4 +1,4 @@
-/* tslint:disable */
+/* eslint-disable */
 import { PointDto } from './point-dto';
 import { TaskDto } from './task-dto';
 export interface IncidentDto {

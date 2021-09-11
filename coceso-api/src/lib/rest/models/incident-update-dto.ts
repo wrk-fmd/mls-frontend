@@ -1,4 +1,4 @@
-/* tslint:disable */
+/* eslint-disable */
 import { PointDto } from './point-dto';
 export interface IncidentUpdateDto {
   ao?: PointDto;

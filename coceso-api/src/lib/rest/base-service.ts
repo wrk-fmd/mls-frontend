@@ -1,4 +1,4 @@
-/* tslint:disable */
+/* eslint-disable */
 import { HttpClient, HttpParameterCodec, HttpParams } from '@angular/common/http';
 import { CocesoRestConfiguration } from './coceso-rest-configuration';
 

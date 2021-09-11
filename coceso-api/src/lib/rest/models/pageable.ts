@@ -1,4 +1,4 @@
-/* tslint:disable */
+/* eslint-disable */
 import { Sort } from './sort';
 export interface Pageable {
   offset?: number;

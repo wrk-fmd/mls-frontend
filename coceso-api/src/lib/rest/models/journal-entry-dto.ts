@@ -1,4 +1,4 @@
-/* tslint:disable */
+/* eslint-disable */
 import { ChangeDto } from './change-dto';
 export interface JournalEntryDto {
   changes?: Array<ChangeDto>;

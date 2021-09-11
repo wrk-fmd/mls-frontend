@@ -1,4 +1,4 @@
-/* tslint:disable */
+/* eslint-disable */
 export interface ContainerDto {
   children?: Array<number>;
   concern?: number;

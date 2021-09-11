@@ -1,9 +1,12 @@
+# Editor configuration, see https://editorconfig.org
+root = true
+
 [*]
 charset = utf-8
 end_of_line = lf
 indent_size = 2
 indent_style = space
-insert_final_newline = false
+insert_final_newline = true
 # Not Google Style: Longer lines
 max_line_length = 140
 tab_width = 2
@@ -231,6 +234,7 @@ ij_javascript_while_on_new_line = false
 ij_javascript_wrap_comments = false
 
 [*.ts]
+quote_type = single
 ij_typescript_align_imports = false
 ij_typescript_align_multiline_array_initializer_expression = false
 ij_typescript_align_multiline_binary_operation = false

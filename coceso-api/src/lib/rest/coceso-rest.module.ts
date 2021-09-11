@@ -1,4 +1,4 @@
-/* tslint:disable */
+/* eslint-disable */
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { CocesoRestConfiguration, CocesoRestConfigurationInterface } from './coceso-rest-configuration';

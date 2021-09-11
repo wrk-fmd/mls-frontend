@@ -1,4 +1,4 @@
-/* tslint:disable */
+/* eslint-disable */
 import { ContactDto } from './contact-dto';
 export interface StaffMemberUpdateDto {
   contacts?: Array<ContactDto>;

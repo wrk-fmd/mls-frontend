@@ -1,4 +1,4 @@
-/* tslint:disable */
+/* eslint-disable */
 export interface TaskDto {
   alarmSent?: number;
   casusSent?: number;

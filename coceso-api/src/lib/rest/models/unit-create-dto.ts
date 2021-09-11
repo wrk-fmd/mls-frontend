@@ -1,4 +1,4 @@
-/* tslint:disable */
+/* eslint-disable */
 import { ContactDto } from './contact-dto';
 import { PointDto } from './point-dto';
 export interface UnitCreateDto {

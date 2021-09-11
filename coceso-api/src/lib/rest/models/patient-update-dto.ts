@@ -1,4 +1,4 @@
-/* tslint:disable */
+/* eslint-disable */
 export interface PatientUpdateDto {
   birthday?: string;
   diagnosis?: string;

@@ -1,4 +1,4 @@
-/* tslint:disable */
+/* eslint-disable */
 export interface SendAlarmDto {
   message?: string;
   recipients?: 'ALL' | 'UNSENT' | 'LIST';
