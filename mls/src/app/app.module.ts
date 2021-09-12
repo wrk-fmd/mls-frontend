@@ -1,3 +1,4 @@
+import {HttpClientModule} from '@angular/common/http';
 import {Inject, NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -22,7 +23,7 @@ import {AppComponent} from './app.component';
   ],
   imports: [
     // Angular
-    BrowserModule, BrowserAnimationsModule,
+    BrowserModule, BrowserAnimationsModule, HttpClientModule,
     // Translation
     TranslateModule.forRoot(),
     // Logging
