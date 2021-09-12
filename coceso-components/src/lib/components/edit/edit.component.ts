@@ -8,7 +8,7 @@ import {ConcernDataService} from '../../services/concern.data.service';
 })
 export class EditComponent {
 
-  readonly concern: Observable<ConcernDto>;
+  readonly concern: Observable<ConcernDto | undefined>;
 
   constructor(concernService: ConcernDataService) {
     this.concern = concernService.getActiveConcern();

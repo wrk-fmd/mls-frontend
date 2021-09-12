@@ -22,16 +22,16 @@ export class IncidentMessageFormComponent implements DialogContent<IncidentMessa
 
   readonly windowTitle = new ReplaySubject<string>(1);
   readonly taskTitle = new ReplaySubject<string>(1);
-  title: string;
+  title: string = '';
 
-  private readonly id = new BehaviorSubject<number>(null);
+  private readonly id = new BehaviorSubject<number | undefined>(undefined);
 
-  incident: IncidentWithUnits;
+  incident?: IncidentWithUnits;
   units: TaskWithUnit[] = [];
-  type: AlarmTypeDto;
+  type?: AlarmTypeDto;
 
   private selectedUnits: number[] = [];
-  private mode: AlarmRecipientsDto;
+  private mode?: AlarmRecipientsDto;
   readonly modes = [AlarmRecipientsDto.Unsent, AlarmRecipientsDto.All];
 
   readonly form: TrackingFormGroup;
@@ -41,7 +41,7 @@ export class IncidentMessageFormComponent implements DialogContent<IncidentMessa
 
   constructor(private readonly incidentService: IncidentDataService, taskService: TaskDataService,
               private readonly incidentHelper: IncidentHelper, private readonly notificationService: NotificationService,
-              private readonly translateService: TranslateService, private readonly  dialog: MatDialogRef<any>, fb: TrackingFormBuilder) {
+              private readonly translateService: TranslateService, private readonly dialog: MatDialogRef<any>, fb: TrackingFormBuilder) {
     this.form = fb.group({
       mode: [AlarmRecipientsDto.Unsent, Validators.required],
       text: ['', Validators.required, null, true]
@@ -60,9 +60,9 @@ export class IncidentMessageFormComponent implements DialogContent<IncidentMessa
 
   set data(data: IncidentMessageFormOptions) {
     if (!data) {
-      this.type = null;
+      this.type = undefined;
       this.mode = AlarmRecipientsDto.Unsent;
-      this.id.next(null);
+      this.id.next(undefined);
       return;
     }
 
@@ -74,17 +74,17 @@ export class IncidentMessageFormComponent implements DialogContent<IncidentMessa
       this.mode = data.mode || AlarmRecipientsDto.Unsent;
     }
 
-    this.id.next(data.incident || null);
+    this.id.next(data.incident);
   }
 
-  private setIncident(incident: IncidentWithUnits) {
+  private setIncident(incident?: IncidentWithUnits) {
     this.incident = incident;
     this.updateUnits(incident, this.mode);
     this.updateTitles(incident);
     (this.form.controls.text as TrackingFormControl).setServerValue(this.buildMessage(incident));
   }
 
-  private updateUnits(incident: IncidentWithUnits, mode: AlarmRecipientsDto) {
+  private updateUnits(incident?: IncidentWithUnits, mode?: AlarmRecipientsDto) {
     if (!incident) {
       this.units = [];
       return;
@@ -112,13 +112,13 @@ export class IncidentMessageFormComponent implements DialogContent<IncidentMessa
     }
   }
 
-  private updateTitles(incident: IncidentDto) {
+  private updateTitles(incident?: IncidentDto) {
     this.title = this.translateService.instant(`incident.message.title.${this.type || 'default'}`);
     this.windowTitle.next(incident ? `${this.title} – ${this.incidentHelper.title(incident)}` : this.title);
     this.taskTitle.next(this.title);
   }
 
-  private buildMessage(incident: IncidentWithUnits): string {
+  private buildMessage(incident?: IncidentWithUnits): string {
     if (!incident) {
       return '';
     }
@@ -133,7 +133,7 @@ export class IncidentMessageFormComponent implements DialogContent<IncidentMessa
       info: this.limitString(incident.info, 80),
       units: this.buildUnitsString(incident.units),
       casusNr: this.limitString(incident.casusNr, 40),
-      erType: this.limitString(null, 20)
+      erType: this.limitString('', 20) // TODO
     };
 
     return this.translateService.getParsedResult(this.incidentService.getAlarmTemplates(), this.type, params).trim();
@@ -148,7 +148,7 @@ export class IncidentMessageFormComponent implements DialogContent<IncidentMessa
   }
 
   private buildUnitsString(tasks: TaskWithUnit[]): string {
-    const units = tasks.map(t => t.unitData ? t.unitData.call : null)
+    const units = tasks.map(t => t.unitData?.call)
         .filter(u => !!u)
         .sort()
         .join(', ');
@@ -175,6 +175,10 @@ export class IncidentMessageFormComponent implements DialogContent<IncidentMessa
   }
 
   save() {
+    if (!this.type) {
+      return;
+    }
+
     const data: SendAlarmDto = {
       type: this.type,
       recipients: this.form.value.mode,

@@ -2,7 +2,7 @@ import {Component, Input} from '@angular/core';
 
 import {IncidentTypeDto, TaskStateDto} from 'mls-coceso-api';
 
-import {Observable, ReplaySubject} from 'rxjs';
+import {Observable, of, ReplaySubject} from 'rxjs';
 import {switchMap} from 'rxjs/operators';
 
 import {IncidentHelper, TaskHelper} from '../../../helpers';
@@ -15,14 +15,14 @@ import {ClockService} from '../../../services';
 })
 export class UnitTaskComponent {
 
-  _task: TaskWithIncident;
+  _task?: TaskWithIncident;
 
-  css: string;
-  icon: string;
-  type: string;
-  state: string;
+  css: string = '';
+  icon: string | null = null;
+  type: string | null = null;
+  state: string | null = null;
 
-  private readonly updated = new ReplaySubject<number>(1);
+  private readonly updated = new ReplaySubject<number | null>(1);
   readonly elapsed: Observable<number>;
 
   @Input() set task(value: TaskWithIncident) {
@@ -32,12 +32,14 @@ export class UnitTaskComponent {
 
   constructor(private readonly incidentHelper: IncidentHelper, private readonly taskHelper: TaskHelper,
               private readonly clockService: ClockService) {
-    this.elapsed = this.updated.pipe(switchMap(timestamp => clockService.elapsedMinutes(timestamp)));
+    this.elapsed = this.updated.pipe(switchMap(timestamp => timestamp ? clockService.elapsedMinutes(timestamp) : of(0)));
   }
 
   nextState(event: Event): void {
     event.stopPropagation();
-    this.taskHelper.nextState(this._task);
+    if (this._task) {
+      this.taskHelper.nextState(this._task);
+    }
   }
 
   private setTask(task: TaskWithIncident) {
@@ -58,7 +60,7 @@ export class UnitTaskComponent {
 
   private cssForType(task: TaskWithIncident): string {
     const incident = task.incidentData;
-    if (!incident.type) {
+    if (!incident || !incident.type) {
       return '';
     }
 
@@ -76,22 +78,22 @@ export class UnitTaskComponent {
     return `unit-task-${type}`;
   }
 
-  private iconForType(task: TaskWithIncident): string {
+  private iconForType(task: TaskWithIncident): string | null {
     const incident = task.incidentData;
     if (this.incidentHelper.isHoldPosition(task, incident)) {
       return 'adjust';
     }
-    if (incident.type === IncidentTypeDto.Standby) {
+    if (incident && incident.type === IncidentTypeDto.Standby) {
       return 'pause';
     }
 
     return null;
   }
 
-  private charForType(task: TaskWithIncident): string {
+  private charForType(task: TaskWithIncident): string | null {
     const incident = task.incidentData;
 
-    if (incident.type === IncidentTypeDto.Standby) {
+    if (incident && incident.type === IncidentTypeDto.Standby) {
       // Only display icon for standby
       return null;
     }
@@ -109,14 +111,14 @@ export class UnitTaskComponent {
     return this.incidentHelper.shortType(incident);
   }
 
-  private stateForType(task: TaskWithIncident): string {
+  private stateForType(task: TaskWithIncident): string | null {
     const incident = task.incidentData;
 
     if (this.incidentHelper.isHoldPosition(task, incident)) {
       // Do not display the state if at position already
       return null;
     }
-    if (incident.type === IncidentTypeDto.Standby && task.state === TaskStateDto.Abo) {
+    if (incident && incident.type === IncidentTypeDto.Standby && task.state === TaskStateDto.Abo) {
       // Do not display the state if at standby
       return null;
     }

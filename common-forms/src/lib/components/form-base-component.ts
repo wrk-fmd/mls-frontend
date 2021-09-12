@@ -7,16 +7,18 @@ import {AbstractControl} from '@angular/forms';
 export abstract class FormBaseComponent<T extends AbstractControl> {
 
   @Input()
-  control: T;
+  control?: T;
 
   @Input()
-  label: string;
+  label?: string;
 
   @Input()
   required = false;
 
   @Input()
   set disabled(disabled: boolean) {
-    disabled ? this.control.disable() : this.control.enable();
+    if (this.control) {
+      disabled ? this.control.disable() : this.control.enable();
+    }
   }
 }

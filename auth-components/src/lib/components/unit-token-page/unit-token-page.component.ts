@@ -9,7 +9,7 @@ import {UnitTokenDto} from 'mls-auth-api';
 export class UnitTokenPageComponent {
 
   @Input()
-  unit: UnitTokenDto;
+  unit?: UnitTokenDto;
 
   constructor() {
   }

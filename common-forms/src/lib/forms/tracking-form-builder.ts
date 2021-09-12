@@ -13,7 +13,7 @@ export class TrackingFormBuilder extends FormBuilder {
   }
 
   group(controlsConfig: { [p: string]: any }, options?: AbstractControlOptions): TrackingFormGroup {
-    const controls = Object.entries(controlsConfig).reduce((obj, [name, config]) => {
+    const controls = Object.entries(controlsConfig).reduce((obj: { [p: string]: any }, [name, config]) => {
       obj[name] = this.createTrackingControl(config);
       return obj;
     }, {});
@@ -27,7 +27,7 @@ export class TrackingFormBuilder extends FormBuilder {
     return new TrackingFormArray(controls, validatorOrOpts, asyncValidator);
   }
 
-  private createTrackingControl(controlConfig): AbstractControl {
+  private createTrackingControl(controlConfig: any): AbstractControl {
     if (controlConfig instanceof AbstractControl) {
       return controlConfig;
     }

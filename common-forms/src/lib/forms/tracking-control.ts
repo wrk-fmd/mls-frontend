@@ -14,8 +14,8 @@ export class TrackingFormControl extends FormControl implements TrackingControl 
   private _serverChange = false;
 
   constructor(formState: any,
-              validatorOrOpts: ValidatorFn | ValidatorFn[] | AbstractControlOptions | null,
-              asyncValidator: AsyncValidatorFn | AsyncValidatorFn[] | null,
+              validatorOrOpts?: ValidatorFn | ValidatorFn[] | AbstractControlOptions | null,
+              asyncValidator?: AsyncValidatorFn | AsyncValidatorFn[] | null,
               private readonly keepExisting = false) {
     super(formState, validatorOrOpts, asyncValidator);
     this._serverValue = this.value;

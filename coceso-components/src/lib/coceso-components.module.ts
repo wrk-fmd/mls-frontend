@@ -26,7 +26,7 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTooltipModule} from '@angular/material/tooltip';
 
 import {CommonFormsModule} from 'mls-common-forms';
-import {CommonI18nModule, TRANSLATE_REGISTRAR} from 'mls-common-i18n';
+import {CommonI18nModule, TRANSLATE_REGISTRAR, Translations} from 'mls-common-i18n';
 import {CommonUiModule} from 'mls-common-ui';
 
 import de from '../i18n/de';
@@ -133,7 +133,7 @@ import {
   ]
 })
 export class CocesoComponentsModule {
-  constructor(@Inject(TRANSLATE_REGISTRAR) registerTranslations) {
+  constructor(@Inject(TRANSLATE_REGISTRAR) registerTranslations: (translations: Translations) => void) {
     registerTranslations({en, de});
   }
 }

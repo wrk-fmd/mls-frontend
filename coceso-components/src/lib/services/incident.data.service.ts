@@ -10,7 +10,7 @@ import {ConcernDataService} from './concern.data.service';
 @Injectable()
 export class IncidentDataService extends DataService<IncidentDto> {
 
-  private alarmTemplates: { [key: string]: string };
+  private alarmTemplates: { [key: string]: string } = {};
 
   constructor(private readonly concernService: ConcernDataService, private readonly endpoint: IncidentEndpointService,
               private readonly watchService: CocesoWatchService) {

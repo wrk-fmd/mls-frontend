@@ -16,41 +16,43 @@ import {UnitFormComponent} from '../unit-form/unit-form.component';
 export class MessageEntryComponent {
 
   @Input()
-  activePanels: Set<number>;
+  activePanels?: Set<number>;
 
   get expanded(): boolean {
-    return this.isLast || (this.data && this.activePanels && !!this.data.messages.find(m => this.activePanels.has(m.id)));
+    return this.isLast || (!!this.data && !!this.activePanels && !!this.data.messages.find(m => this.activePanels!.has(m.id)));
   }
 
   set expanded(value: boolean) {
     if (!this.data || !this.activePanels) {
       return;
     }
-    this.data.messages.forEach(m => value ? this.activePanels.add(m.id) : this.activePanels.delete(m.id));
+    this.data.messages.forEach(m => value ? this.activePanels!.add(m.id) : this.activePanels!.delete(m.id));
   }
 
-  private _data: CombinedMessage;
+  private _data?: CombinedMessage;
 
   @Input()
-  set data(value: CombinedMessage) {
-    this._data = value;
-    this.emergency = !!value.messages.find(m => m.emergency);
-    this.timestamp.next(value.messages[0].timestamp);
-    this.setIncidents(value);
+  set data(value: CombinedMessage | undefined) {
+    if (value) {
+      this._data = value;
+      this.emergency = !!value.messages.find(m => m.emergency);
+      this.timestamp.next(value.messages[0].timestamp);
+      this.setIncidents(value);
+    }
   }
 
-  get data(): CombinedMessage {
+  get data(): CombinedMessage | undefined {
     return this._data;
   }
 
   @Input()
   isLast = false;
 
-  emergency: boolean;
+  emergency: boolean = false;
   incidents: MessageTask[] = [];
 
   readonly timestamp = new ReplaySubject<number>(1);
-  readonly timer: Observable<number>;
+  readonly timer: Observable<number | null>;
 
   constructor(private readonly incidentHelper: IncidentHelper, private readonly taskHelper: TaskHelper,
               clockService: ClockService, private readonly windowService: WindowService) {
@@ -70,7 +72,7 @@ export class MessageEntryComponent {
     this.taskHelper.nextState(task);
   }
 
-  openDetails(id): void {
+  openDetails(id: number): void {
     if (id) {
       this.windowService.open(UnitFormComponent, {id});
     }

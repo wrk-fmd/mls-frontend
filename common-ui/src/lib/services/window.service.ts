@@ -4,13 +4,13 @@ import {DialogContent, WindowOptions, WinmanComponent} from '../components';
 @Injectable()
 export class WindowService {
 
-  private component: WinmanComponent;
+  private component?: WinmanComponent;
 
   setComponent(component: WinmanComponent) {
     this.component = component;
   }
 
-  open<T>(component: Type<DialogContent<T>>, componentData?: T, options?: WindowOptions) {
+  open<T>(component: Type<DialogContent<T>>, componentData?: any, options?: WindowOptions) {
     if (this.component) {
       this.component.open(component, componentData, options);
     }

@@ -22,7 +22,7 @@ export class FormCrewComponent {
   readonly changed = new EventEmitter<ChangedItems<StaffMemberDto>>();
 
   @ViewChild('input')
-  input: ElementRef<HTMLInputElement>;
+  input?: ElementRef<HTMLInputElement>;
 
   form: FormControl;
   staff: Observable<StaffMemberDto[]>;
@@ -58,7 +58,9 @@ export class FormCrewComponent {
     }
 
     this.form.setValue('');
-    this.input.nativeElement.value = '';
+    if (this.input) {
+      this.input.nativeElement.value = '';
+    }
   }
 
   removeMember(member: StaffMemberDto) {

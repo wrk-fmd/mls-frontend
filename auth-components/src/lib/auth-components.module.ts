@@ -12,7 +12,7 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 
 import {QRCodeModule} from 'angularx-qrcode';
 
-import {CommonI18nModule, TRANSLATE_REGISTRAR} from 'mls-common-i18n';
+import {CommonI18nModule, TRANSLATE_REGISTRAR, Translations} from 'mls-common-i18n';
 import de from '../i18n/de';
 import en from '../i18n/en';
 
@@ -44,7 +44,7 @@ import {UnitTokenConcernsComponent, UnitTokenListComponent, UnitTokenPageCompone
   providers: []
 })
 export class AuthComponentsModule {
-  constructor(@Inject(TRANSLATE_REGISTRAR) registerTranslations) {
+  constructor(@Inject(TRANSLATE_REGISTRAR) registerTranslations: (translations: Translations) => void) {
     registerTranslations({en, de});
   }
 }

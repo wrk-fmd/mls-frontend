@@ -7,21 +7,21 @@ import {ContactDto} from 'mls-coceso-api';
 })
 export class ContactComponent {
 
-  private _contact: ContactDto;
+  private _contact?: ContactDto;
 
   @Input()
-  set contact(value: ContactDto) {
+  set contact(value: ContactDto | undefined) {
     this._contact = value;
     this.setLink(value);
   }
 
-  get contact(): ContactDto {
+  get contact(): ContactDto | undefined {
     return this._contact;
   }
 
-  link: string;
+  link: string | null = null;
 
-  private setLink(contact: ContactDto) {
+  private setLink(contact?: ContactDto) {
     this.link = contact && contact.type === 'phone' && contact.data ? `tel:${contact.data}` : null;
   }
 }

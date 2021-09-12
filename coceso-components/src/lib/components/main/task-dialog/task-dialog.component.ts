@@ -18,11 +18,11 @@ import {IncidentDataService, TaskDataService, UnitDataService} from '../../../se
 export class TaskDialogComponent implements DialogContent<TaskDto> {
 
   readonly windowTitle: Observable<string>;
-  readonly incident: Observable<IncidentDto>;
+  readonly incident: Observable<IncidentDto | undefined>;
   readonly units: Observable<UnitInfo[]>;
-  readonly options: Observable<TaskDialogOptions>;
+  readonly options: Observable<TaskDialogOptions | null>;
 
-  private readonly _task = new BehaviorSubject<TaskDto>(null);
+  private readonly _task = new BehaviorSubject<TaskDto | undefined>(undefined);
 
   @Input() set data(value: TaskDto) {
     this._task.next(value);
@@ -52,9 +52,9 @@ export class TaskDialogComponent implements DialogContent<TaskDto> {
         .subscribe(this.notificationService.onError('task.error'));
   }
 
-  private buildTitle(incident: IncidentDto, unit: UnitDto): string {
+  private buildTitle(incident?: IncidentDto, unit?: UnitDto): string {
     const title = this.incidentHelper.title(incident);
-    const call = unit ? unit.call : null;
+    const call = unit?.call;
 
     if (title && call) {
       return `${call} – ${title}`;
@@ -68,7 +68,7 @@ export class TaskDialogComponent implements DialogContent<TaskDto> {
     return '';
   }
 
-  private buildUnits(incident: IncidentDto, unit: UnitDto): Observable<UnitInfo[]> {
+  private buildUnits(incident?: IncidentDto, unit?: UnitDto): Observable<UnitInfo[]> {
     return incident && unit ? combineLatest(incident.units
         .filter(t => t.unit !== unit.id)
         .map(t => this.loadUnitInfo(t))
@@ -77,12 +77,12 @@ export class TaskDialogComponent implements DialogContent<TaskDto> {
 
   private loadUnitInfo(task: TaskDto): Observable<UnitInfo> {
     return this.unitService.getById(task.unit).pipe(map(u => ({
-      call: u.call,
+      call: u?.call || '',
       state: task.state as TaskStateDto
     })));
   }
 
-  private buildOptions(incident: IncidentDto, unit: UnitDto): TaskDialogOptions {
+  private buildOptions(incident?: IncidentDto, unit?: UnitDto): TaskDialogOptions | null {
     if (!incident || !incident.units || !unit) {
       return null;
     }
@@ -95,6 +95,9 @@ export class TaskDialogComponent implements DialogContent<TaskDto> {
 
     const currentState = task.state as TaskStateDto;
     const nextState = this.calculateNextState(currentState, incident.type as IncidentTypeDto);
+    if (!nextState) {
+      return null;
+    }
 
     let info = 'task.dialog.next';
     let button = 'form.yes';
@@ -134,7 +137,7 @@ export class TaskDialogComponent implements DialogContent<TaskDto> {
     return {currentState, nextState, info, button};
   }
 
-  private calculateNextState(state: TaskStateDto, type: IncidentTypeDto): TaskStateDto {
+  private calculateNextState(state: TaskStateDto, type: IncidentTypeDto): TaskStateDto | null {
     const isStandby = type === IncidentTypeDto.Standby;
     const isTaskOrTransport = type === IncidentTypeDto.Task || type === IncidentTypeDto.Transport;
 

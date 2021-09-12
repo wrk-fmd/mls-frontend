@@ -10,8 +10,8 @@ import {map, switchMap} from 'rxjs/operators';
 @Injectable()
 export class ConcernDataService extends DataService<ConcernDto> implements Resolve<void> {
 
-  private readonly active = new BehaviorSubject<number>(null);
-  private readonly section = new BehaviorSubject<string>(null);
+  private readonly active = new BehaviorSubject<number | undefined>(undefined);
+  private readonly section = new BehaviorSubject<string | null>(null);
 
   constructor(private readonly endpoint: ConcernEndpointService, watchService: CocesoWatchService) {
     super(watchService.watchConcerns());
@@ -19,14 +19,15 @@ export class ConcernDataService extends DataService<ConcernDto> implements Resol
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): void {
     // TODO This only takes care of setting the concern id, but does not unset it after leaving the page
-    this.active.next(+route.paramMap.get('concernId') || null);
+    const concernId = route.paramMap.get('concernId');
+    this.active.next(concernId ? +concernId : undefined);
   }
 
-  getActiveId(): Observable<number> {
+  getActiveId(): Observable<number | undefined> {
     return this.active;
   }
 
-  getActiveConcern(): Observable<ConcernDto> {
+  getActiveConcern(): Observable<ConcernDto | undefined> {
     return this.active.pipe(switchMap(id => this.getById(id)));
   }
 
@@ -36,15 +37,15 @@ export class ConcernDataService extends DataService<ConcernDto> implements Resol
     return c ? runnable(c) : throwError('No concern set');
   }
 
-  getSections(): Observable<string[]> {
+  getSections(): Observable<string[] | null> {
     return this.getActiveConcern().pipe(map(c => c && c.sections && c.sections.length ? c.sections.sort() : null));
   }
 
-  getActiveSection(): Observable<string> {
+  getActiveSection(): Observable<string | null> {
     return this.section;
   }
 
-  setActiveSection(section: string) {
+  setActiveSection(section: string | null) {
     this.section.next(section);
   }
 

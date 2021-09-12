@@ -6,7 +6,11 @@ export interface StompConfiguration {
  * This takes the root URL for the API and transforms it into an URL for the WebSocket protocol
  * @param rootUrl The absolute,
  */
-export function buildWebSocketUrl(rootUrl: string): string {
+export function buildWebSocketUrl(rootUrl?: string): string {
+  if (!rootUrl) {
+    throw new Error('No root URL for API defined');
+  }
+
   if (/^https?:\/\//.test(rootUrl)) {
     // Full URL with scheme, just replace http/https with ws/wss
     return rootUrl.replace(/^http/, 'ws');

@@ -1,4 +1,4 @@
-<div class="unit-token-page">
+<div class="unit-token-page" *ngIf="unit">
   <h2>{{unit.name}}</h2>
   <div class="qr">
     <qrcode [qrdata]="unit.token" [width]="300" errorCorrectionLevel="L"></qrcode>

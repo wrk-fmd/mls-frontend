@@ -1,4 +1,4 @@
-<div>
+<div *ngIf="container">
   <ul class="unit-list" *ngIf="container.unitsData as units">
     <coceso-main-unit *ngFor="let unit of units" [unit]="unit"></coceso-main-unit>
   </ul>

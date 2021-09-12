@@ -1,10 +1,10 @@
 import {Predicate} from '@angular/core';
 
 export class ListOptions<T> {
-  private readonly filter?: Predicate<T>[] = [];
-  private readonly sort?: ((a: T, b: T) => number)[] = [];
+  private readonly filter: Predicate<T>[] = [];
+  private readonly sort: ((a: T, b: T) => number)[] = [];
 
-  constructor(private readonly emptyAsNull = false) {
+  constructor() {
   }
 
   addFilters(...filters: Predicate<T>[]): this {
@@ -32,6 +32,6 @@ export class ListOptions<T> {
       });
     }
 
-    return data.length || !this.emptyAsNull ? data : null;
+    return data;
   }
 }

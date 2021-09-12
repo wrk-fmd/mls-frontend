@@ -3,7 +3,7 @@
  */
 export class AddRemoveContainer<K, V> implements ChangedItems<V> {
 
-  private _values: V[] = [];
+  private _values: V[] | null = [];
   private readonly _keyed = new Map<K, V>();
   private readonly _added = new Map<K, V>();
   private readonly _removed = new Map<K, V>();

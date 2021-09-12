@@ -12,11 +12,11 @@ export class FormTextComponent extends FormBaseComponent<FormControl> {
   type = 'text';
 
   @Input()
-  autocomplete: string;
+  autocomplete?: string;
 
   @Input()
-  min: number;
+  min: number | null = null;
 
   @Input()
-  max: number;
+  max: number | null = null;
 }

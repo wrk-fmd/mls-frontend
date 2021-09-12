@@ -20,7 +20,7 @@ export class UnitListComponent implements DialogContent<UnitListOptions> {
   readonly taskTitle = new ReplaySubject<string>(1);
 
   units: Observable<UnitWithIncidents[]>;
-  private readonly filter = new BehaviorSubject<Predicate<UnitWithIncidents>>(null);
+  private readonly filter = new BehaviorSubject<Predicate<UnitWithIncidents> | undefined>(undefined);
 
   constructor(private readonly taskService: TaskDataService, private readonly unitHelper: UnitHelper,
               private readonly translateService: TranslateService) {
@@ -34,7 +34,7 @@ export class UnitListComponent implements DialogContent<UnitListOptions> {
     );
   }
 
-  private loadUnits(filter: Predicate<UnitWithIncidents>): Observable<UnitWithIncidents[]> {
+  private loadUnits(filter?: Predicate<UnitWithIncidents>): Observable<UnitWithIncidents[]> {
     const options = new ListOptions<UnitWithIncidents>();
     if (filter) {
       options.addFilters(filter);
@@ -45,20 +45,20 @@ export class UnitListComponent implements DialogContent<UnitListOptions> {
   set data(data: UnitListOptions) {
     data = data || {};
 
-    let filterPredicate = null;
+    let filterPredicate = undefined;
     let titlePrefix = 'main.nav.units.overview';
 
     switch (data.filter) {
       case UnitListFilter.ALARM:
-        filterPredicate = u => this.unitHelper.hasAssigned(u);
+        filterPredicate = (u: UnitWithIncidents) => this.unitHelper.hasAssigned(u);
         titlePrefix = 'main.nav.units.alarm';
         break;
       case UnitListFilter.FREE:
-        filterPredicate = u => this.unitHelper.isFree(u);
+        filterPredicate = (u: UnitWithIncidents) => this.unitHelper.isFree(u);
         titlePrefix = 'main.nav.units.free';
         break;
       case UnitListFilter.AVAILABLE:
-        filterPredicate = u => this.unitHelper.isAvailable(u);
+        filterPredicate = (u: UnitWithIncidents) => this.unitHelper.isAvailable(u);
         titlePrefix = 'main.nav.units.available';
         break;
     }

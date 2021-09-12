@@ -17,30 +17,30 @@ import {IncidentMessageFormComponent} from '../incident-message-form/incident-me
 })
 export class IncidentFormTaskComponent {
 
-  private _control: TaskFormControl<TaskWithUnit>;
+  private _control?: TaskFormControl<TaskWithUnit>;
 
-  @Input() set control(value: TaskFormControl<TaskWithUnit>) {
+  @Input() set control(value: TaskFormControl<TaskWithUnit> | undefined) {
     this._control = value;
   }
 
-  get control(): TaskFormControl<TaskWithUnit> {
+  get control(): TaskFormControl<TaskWithUnit> | undefined {
     return this._control;
   }
 
   @Input()
-  states: TaskStateDto[];
+  states?: TaskStateDto[];
 
   @Input()
-  showDuplicate: boolean;
+  showDuplicate?: boolean;
 
   @Input()
-  sendAlarmDisabled: boolean;
+  sendAlarmDisabled?: boolean;
 
   @Input()
-  showSendCasus: boolean;
+  showSendCasus?: boolean;
 
   @Input()
-  sendCasusDisabled: boolean;
+  sendCasusDisabled?: boolean;
 
   private readonly translations;
 
@@ -53,38 +53,38 @@ export class IncidentFormTaskComponent {
     ]);
   }
 
-  get task(): Partial<TaskWithUnit> {
-    return this.control ? this.control.task : {};
+  get task(): TaskWithUnit | undefined {
+    return this.control?.task;
   }
 
-  get unit(): Partial<UnitDto> {
-    return this.task.unitData || {};
+  get unit(): UnitDto | undefined {
+    return this.task?.unitData;
   }
 
-  get sendAlarmColor(): ThemePalette {
-    return this.task.alarmSent ? null : 'accent';
+  get sendAlarmColor(): ThemePalette | null {
+    return this.task?.alarmSent ? null : 'accent';
   }
 
   get sendAlarmTooltip(): string {
-    return this.getTooltip(this.task.alarmSent, AlarmTypeDto.Alarm);
+    return this.getTooltip(this.task?.alarmSent || null, AlarmTypeDto.Alarm);
   }
 
-  get sendCasusColor(): ThemePalette {
-    return this.task.casusSent ? null : 'accent';
+  get sendCasusColor(): ThemePalette | null {
+    return this.task?.casusSent ? null : 'accent';
   }
 
   get sendCasusTooltip(): string {
-    return this.getTooltip(this.task.casusSent, AlarmTypeDto.Casus);
+    return this.getTooltip(this.task?.casusSent || null, AlarmTypeDto.Casus);
   }
 
-  private getTooltip(timestamp: number, type: AlarmTypeDto) {
+  private getTooltip(timestamp: number | null, type: AlarmTypeDto) {
     return timestamp
         ? this.translations[`incident.message.sent.${type}`] + ': ' + formatDate(timestamp * 1000, 'mediumTime', this.locale)
         : this.translations[`incident.message.title.${type}`];
   }
 
   openSendAlarmForm() {
-    if (this.task.incident && this.task.unit) {
+    if (this.task && this.task.incident && this.task.unit) {
       this.windowService.open(IncidentMessageFormComponent, {
         incident: this.task.incident,
         units: [this.task.unit],
@@ -94,7 +94,7 @@ export class IncidentFormTaskComponent {
   }
 
   openSendCasusForm() {
-    if (this.task.incident && this.task.unit) {
+    if (this.task && this.task.incident && this.task.unit) {
       this.windowService.open(IncidentMessageFormComponent, {
         incident: this.task.incident,
         units: [this.task.unit],

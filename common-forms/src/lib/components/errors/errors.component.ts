@@ -14,21 +14,23 @@ export class FormErrorsComponent {
   private readonly _control = new ReplaySubject<AbstractControl>(1);
 
   @Input()
-  set control(value: AbstractControl) {
-    this._control.next(value);
+  set control(value: AbstractControl | undefined) {
+    if (value) {
+      this._control.next(value);
+    }
   }
 
-  readonly errors: Observable<string[]>;
+  readonly errors: Observable<string[] | null>;
 
   constructor(private readonly translateService: TranslateService) {
     this.errors = this._control.pipe(switchMap(control => this.subscribeErrors(control)));
   }
 
-  private subscribeErrors(control: AbstractControl): Observable<string[]> {
+  private subscribeErrors(control: AbstractControl): Observable<string[] | null> {
     return control ? control.statusChanges.pipe(map(() => this.buildErrors(control))) : of(null);
   }
 
-  private buildErrors(control: AbstractControl): string[] {
+  private buildErrors(control: AbstractControl): string[] | null {
     return control.errors ? Object.entries(control.errors).map(([error, params]) => this.getMessage(error, params)) : null;
   }
 

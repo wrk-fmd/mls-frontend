@@ -1,4 +1,4 @@
-<mat-expansion-panel [(expanded)]="expanded" [hideToggle]="isLast" [disabled]="isLast">
+<mat-expansion-panel *ngIf="data" [(expanded)]="expanded" [hideToggle]="isLast" [disabled]="isLast">
   <mat-expansion-panel-header>
     <mat-panel-title [ngClass]="{'message-emergency': emergency}">
       <ng-container *ngIf="isLast">

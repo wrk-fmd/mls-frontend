@@ -31,8 +31,8 @@ export class ConcernListComponent {
     this.form = fb.group({
       name: ['', [Validators.required, Validators.maxLength(100)]]
     });
-    this.open = concernService.getAll(new ListOptions<ConcernDto>(true).addFilters(c => !c.closed));
-    this.closed = concernService.getAll(new ListOptions<ConcernDto>(true).addFilters(c => c.closed));
+    this.open = concernService.getAllOrNull(new ListOptions<ConcernDto>().addFilters(c => !c.closed));
+    this.closed = concernService.getAllOrNull(new ListOptions<ConcernDto>().addFilters(c => c.closed));
   }
 
   get createDisabled(): boolean {

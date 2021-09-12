@@ -5,6 +5,7 @@ import {MatMenuTrigger} from '@angular/material/menu';
 import {IncidentTypeDto, TaskStateDto, UnitStateDto} from 'mls-coceso-api';
 import {NotificationService} from 'mls-common-forms';
 import {WindowService} from 'mls-common-ui';
+import {Subscription} from 'rxjs';
 
 import {DropdownIncident, IncidentHelper, UnitHelper} from '../../../helpers';
 import {UnitWithIncidents} from '../../../models';
@@ -21,50 +22,50 @@ import {UnitMessageFormComponent} from '../unit-message-form/unit-message-form.c
 })
 export class UnitEntryComponent implements OnDestroy {
 
-  private _unit: UnitWithIncidents;
+  private _unit?: UnitWithIncidents;
 
-  get unit(): UnitWithIncidents {
+  get unit(): UnitWithIncidents | undefined {
     return this._unit;
   }
 
   @Input()
-  set unit(value: UnitWithIncidents) {
+  set unit(value: UnitWithIncidents | undefined) {
     this._unit = value;
     this.setUnit(value);
   }
 
   @ViewChild(MatMenuTrigger)
-  private unitMenu: MatMenuTrigger;
+  private unitMenu?: MatMenuTrigger;
 
   @ViewChild(CdkDrag)
-  private cdkDrag: CdkDrag;
+  private cdkDrag?: CdkDrag;
 
   @ViewChild(CdkDropList)
   set cdkDropList(list: CdkDropList) {
     if (this.dropListSubscription) {
       this.dropListSubscription.unsubscribe();
-      this.dropListSubscription = null;
+      this.dropListSubscription = undefined;
     }
     if (list) {
       this.dropListSubscription = list._dropListRef.beforeStarted.subscribe(() => this.fixDragPlaceholder());
     }
   }
 
-  private dropListSubscription;
+  private dropListSubscription?: Subscription;
 
-  states: UnitStateDto[];
-  stateCss: string;
+  states: UnitStateDto[] = [];
+  stateCss: string | null = null;
 
-  isFree: boolean;
-  isHome: boolean;
+  isFree: boolean = false;
+  isHome: boolean = false;
 
-  showActions: boolean;
-  allowSendHome: boolean;
-  allowStandby: boolean;
-  allowHoldPosition: boolean;
+  showActions: boolean = false;
+  allowSendHome: boolean = false;
+  allowStandby: boolean = false;
+  allowHoldPosition: boolean = false;
 
-  hasIncident: boolean;
-  dropdownIncidents: DropdownIncident[];
+  hasIncident: boolean = false;
+  dropdownIncidents: DropdownIncident[] | null = null;
 
   constructor(private readonly unitService: UnitDataService,
               private readonly unitHelper: UnitHelper, private readonly incidentHelper: IncidentHelper,
@@ -92,11 +93,11 @@ export class UnitEntryComponent implements OnDestroy {
     }
   }
 
-  private get id(): number {
-    return this.unit ? this.unit.id : null;
+  private get id(): number | undefined {
+    return this.unit?.id;
   }
 
-  private setUnit(unit: UnitWithIncidents) {
+  private setUnit(unit?: UnitWithIncidents) {
     // Compute everything only once when the unit is updated instead of at every change detection run
     this.states = unit ? Object.values(UnitStateDto).filter(state => state !== unit.state) : [];
     this.stateCss = this.unitHelper.stateCss(unit);
@@ -107,15 +108,17 @@ export class UnitEntryComponent implements OnDestroy {
     this.allowSendHome = this.unitHelper.allowSendHome(unit);
     this.allowStandby = this.unitHelper.allowStandby(unit);
     this.allowHoldPosition = this.unitHelper.allowHoldPosition(unit);
-    this.showActions = unit && unit.portable && (this.allowSendHome || this.allowStandby || this.allowHoldPosition);
+    this.showActions = !!unit && unit.portable && (this.allowSendHome || this.allowStandby || this.allowHoldPosition);
 
-    this.hasIncident = unit && unit.incidents && unit.incidents.length > 0;
+    this.hasIncident = !!unit && unit.incidents && unit.incidents.length > 0;
     this.dropdownIncidents = unit ? this.incidentHelper.dropdownIncidents(unit.incidents) : null;
   }
 
   openMenu(event: MouseEvent) {
     event.preventDefault();
-    this.unitMenu.openMenu();
+    if (this.unitMenu) {
+      this.unitMenu.openMenu();
+    }
   }
 
   setState(state: UnitStateDto): void {
@@ -185,7 +188,7 @@ export class UnitEntryComponent implements OnDestroy {
   }
 
   reportIncident(): void {
-    if (!this.id) {
+    if (!this.unit || !this.id) {
       return;
     }
 

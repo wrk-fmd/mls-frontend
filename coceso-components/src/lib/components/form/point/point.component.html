@@ -1,4 +1,4 @@
-﻿<mat-form-field appearance="outline">
+﻿<mat-form-field appearance="outline" *ngIf="control">
   <mat-label translate>{{label}}</mat-label>
   <!--suppress HtmlFormInputWithoutLabel -->
   <textarea matInput [formControl]="control" [required]="required" rows="3"></textarea>

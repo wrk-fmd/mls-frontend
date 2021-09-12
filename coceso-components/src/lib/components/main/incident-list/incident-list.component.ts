@@ -31,12 +31,12 @@ export class IncidentListComponent implements DialogContent<IncidentListOptions>
   readonly activePanels = new Set<number>();
 
   filterCss = '';
-  filterTypes: IncidentTypeDto[];
-  filterStates: IncidentClosedReasonDto[];
-  filterCasusAndPatient: boolean;
+  filterTypes: IncidentTypeDto[] | null = null;
+  filterStates: IncidentClosedReasonDto[] | null = null;
+  filterCasusAndPatient: boolean = false;
 
-  private transportView: boolean;
-  readonly highlighted = i => this.isHighlighted(i);
+  private transportView: boolean = false;
+  readonly highlighted = (i: IncidentDto) => this.isHighlighted(i);
 
   constructor(private readonly taskService: TaskDataService, private readonly incidentHelper: IncidentHelper,
               private readonly translateService: TranslateService, fb: FormBuilder) {
@@ -91,7 +91,7 @@ export class IncidentListComponent implements DialogContent<IncidentListOptions>
 
       if (data.filter.types && data.filter.types.length) {
         this.filterTypes = data.filter.types.length > 1 ? data.filter.types : null;
-        predicates.push(i => data.filter.types.includes(i.type as IncidentTypeDto));
+        predicates.push(i => data.filter!.types!.includes(i.type as IncidentTypeDto));
 
         // Only show casus and patient filter option if tasks or transports are shown
         this.filterCasusAndPatient = !!data.filter.types.find(t => t === IncidentTypeDto.Task || t === IncidentTypeDto.Transport);

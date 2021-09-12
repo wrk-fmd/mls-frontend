@@ -11,7 +11,7 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatToolbarModule} from '@angular/material/toolbar';
 
 import {REQUEST_TOKEN} from 'mls-common-data';
-import {CommonI18nModule, TRANSLATE_REGISTRAR} from 'mls-common-i18n';
+import {CommonI18nModule, TRANSLATE_REGISTRAR, Translations} from 'mls-common-i18n';
 import {LoggerModule} from 'ngx-logger';
 
 import de from '../i18n/de';
@@ -53,13 +53,13 @@ import {AuthGuard, AuthService, TokenInterceptor, TokenService} from './services
     },
     {
       provide: REQUEST_TOKEN,
-      useFactory: tokenService => tokenService.requestToken,
+      useFactory: (tokenService: TokenService) => tokenService.requestToken,
       deps: [TokenService]
     }
   ],
 })
 export class AuthLoginModule {
-  constructor(@Inject(TRANSLATE_REGISTRAR) registerTranslations) {
+  constructor(@Inject(TRANSLATE_REGISTRAR) registerTranslations: (translations: Translations) => void) {
     registerTranslations({en, de});
   }
 }

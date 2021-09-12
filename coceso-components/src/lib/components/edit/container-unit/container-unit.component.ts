@@ -13,7 +13,7 @@ import {UnitDataService} from '../../../services/unit.data.service';
 export class ContainerEditUnitComponent {
 
   private readonly _id = new ReplaySubject<number>(1);
-  readonly unit: Observable<UnitDto>;
+  readonly unit: Observable<UnitDto | undefined>;
 
   @Input()
   set unitId(id: number) {

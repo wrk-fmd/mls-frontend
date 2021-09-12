@@ -21,15 +21,15 @@ export class WindowComponent extends DialogComponent {
   readonly taskTitle: Observable<string>;
 
   @ViewChild(CdkDrag)
-  cdkDrag: CdkDrag;
+  cdkDrag?: CdkDrag;
 
   private resize = false;
   private resizeN = false;
   private resizeS = false;
   private resizeW = false;
   private resizeE = false;
-  private lastX: number;
-  private lastY: number;
+  private lastX: number = 0;
+  private lastY: number = 0;
 
   constructor(@Inject(MAT_DIALOG_DATA) data: DialogComponentOptions<any>, private readonly dialog: MatDialogRef<WindowComponent>) {
     super(data);
@@ -98,6 +98,6 @@ export class WindowComponent extends DialogComponent {
 
   @HostListener('document:mouseup')
   stopResizing() {
-    this.resize = null;
+    this.resize = false;
   }
 }

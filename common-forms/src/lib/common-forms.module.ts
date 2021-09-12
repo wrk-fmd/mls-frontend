@@ -10,7 +10,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 
-import {CommonI18nModule, TRANSLATE_REGISTRAR} from 'mls-common-i18n';
+import {CommonI18nModule, TRANSLATE_REGISTRAR, Translations} from 'mls-common-i18n';
 import de from '../i18n/de';
 import en from '../i18n/en';
 
@@ -50,7 +50,7 @@ import {NotificationService} from './services';
   ]
 })
 export class CommonFormsModule {
-  constructor(@Inject(TRANSLATE_REGISTRAR) registerTranslations) {
+  constructor(@Inject(TRANSLATE_REGISTRAR) registerTranslations: (translations: Translations) => void) {
     registerTranslations({en, de});
   }
 }

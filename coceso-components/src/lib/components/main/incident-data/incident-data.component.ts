@@ -5,7 +5,7 @@ import {IncidentDto, TaskDto} from 'mls-coceso-api';
 import {NotificationService} from 'mls-common-forms';
 import {WindowService} from 'mls-common-ui';
 
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 
 import {IncidentHelper, TaskHelper, TimerData} from '../../../helpers';
 import {IncidentWithUnits} from '../../../models';
@@ -20,31 +20,31 @@ import {IncidentFormComponent} from '../incident-form/incident-form.component';
 })
 export class IncidentDataComponent {
 
-  private _incident: IncidentWithUnits;
-  private _highlighted: Predicate<IncidentDto>;
+  private _incident?: IncidentWithUnits;
+  private _highlighted?: Predicate<IncidentDto>;
 
-  shortBo: string;
-  shortAo: string;
-  typeChar: string;
+  shortBo: string = '';
+  shortAo: string | null = null;
+  typeChar: string | null = null;
 
-  timer: Observable<TimerData>;
+  timer: Observable<TimerData | null> = of(null);
 
-  showBo: boolean;
-  showAo: boolean;
+  showBo: boolean = false;
+  showAo: boolean = false;
 
-  isHighlighted: boolean;
+  isHighlighted: boolean = false;
 
   @Input()
   set highlighted(highlighted: Predicate<IncidentDto>) {
     this._highlighted = highlighted;
-    this.isHighlighted = highlighted && this.incident && highlighted(this.incident);
+    this.isHighlighted = this.incident ? highlighted(this.incident) : false;
   }
 
   @Input()
-  activePanels: Set<number>;
+  activePanels?: Set<number>;
 
   get expanded(): boolean {
-    return this.id && this.activePanels && this.activePanels.has(this.id);
+    return !!this.id && !!this.activePanels && this.activePanels.has(this.id);
   }
 
   set expanded(value: boolean) {
@@ -59,14 +59,16 @@ export class IncidentDataComponent {
     }
   }
 
-  get incident(): IncidentWithUnits {
+  get incident(): IncidentWithUnits | undefined {
     return this._incident;
   }
 
   @Input()
-  set incident(incident: IncidentWithUnits) {
-    this._incident = incident;
-    this.setIncident(incident);
+  set incident(incident: IncidentWithUnits | undefined) {
+    if (incident) {
+      this._incident = incident;
+      this.setIncident(incident);
+    }
   }
 
   constructor(private readonly taskService: TaskDataService,
@@ -74,8 +76,8 @@ export class IncidentDataComponent {
               private readonly notificationService: NotificationService, private readonly windowService: WindowService) {
   }
 
-  private get id(): number {
-    return this.incident ? this.incident.id : null;
+  private get id(): number | undefined {
+    return this.incident?.id;
   }
 
   private setIncident(incident: IncidentDto) {
@@ -88,7 +90,7 @@ export class IncidentDataComponent {
     this.showBo = incident && !this.incidentHelper.pointEmpty(incident.bo);
     this.showAo = incident && !this.incidentHelper.pointEmpty(incident.ao);
 
-    this.isHighlighted = this._highlighted && incident && this._highlighted(incident);
+    this.isHighlighted = this._highlighted ? this._highlighted(incident) : false;
   }
 
   dropUnit(event: CdkDragDrop<any>) {

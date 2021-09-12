@@ -1,15 +1,17 @@
-﻿<mat-form-field *ngIf="sections | async as sections" appearance="outline">
-  <mat-label translate>{{label}}</mat-label>
-  <mat-select [formControl]="control">
-    <mat-option [value]="null"></mat-option>
-    <mat-option *ngFor="let section of sections" [value]="section">{{section}}</mat-option>
-  </mat-select>
+﻿<ng-container *ngIf="control">
+  <mat-form-field *ngIf="sections | async as sections" appearance="outline">
+    <mat-label translate>{{label}}</mat-label>
+    <mat-select [formControl]="control">
+      <mat-option [value]="null"></mat-option>
+      <mat-option *ngFor="let section of sections" [value]="section">{{section}}</mat-option>
+    </mat-select>
 
-  <mat-hint>
-    <mls-form-server [control]="control"></mls-form-server>
-  </mat-hint>
+    <mat-hint>
+      <mls-form-server [control]="control"></mls-form-server>
+    </mat-hint>
 
-  <mat-error>
-    <mls-form-errors [control]="control"></mls-form-errors>
-  </mat-error>
-</mat-form-field>
+    <mat-error>
+      <mls-form-errors [control]="control"></mls-form-errors>
+    </mat-error>
+  </mat-form-field>
+</ng-container>

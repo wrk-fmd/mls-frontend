@@ -6,7 +6,7 @@ import {TranslateModule} from '@ngx-translate/core';
 import {AuthApiModule} from 'mls-auth-api';
 import {AuthLoginModule} from 'mls-auth-login';
 import {CocesoApiModule} from 'mls-coceso-api';
-import {CommonI18nModule, TRANSLATE_REGISTRAR} from 'mls-common-i18n';
+import {CommonI18nModule, TRANSLATE_REGISTRAR, Translations} from 'mls-common-i18n';
 
 import {LoggerModule, NgxLoggerLevel} from 'ngx-logger';
 
@@ -37,7 +37,7 @@ import {AppComponent} from './app.component';
   bootstrap: [AppComponent]
 })
 export class AppModule {
-  constructor(@Inject(TRANSLATE_REGISTRAR) registerTranslations) {
+  constructor(@Inject(TRANSLATE_REGISTRAR) registerTranslations: (translations: Translations) => void) {
     registerTranslations({en, de});
   }
 }

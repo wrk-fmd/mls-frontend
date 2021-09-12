@@ -9,5 +9,5 @@ import {ContainerWithDependencies} from '../../../models';
 export class UnitContainerComponent {
 
   @Input()
-  container: ContainerWithDependencies;
+  container?: ContainerWithDependencies;
 }

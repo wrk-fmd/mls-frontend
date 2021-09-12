@@ -1,4 +1,4 @@
-﻿<mat-form-field appearance="outline">
+﻿<mat-form-field appearance="outline" *ngIf="control">
   <mat-label translate>{{label}}</mat-label>
   <!--suppress HtmlFormInputWithoutLabel -->
   <input matInput [type]="type" [formControl]="control" [autocomplete]="autocomplete"

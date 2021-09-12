@@ -17,17 +17,17 @@ import {WinmanMatDialog, WinmanOverlay, WinmanOverlayContainer} from './winman.d
 export class WinmanComponent implements AfterViewInit {
 
   windows: MatDialogRef<WindowComponent>[] = [];
-  focused: MatDialogRef<WindowComponent>;
+  focused: MatDialogRef<WindowComponent> | null = null;
 
   private stack = new Set<MatDialogRef<WindowComponent>>();
 
-  @ViewChild('winmanContainer', {static: true}) winmanContainer: ElementRef;
+  @ViewChild('winmanContainer', {static: true}) winmanContainer?: ElementRef;
 
   constructor(private readonly dialog: WinmanMatDialog) {
   }
 
   ngAfterViewInit(): void {
-    this.dialog.overlayContainer.setContainer(this.winmanContainer.nativeElement);
+    this.dialog.overlayContainer.setContainer(this.winmanContainer!.nativeElement);
   }
 
   /**

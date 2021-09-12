@@ -10,7 +10,7 @@ import {ConcernDataService} from '../../../services';
 })
 export class FormSectionComponent extends FormBaseComponent<FormControl> {
 
-  readonly sections: Observable<string[]>;
+  readonly sections: Observable<string[] | null>;
 
   constructor(concernService: ConcernDataService) {
     super();

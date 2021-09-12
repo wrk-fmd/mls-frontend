@@ -28,27 +28,25 @@ import {
 export class MainComponent implements AfterViewInit, OnDestroy {
 
   @ViewChild(WinmanComponent)
-  winmanComponent: WinmanComponent;
+  winmanComponent?: WinmanComponent;
 
   private readonly sectionSubscription: Subscription;
 
-  readonly concern: Observable<ConcernDto>;
-  readonly sections: Observable<string[]>;
-  activeSection: string = null;
+  readonly concern: Observable<ConcernDto | undefined>;
+  readonly sections: Observable<string[] | null>;
+  activeSection: string | null = null;
 
   connected = false; // TODO
-  readonly highlightedIncidents: Observable<string>;
-  readonly highlightedTransports: Observable<string>;
-  readonly alarmUnits: Observable<string>;
-  readonly freeUnits: Observable<string>;
+  readonly highlightedIncidents: Observable<string | null>;
+  readonly highlightedTransports: Observable<string | null>;
+  readonly alarmUnits: Observable<string | null>;
+  readonly freeUnits: Observable<string | null>;
 
   constructor(private readonly concernService: ConcernDataService, taskService: TaskDataService,
               incidentHelper: IncidentHelper, unitHelper: UnitHelper,
               private readonly windowService: WindowService, private readonly snackBar: MatSnackBar) {
     this.concern = concernService.getActiveConcern();
-    this.sections = this.concern.pipe(
-        map(c => c && c.sections && c.sections.length ? c.sections.sort() : null)
-    );
+    this.sections = concernService.getSections();
 
     this.sectionSubscription = concernService.getActiveSection().subscribe(s => this.activeSection = s);
 
@@ -74,7 +72,7 @@ export class MainComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    this.windowService.setComponent(this.winmanComponent);
+    this.windowService.setComponent(this.winmanComponent!);
     this.showUnitsHierarchy();
     this.showActiveTasks();
     this.showActivePositions();
@@ -84,7 +82,7 @@ export class MainComponent implements AfterViewInit, OnDestroy {
     this.sectionSubscription.unsubscribe();
   }
 
-  showInfo(message: string) {
+  showInfo(message?: string) {
     if (message) {
       this.snackBar.open(message, 'Jo eh.', {
         panelClass: 'snackbar-multiline'
@@ -188,7 +186,7 @@ export class MainComponent implements AfterViewInit, OnDestroy {
     // TODO
   }
 
-  setSection(section: string) {
+  setSection(section: string | null) {
     this.concernService.setActiveSection(section);
   }
 }

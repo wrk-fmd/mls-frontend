@@ -9,15 +9,15 @@ import {BehaviorSubject} from 'rxjs';
 export class TokenService implements OnDestroy {
   private readonly key: string = 'mls-token';
 
-  private readonly storageChanges;
-  readonly renewalToken: BehaviorSubject<string>;
-  readonly requestToken: BehaviorSubject<string>;
+  private readonly storageChanges: (event: StorageEvent) => void;
+  readonly renewalToken: BehaviorSubject<string | null>;
+  readonly requestToken: BehaviorSubject<string | null>;
 
   constructor(private logger: NGXLogger) {
     // Read existing token from LocalStorage
     const existingToken = localStorage.getItem(this.key) || null;
-    this.renewalToken = new BehaviorSubject<string>(existingToken);
-    this.requestToken = new BehaviorSubject<string>(null);
+    this.renewalToken = new BehaviorSubject<string | null>(existingToken);
+    this.requestToken = new BehaviorSubject<string | null>(null);
 
     // Listen to changes in LocalStorage
     this.storageChanges = event => this.updateFromLocalStorage(event);
@@ -44,7 +44,7 @@ export class TokenService implements OnDestroy {
    * Set the new token value
    * @param token The token, or null to unset the token
    */
-  setRenewalToken(token?: string) {
+  setRenewalToken(token: string | null) {
     token = token || null;
     if (this.renewalToken.value !== token) {
       this.logger.debug(`[TokenService] Updating renewal token to ${token}`);
@@ -58,14 +58,14 @@ export class TokenService implements OnDestroy {
    */
   removeRenewalToken() {
     this.logger.debug('[TokenService] Removing renewal token');
-    this.setRenewalToken();
+    this.setRenewalToken(null);
   }
 
   /**
    * Return the current token value
    * @return The token string, or null if none is set
    */
-  getRenewalToken(): string {
+  getRenewalToken(): string | null {
     return this.renewalToken.value;
   }
 
@@ -76,7 +76,7 @@ export class TokenService implements OnDestroy {
   /**
    * Return the current request token
    */
-  getRequestToken(): string {
+  getRequestToken(): string | null {
     return this.requestToken.value;
   }
 
@@ -84,7 +84,7 @@ export class TokenService implements OnDestroy {
    * Store the token value in LocalStorage
    * @param token The token value (or null to unset)
    */
-  private store(token?: string) {
+  private store(token: string | null) {
     if (token) {
       localStorage.setItem(this.key, token);
     } else {

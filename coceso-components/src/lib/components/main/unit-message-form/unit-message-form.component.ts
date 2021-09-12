@@ -20,7 +20,7 @@ export class UnitMessageFormComponent implements DialogContent<UnitMessageFormOp
   readonly taskTitle: Observable<string>;
   readonly title: string;
 
-  private readonly ids = new BehaviorSubject<number[]>(null);
+  private readonly ids = new BehaviorSubject<number[]>([]);
   readonly units: Observable<UnitDto[]>;
 
   readonly form: TrackingFormGroup;
@@ -33,7 +33,7 @@ export class UnitMessageFormComponent implements DialogContent<UnitMessageFormOp
 
     this.units = this.ids.pipe(
         switchMap(ids => combineLatest(ids.map(id => unitService.getById(id)))),
-        map(units => units.filter(u => !!u)),
+        map(units => units.filter((u): u is UnitDto => !!u)),
         shareReplay(1)
     );
 

@@ -12,7 +12,7 @@ export class IncidentHelper {
   constructor(private readonly translateService: TranslateService, private readonly clockService: ClockService) {
   }
 
-  shortType(incident: IncidentDto): string {
+  shortType(incident?: IncidentDto): string | null {
     if (!incident) {
       return null;
     }
@@ -23,19 +23,21 @@ export class IncidentHelper {
     return incident.type;
   }
 
-  shortBo(incident: IncidentDto) {
+  shortBo(incident?: IncidentDto): string {
     return incident && !this.pointEmpty(incident.bo)
         ? this.trimPoint(incident.bo)
         : this.translateService.instant('incident.boMissing');
   }
 
-  shortAo(incident: IncidentDto) {
-    return this.isTaskOrTransport(incident) && !this.pointEmpty(incident.ao) ? this.trimPoint(incident.ao) : null;
+  shortAo(incident?: IncidentDto): string | null {
+    return incident && this.isTaskOrTransport(incident) && !this.pointEmpty(incident.ao)
+        ? this.trimPoint(incident.ao)
+        : null;
   }
 
-  title(incident: IncidentDto) {
+  title(incident?: IncidentDto): string {
     if (!incident) {
-      return null;
+      return '';
     }
 
     const bo = this.shortBo(incident);
@@ -43,7 +45,7 @@ export class IncidentHelper {
     return bo ? `${type}: ${bo}` : type;
   }
 
-  dropdownIncidents(incidents: TaskWithIncident[]): DropdownIncident[] {
+  dropdownIncidents(incidents: TaskWithIncident[]): DropdownIncident[] | null {
     if (!incidents) {
       return null;
     }
@@ -56,11 +58,11 @@ export class IncidentHelper {
   }
 
   private showInDropdown(task: TaskWithIncident): boolean {
-    return task && task.incidentData &&
+    return task && !!task.incidentData &&
         task.incidentData.type !== IncidentTypeDto.ToHome && task.incidentData.type !== IncidentTypeDto.Standby;
   }
 
-  isHighlighted(incident: IncidentDto): boolean {
+  isHighlighted(incident?: IncidentDto): boolean {
     if (!incident || incident.closed) {
       return false;
     }
@@ -69,7 +71,7 @@ export class IncidentHelper {
     return !incident.units || !incident.units.length;
   }
 
-  isHighlightedTransport(incident: IncidentDto): boolean {
+  isHighlightedTransport(incident?: IncidentDto): boolean {
     if (!incident || incident.closed || incident.type !== IncidentTypeDto.Transport) {
       return false;
     }
@@ -77,36 +79,36 @@ export class IncidentHelper {
     return this.pointEmpty(incident.ao) || !this.hasCasusNr(incident);
   }
 
-  hasCasusNr(incident: IncidentDto): boolean {
-    return incident && incident.casusNr && !!incident.casusNr.trim();
+  hasCasusNr(incident?: IncidentDto): boolean {
+    return !!incident && !!incident.casusNr && !!incident.casusNr.trim();
   }
 
   isTaskOrTransport(incident: Partial<IncidentDto>): boolean {
     return incident ? incident.type === IncidentTypeDto.Task || incident.type === IncidentTypeDto.Transport : false;
   }
 
-  isRelocation(task: TaskDto, incident: IncidentDto): boolean {
+  isRelocation(task: TaskDto, incident?: IncidentDto): boolean {
     return incident ? incident.type === IncidentTypeDto.Position && task.state !== TaskStateDto.Abo : false;
   }
 
-  isHoldPosition(task: TaskDto, incident: IncidentDto): boolean {
+  isHoldPosition(task: TaskDto, incident?: IncidentDto): boolean {
     return incident ? incident.type === IncidentTypeDto.Position && task.state === TaskStateDto.Abo : false;
   }
 
-  pointEmpty(point: PointDto) {
+  pointEmpty(point?: PointDto): point is PointDto {
     return !point || !point.info;
   }
 
-  trimPoint(point: PointDto) {
+  trimPoint(point: PointDto): string {
     return point.info.split('\n')[0];
   }
 
-  timer(incident: IncidentDto): Observable<TimerData> {
+  timer(incident: IncidentDto): Observable<TimerData | null> {
     if (!incident || incident.closed) {
       return of(null);
     }
 
-    return this.clockService.elapsedMinutes(incident.arrival ? incident.stateChange : incident.created)
+    return this.clockService.elapsedMinutes(incident.arrival ? incident.stateChange! : incident.created)
         .pipe(map(elapsed => this.timerData(incident, elapsed)));
   }
 

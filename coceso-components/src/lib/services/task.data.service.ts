@@ -3,7 +3,7 @@ import {Injectable} from '@angular/core';
 import {IncidentDto, IncidentTypeDto, TaskEndpointService, TaskStateDto, UnitDto} from 'mls-coceso-api';
 import {ListOptions} from 'mls-common-data';
 
-import {combineLatest, Observable} from 'rxjs';
+import {combineLatest, Observable, of} from 'rxjs';
 import {auditTime, map, shareReplay} from 'rxjs/operators';
 
 import {IncidentWithUnits, UnitWithIncidents} from '../models';
@@ -52,8 +52,8 @@ export class TaskDataService {
     };
   }
 
-  getIncident(id: number): Observable<IncidentWithUnits> {
-    return this.combined.pipe(map(c => c.incidents.get(id) || null));
+  getIncident(id?: number): Observable<IncidentWithUnits | undefined> {
+    return id ? this.combined.pipe(map(c => c.incidents.get(id))) : of(undefined);
   }
 
   getIncidents(options?: ListOptions<IncidentWithUnits>, addDefaultSort = true): Observable<IncidentWithUnits[]> {
@@ -70,11 +70,11 @@ export class TaskDataService {
       );
     }
 
-    return this.combined.pipe(map(c => options.apply([...c.incidents.values()])));
+    return this.combined.pipe(map(c => options!.apply([...c.incidents.values()])));
   }
 
-  getUnit(id: number): Observable<UnitWithIncidents> {
-    return this.combined.pipe(map(c => c.units.get(id) || null));
+  getUnit(id?: number): Observable<UnitWithIncidents | undefined> {
+    return id ? this.combined.pipe(map(c => c.units.get(id))) : of(undefined);
   }
 
   getUnits(options?: ListOptions<UnitWithIncidents>, addDefaultSort = true): Observable<UnitWithIncidents[]> {
@@ -87,7 +87,7 @@ export class TaskDataService {
       );
     }
 
-    return this.combined.pipe(map(c => options.apply([...c.units.values()])));
+    return this.combined.pipe(map(c => options!.apply([...c.units.values()])));
   }
 
   assign(incident: number, unit: number): Observable<void> {

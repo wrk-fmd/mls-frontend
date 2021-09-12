@@ -14,7 +14,7 @@ import {ContainerDataService} from '../../../services/container.data.service';
 })
 export class ContainerEditRootComponent {
 
-  readonly root: Observable<ContainerDto>;
+  readonly root: Observable<ContainerDto | undefined>;
 
   constructor(private readonly containerService: ContainerDataService) {
     this.root = containerService.getRoot();

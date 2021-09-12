@@ -23,7 +23,7 @@ export class TokenInterceptor implements HttpInterceptor {
     return next.handle(request);
   }
 
-  private getToken(request: HttpRequest<any>): string {
+  private getToken(request: HttpRequest<any>): string | null {
     return request.method === 'GET' && request.url.endsWith('/authentication')
         ? this.tokenService.getRenewalToken()
         : this.tokenService.getRequestToken();

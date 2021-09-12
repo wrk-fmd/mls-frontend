@@ -48,7 +48,7 @@ export class AuthGuard implements CanActivate, OnDestroy {
   /**
    * Triggered after the login status has changed
    */
-  private loginEvent(user: User) {
+  private loginEvent(user: User | null) {
     this.logger.debug('[AuthGuard] Received logged in user:', user);
 
     const onLoginPage = this.router.isActive('/login', false);

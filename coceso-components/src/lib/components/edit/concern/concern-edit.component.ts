@@ -19,9 +19,9 @@ export class ConcernEditComponent implements OnDestroy {
 
   readonly form: TrackingFormGroup;
   readonly sectionForm: FormControl;
-  sections: string[];
+  sections: string[] = [];
 
-  private loading: boolean;
+  private loading: boolean = false;
 
   constructor(private readonly concernService: ConcernDataService, private readonly notificationService: NotificationService,
               fb: TrackingFormBuilder) {
@@ -38,20 +38,12 @@ export class ConcernEditComponent implements OnDestroy {
     this.concernSubscription.unsubscribe();
   }
 
-  private setConcern(concern: ConcernDto | null) {
-    if (concern) {
-      this.form.setServerValue({
-        name: concern.name || '',
-        info: concern.info || ''
-      });
-      this.sections = concern.sections ? concern.sections.sort() : [];
-    } else {
-      this.form.setServerValue({
-        name: '',
-        info: ''
-      });
-      this.sections = [];
-    }
+  private setConcern(concern?: ConcernDto) {
+    this.form.setServerValue({
+      name: concern?.name || '',
+      info: concern?.info || ''
+    });
+    this.sections = concern?.sections?.sort() || [];
   }
 
   get saveDisabled(): boolean {

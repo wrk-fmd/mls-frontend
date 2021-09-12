@@ -21,7 +21,7 @@ export class WatchService {
   private subscriptionCounter = 0;
 
   private readonly tokenSubscription: Subscription;
-  private token: string = null;
+  private token: string | null = null;
 
   constructor(private readonly stompService: RxStompService,
               stompConfig: InjectableRxStompConfig,
@@ -69,7 +69,7 @@ export class WatchService {
 
     // TODO This only considers the last message for this channel
     //      maybe use a combination of subscription receipt and overall last connection?
-    let lastConnection;
+    let lastConnection: number;
     Object.defineProperties(headers, {
       'last-connection': {get: () => lastConnection, enumerable: true}
     });

@@ -27,11 +27,11 @@ export class ContainerDataService extends DataService<ContainerDto> {
     super(concernService.getActiveId().pipe(switchMap(c => c ? watchService.watchContainers(c) : EMPTY)));
   }
 
-  getRoot(): Observable<ContainerDto> {
-    return this.getById(null);
+  getRoot(): Observable<ContainerDto | undefined> {
+    return this.getById(0);
   }
 
-  getRootWithDependencies(): Observable<ContainerWithDependencies> {
+  getRootWithDependencies(): Observable<ContainerWithDependencies | null> {
     return combineLatest([this.getData(), this.taskService.getUnits()]).pipe(
         auditTime(50),
         map(([containers, units]) => this.buildHierarchyTree(containers, units)),
@@ -39,14 +39,14 @@ export class ContainerDataService extends DataService<ContainerDto> {
     );
   }
 
-  private buildHierarchyTree(containers: Map<number, ContainerDto>, units: UnitWithIncidents[]): ContainerWithDependencies {
+  private buildHierarchyTree(containers: Map<number, ContainerDto>, units: UnitWithIncidents[]): ContainerWithDependencies | null {
     if (!containers || !units) {
       return null;
     }
 
     // Create a dictionary of units keyed by id to make access faster
     const unitDictionary = new Map(units.map(u => [u.id, u]));
-    return this.getCompact(null, containers, unitDictionary);
+    return this.getCompact(0, containers, unitDictionary);
   }
 
   /**
@@ -55,14 +55,19 @@ export class ContainerDataService extends DataService<ContainerDto> {
    * @param containers All available containers
    * @param units All available units with their dependencies
    */
-  private getCompact(id: number, containers: Map<number, ContainerDto>, units: Map<number, UnitWithIncidents>): ContainerWithDependencies {
+  private getCompact(id: number, containers: Map<number, ContainerDto>,
+                     units: Map<number, UnitWithIncidents>): ContainerWithDependencies | null {
     const container = containers.get(id);
     if (!container) {
       return null;
     }
 
-    const unitsData = container.units ? container.units.map(u => units.get(u)).filter(u => !!u) : [];
-    const childrenData = container.children ? container.children.map(c => this.getCompact(c, containers, units)).filter(c => !!c) : [];
+    const unitsData = container.units
+        ? container.units.map(u => units.get(u)).filter((u): u is UnitWithIncidents => !!u)
+        : [];
+    const childrenData = container.children
+        ? container.children.map(c => this.getCompact(c, containers, units)).filter((c): c is ContainerWithDependencies => !!c)
+        : [];
 
     if (!unitsData.length && childrenData.length <= 1) {
       // No units and at most one child: Skip the container, use the (possibly undefined) child directly

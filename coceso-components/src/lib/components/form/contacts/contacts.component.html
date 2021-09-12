@@ -9,7 +9,7 @@
   <mat-label translate>contact.add</mat-label>
 
   <!--suppress HtmlFormInputWithoutLabel -->
-  <input matInput formControlName="data" [type]="inputType | async" [matChipInputFor]="contactList" (matChipInputTokenEnd)="addContact($event)">
+  <input matInput formControlName="data" [type]="inputType" [matChipInputFor]="contactList" (matChipInputTokenEnd)="addContact($event)">
 
   <mat-select matSuffix formControlName="type" [placeholder]="'contact.type.label' | translate">
     <mat-option [value]="null" disabled>{{'contact.type.label' | translate}}</mat-option>

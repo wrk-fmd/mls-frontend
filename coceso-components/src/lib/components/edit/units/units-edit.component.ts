@@ -16,7 +16,7 @@ import {UnitEditFormComponent} from '../unit/unit-edit-form.component';
 })
 export class UnitsEditComponent implements OnInit, OnDestroy {
 
-  private subscription: Subscription;
+  private subscription?: Subscription;
 
   readonly displayedColumns = ['call', 'properties', 'section', 'home', 'info', 'type', 'actions'];
   readonly units = new MatTableDataSource<UnitDto>();

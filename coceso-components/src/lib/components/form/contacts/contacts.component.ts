@@ -23,18 +23,17 @@ export class FormContactsComponent implements OnDestroy {
   readonly changed = new EventEmitter<ChangedItems<ContactDto>>();
 
   private readonly typeSubscription: Subscription;
-  private type: string;
+  private type?: string;
   form: FormGroup;
 
-  readonly inputType: Observable<string>;
+  inputType: string = 'text';
 
   constructor(fb: FormBuilder) {
     this.form = fb.group({
-      data: ['', control => this.validateData(control)],
+      data: ['', (control: AbstractControl) => this.validateData(control)],
       type: [null]
     });
 
-    this.inputType = this.form.controls.type.valueChanges.pipe(map(type => this.buildInputType(type)));
     this.typeSubscription = this.form.controls.type.valueChanges.subscribe(type => this.setType(type));
   }
 
@@ -66,6 +65,7 @@ export class FormContactsComponent implements OnDestroy {
 
   private setType(type: string) {
     this.type = type;
+    this.inputType = this.buildInputType(type);
     this.form.controls.data.updateValueAndValidity();
   }
 
@@ -91,7 +91,7 @@ export class FormContactsComponent implements OnDestroy {
   }
 
   addContact(event: MatChipInputEvent) {
-    if (!this.form.valid || !event.value) {
+    if (!this.form.valid || !event.value || !this.type) {
       return;
     }
 

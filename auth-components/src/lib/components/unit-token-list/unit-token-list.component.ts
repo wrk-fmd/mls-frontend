@@ -12,9 +12,9 @@ import {UnitEndpointService, UnitTokenDto} from 'mls-auth-api';
 })
 export class UnitTokenListComponent implements OnInit, OnDestroy {
 
-  units: UnitTokenDto[];
+  units: UnitTokenDto[] = [];
 
-  private routeSubscription: Subscription;
+  private routeSubscription?: Subscription;
 
   constructor(private readonly unitService: UnitEndpointService,
               private readonly translateService: TranslateService,
@@ -22,7 +22,7 @@ export class UnitTokenListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.routeSubscription = this.route.paramMap.subscribe((params: ParamMap) => this.loadConcern(+params.get('concernId') || null));
+    this.routeSubscription = this.route.paramMap.subscribe((params: ParamMap) => this.loadConcern(+(params.get('concernId') || 0)));
   }
 
   ngOnDestroy() {

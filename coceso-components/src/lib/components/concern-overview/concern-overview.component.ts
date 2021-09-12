@@ -13,8 +13,8 @@ import {ConcernDataService} from '../../services';
 })
 export class ConcernOverviewComponent {
 
-  readonly concern: Observable<ConcernDto>;
-  loading: boolean;
+  readonly concern: Observable<ConcernDto | undefined>;
+  loading: boolean = false;
 
   constructor(private readonly concernService: ConcernDataService, private readonly notificationService: NotificationService) {
     this.concern = concernService.getActiveConcern();

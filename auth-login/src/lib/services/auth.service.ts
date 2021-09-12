@@ -17,13 +17,13 @@ import {User} from './user';
 export class AuthService implements OnDestroy {
 
   private readonly tokenChanges: Subscription;
-  readonly user: BehaviorSubject<User>;
-  private renewalTimeout?;
+  readonly user: BehaviorSubject<User | null>;
+  private renewalTimeout?: number;
 
   constructor(private readonly endpoint: AuthenticationEndpointService,
               private readonly tokenService: TokenService,
               private readonly logger: NGXLogger) {
-    this.user = new BehaviorSubject<User>(null);
+    this.user = new BehaviorSubject<User | null>(null);
     this.tokenChanges = this.tokenService.renewalToken.subscribe(token => this.updateRenewalToken(token));
   }
 
@@ -80,7 +80,7 @@ export class AuthService implements OnDestroy {
    * Called whenever the renewal token has changed in the TokenService
    * @param token The new renewal token
    */
-  private updateRenewalToken(token: string) {
+  private updateRenewalToken(token: string | null) {
     this.logger.debug('[AuthService] Renewal token update received:', token);
 
     if (!token) {
@@ -185,7 +185,7 @@ export class AuthService implements OnDestroy {
     if (this.renewalTimeout) {
       this.logger.debug('[AuthService] Clearing authentication renewal timeout');
       clearTimeout(this.renewalTimeout);
-      this.renewalTimeout = null;
+      this.renewalTimeout = undefined;
     }
   }
 }

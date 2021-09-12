@@ -23,10 +23,10 @@ export class IncidentFormComponent implements DialogContent<IncidentDto>, OnDest
   readonly windowTitle = new ReplaySubject<string>(1);
   readonly taskTitle = new ReplaySubject<string>(1);
 
-  private readonly id = new BehaviorSubject<number>(null);
+  private readonly id = new BehaviorSubject<number | undefined>(undefined);
   private readonly incidentSubscription: Subscription;
-  type: IncidentTypeDto;
-  states: TaskStateDto[];
+  type?: IncidentTypeDto;
+  states?: TaskStateDto[];
 
   readonly form: TrackingFormGroup;
   units: TaskFormControl<TaskWithUnit>[];
@@ -61,11 +61,11 @@ export class IncidentFormComponent implements DialogContent<IncidentDto>, OnDest
     this.incidentSubscription.unsubscribe();
   }
 
-  set data(data) {
-    this.type = data ? data.type : null;
+  set data(data: IncidentDto) {
+    this.type = data?.type;
     this.states = this.taskHelper.statesForType(this.type);
 
-    const id = data ? data.id : null;
+    const id = data?.id;
     this.id.next(id);
 
     if (!id) {
@@ -93,7 +93,7 @@ export class IncidentFormComponent implements DialogContent<IncidentDto>, OnDest
     }
   }
 
-  private setIncident(incident: IncidentWithUnits) {
+  private setIncident(incident?: IncidentWithUnits) {
     this.updateTitles(incident);
 
     if (!incident) {

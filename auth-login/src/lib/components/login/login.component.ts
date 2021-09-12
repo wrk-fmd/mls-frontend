@@ -42,7 +42,7 @@ export class LoginComponent {
       error => {
         this.loading = false;
         this.translateService.get(error.status === 403 ? 'login.errors.credentials' : 'login.errors.failed', error).subscribe(message =>
-          this.snackBar.open(message, null, {verticalPosition: 'top'})
+          this.snackBar.open(message, undefined, {verticalPosition: 'top'})
         );
       }
     );

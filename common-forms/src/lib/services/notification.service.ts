@@ -40,6 +40,6 @@ export class NotificationService {
         message = `${message}: ${e.message}`;
       }
     }
-    this.snackBar.open(message, null, {duration: 5000});
+    this.snackBar.open(message, undefined, {duration: 5000});
   }
 }

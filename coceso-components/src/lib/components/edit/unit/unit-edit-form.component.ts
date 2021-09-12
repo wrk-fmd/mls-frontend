@@ -7,7 +7,7 @@ import {ChangedItems, NotificationService, TrackingFormBuilder, TrackingFormGrou
 import {DialogContent} from 'mls-common-ui';
 
 import {BehaviorSubject, forkJoin, Observable, of, ReplaySubject, Subscription, throwError} from 'rxjs';
-import {flatMap, switchMap, tap} from 'rxjs/operators';
+import {mergeMap, switchMap, tap} from 'rxjs/operators';
 
 import {UnitDataService} from '../../../services';
 
@@ -18,15 +18,15 @@ export class UnitEditFormComponent implements DialogContent<any>, OnDestroy {
 
   readonly windowTitle = new ReplaySubject<string>(1);
 
-  private readonly id = new BehaviorSubject<number>(null);
+  private readonly id = new BehaviorSubject<number | undefined>(undefined);
   private readonly unitSubscription: Subscription;
 
   form: TrackingFormGroup;
-  contacts: ContactDto[];
-  crew: StaffMemberDto[];
+  contacts: ContactDto[] = [];
+  crew: StaffMemberDto[] = [];
 
-  private contactChanges: ChangedItems<ContactDto>;
-  private crewChanges: ChangedItems<StaffMemberDto>;
+  private contactChanges?: ChangedItems<ContactDto>;
+  private crewChanges?: ChangedItems<StaffMemberDto>;
 
   constructor(private readonly unitService: UnitDataService, private readonly translateService: TranslateService,
               private readonly notificationService: NotificationService, fb: TrackingFormBuilder) {
@@ -48,7 +48,7 @@ export class UnitEditFormComponent implements DialogContent<any>, OnDestroy {
     this.unitSubscription.unsubscribe();
   }
 
-  set data(data) {
+  set data(data: any) {
     const id = data ? data.id : null;
     this.id.next(id);
 
@@ -71,7 +71,7 @@ export class UnitEditFormComponent implements DialogContent<any>, OnDestroy {
     }
   }
 
-  private setUnit(unit: UnitDto) {
+  private setUnit(unit?: UnitDto) {
     this.windowTitle.next(this.buildTitle(unit));
 
     if (!unit) {
@@ -91,7 +91,7 @@ export class UnitEditFormComponent implements DialogContent<any>, OnDestroy {
     this.crew = unit.crew;
   }
 
-  private buildTitle(unit): string {
+  private buildTitle(unit?: UnitDto): string {
     if (!this.id.value) {
       return this.translateService.instant('unit.form.add');
     }
@@ -123,17 +123,17 @@ export class UnitEditFormComponent implements DialogContent<any>, OnDestroy {
       info: this.form.value.info,
       home: {info: this.form.value.home},
       portable: this.form.value.options.includes('portable'),
-      contacts: this.contactChanges && this.contactChanges.dirty ? this.contactChanges.values : null
+      contacts: this.contactChanges && this.contactChanges.dirty ? this.contactChanges.values : undefined
     };
 
     const unitId = this.id.value;
     if (unitId) {
       this.unitService.updateUnit(unitId, data)
-          .pipe(flatMap(() => this.saveCrew()))
+          .pipe(mergeMap(() => this.saveCrew()))
           .subscribe(this.notificationService.onError('unit.update.error'));
     } else {
       this.unitService.createUnit(data)
-          .pipe(tap(id => this.id.next(id)), flatMap(() => this.saveCrew()))
+          .pipe(tap(id => this.id.next(id)), mergeMap(() => this.saveCrew()))
           .subscribe(this.notificationService.onError('unit.create.error'));
     }
   }

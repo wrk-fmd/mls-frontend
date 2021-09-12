@@ -24,14 +24,14 @@ export class UnitFormComponent implements DialogContent<any>, OnDestroy {
 
   readonly states = Object.values(UnitStateDto);
 
-  private readonly id = new BehaviorSubject<number>(null);
+  private readonly id = new BehaviorSubject<number | undefined>(undefined);
   private readonly unitSubscription: Subscription;
 
-  readonly unit: Observable<UnitWithIncidents>;
+  readonly unit: Observable<UnitWithIncidents | undefined>;
 
   form: TrackingFormGroup;
-  contacts: ContactDto[];
-  crew: StaffMemberDto[];
+  contacts?: ContactDto[];
+  crew?: StaffMemberDto[];
 
   constructor(private readonly unitService: UnitDataService, taskService: TaskDataService, private readonly staffHelper: StaffHelper,
               private readonly translateService: TranslateService, private readonly notificationService: NotificationService,
@@ -56,11 +56,11 @@ export class UnitFormComponent implements DialogContent<any>, OnDestroy {
     this.unitSubscription.unsubscribe();
   }
 
-  set data(data) {
-    this.id.next(data ? data.id : null);
+  set data(data: any) {
+    this.id.next(data?.id);
   }
 
-  private setUnit(unit: UnitDto) {
+  private setUnit(unit?: UnitDto) {
     this.windowTitle.next(this.buildTitle(unit));
     this.taskTitle.next(unit ? unit.call : '');
 
@@ -80,7 +80,7 @@ export class UnitFormComponent implements DialogContent<any>, OnDestroy {
     this.crew = unit.crew;
   }
 
-  private buildTitle(unit): string {
+  private buildTitle(unit?: UnitDto): string {
     const prefix = this.translateService.instant('unit.form.edit');
     return unit ? `${prefix}: ${unit.call}` : prefix;
   }

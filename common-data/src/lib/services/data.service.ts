@@ -1,5 +1,5 @@
 import {Injectable, OnDestroy} from '@angular/core';
-import {BehaviorSubject, Observable, Subscription} from 'rxjs';
+import {BehaviorSubject, Observable, of, Subscription} from 'rxjs';
 import {auditTime, map} from 'rxjs/operators';
 
 import {DeletionDto, isDeletion, isReplayStart, ListOptions, ReplayStartDto} from '../models';
@@ -26,20 +26,26 @@ export abstract class DataService<T extends Entity> implements OnDestroy {
 
     return this.data.pipe(
         auditTime(50),
-        map(data => options.apply([...data.values()]))
+        map(data => options!.apply([...data.values()]))
+    );
+  }
+
+  getAllOrNull(options?: ListOptions<T>): Observable<T[] | null> {
+    return this.getAll(options).pipe(
+        map(data => data.length ? data : null)
     );
   }
 
   protected defaultSort(): ((a: T, b: T) => number)[] {
-    return [(a, b) => b.id - a.id];
+    return [(a, b) => (b.id || 0) - (a.id || 0)];
   }
 
   public getData(): Observable<Map<number, T>> {
     return this.data;
   }
 
-  public getById(id: number): Observable<T> {
-    return this.data.pipe(map(data => data.get(id) || null));
+  public getById(id?: number): Observable<T | undefined> {
+    return id !== undefined ? this.data.pipe(map(data => data.get(id))) : of(undefined);
   }
 
   private handleUpdate(item: T | DeletionDto | ReplayStartDto) {
@@ -58,7 +64,7 @@ export abstract class DataService<T extends Entity> implements OnDestroy {
   }
 
   private updateItem(item: T): void {
-    this.data.value.set(item.id, item);
+    this.data.value.set(item.id || 0, item);
     this.data.next(this.data.value);
   }
 
@@ -69,5 +75,5 @@ export abstract class DataService<T extends Entity> implements OnDestroy {
 }
 
 export interface Entity {
-  id?: number;
+  id: number | null;
 }

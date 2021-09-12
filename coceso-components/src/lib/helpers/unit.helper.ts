@@ -5,37 +5,37 @@ import {TaskWithIncident, UnitWithIncidents} from '../models/unit-with-incidents
 @Injectable()
 export class UnitHelper {
 
-  private pointNotEmpty(point: PointDto): boolean {
-    return point && !!point.info;
+  private pointNotEmpty(point?: PointDto): boolean {
+    return !!point && !!point.info;
   }
 
-  hasHome(unit: UnitDto): boolean {
-    return unit && this.pointNotEmpty(unit.home);
+  hasHome(unit?: UnitDto): boolean {
+    return this.pointNotEmpty(unit?.home);
   }
 
-  isHome(unit: UnitDto): boolean {
-    return this.hasHome(unit) && unit.position && unit.position.info === unit.home.info;
+  isHome(unit?: UnitDto): boolean {
+    return this.hasHome(unit) && unit?.position?.info === unit?.home?.info;
   }
 
-  hasAssigned(unit: UnitDto): boolean {
-    return unit && unit.incidents && !!unit.incidents.find(t => t.state === TaskStateDto.Assigned);
+  hasAssigned(unit?: UnitDto): boolean {
+    return !!unit?.incidents.find(t => t.state === TaskStateDto.Assigned);
   }
 
-  isFree(unit: UnitDto): boolean {
-    return unit && unit.portable
+  isFree(unit?: UnitDto): boolean {
+    return !!unit && unit.portable
         // Units without assigned incidents
-        && (!unit.incidents || !unit.incidents.length)
+        && !unit.incidents.length
         // Ignore units that are off duty or at home
         && unit.state !== UnitStateDto.OffDuty && !this.isHome(unit);
   }
 
-  isAvailable(unit: UnitWithIncidents): boolean {
+  isAvailable(unit?: UnitWithIncidents): boolean {
     if (!unit || !unit.portable || unit.state !== UnitStateDto.Ready) {
       // Only consider portable, on-duty units
       return false;
     }
 
-    if (!unit.incidents || !unit.incidents.length) {
+    if (!unit.incidents.length) {
       // No incidents means available
       return true;
     }
@@ -45,11 +45,14 @@ export class UnitHelper {
   }
 
   private isInterruptable(task: TaskWithIncident): boolean {
-    return task && task.incidentData &&
-        task.incidentData.type !== IncidentTypeDto.Task && task.incidentData.type !== IncidentTypeDto.Transport;
+    return task.incidentData?.type !== IncidentTypeDto.Task && task.incidentData?.type !== IncidentTypeDto.Transport;
   }
 
-  allowSendHome(unit: UnitWithIncidents): boolean {
+  allowSendHome(unit?: UnitWithIncidents): boolean {
+    if (!unit) {
+      return false;
+    }
+
     if (!this.hasHome(unit) || this.isHome(unit)) {
       // Unit has no home or is already home
       return false;
@@ -65,11 +68,11 @@ export class UnitHelper {
   }
 
   private allowSendHomeWithTask(task: TaskWithIncident): boolean {
-    return task && task.incidentData &&
+    return !!task && !!task.incidentData &&
         (task.incidentData.type === IncidentTypeDto.Standby || task.incidentData.type === IncidentTypeDto.Position);
   }
 
-  allowStandby(unit: UnitWithIncidents): boolean {
+  allowStandby(unit?: UnitWithIncidents): boolean {
     if (!unit) {
       return false;
     }
@@ -84,10 +87,10 @@ export class UnitHelper {
   }
 
   private allowStandbyWithTask(task: TaskWithIncident): boolean {
-    return task && task.incidentData && task.incidentData.type === IncidentTypeDto.Position;
+    return task.incidentData?.type === IncidentTypeDto.Position;
   }
 
-  allowHoldPosition(unit: UnitWithIncidents): boolean {
+  allowHoldPosition(unit?: UnitWithIncidents): boolean {
     if (!unit || !unit.portable || !unit.position || !unit.position.info) {
       return false;
     }
@@ -102,10 +105,10 @@ export class UnitHelper {
   }
 
   private allowHoldPositionWithTask(task: TaskWithIncident): boolean {
-    return task && task.incidentData && task.incidentData.type === IncidentTypeDto.Standby;
+    return !!task && !!task.incidentData && task.incidentData.type === IncidentTypeDto.Standby;
   }
 
-  stateCss(unit: UnitWithIncidents): string | null {
+  stateCss(unit?: UnitWithIncidents): string | null {
     if (!unit) {
       return null;
     }
@@ -132,7 +135,7 @@ export class UnitHelper {
     return !unit.incidents.find(t => !t || !t.incidentData || t.incidentData.type !== IncidentTypeDto.Standby);
   }
 
-  popoverText(unit: UnitWithIncidents): string {
+  popoverText(unit: UnitWithIncidents): string | null {
     // TODO This should probably be a component
     return null;
 

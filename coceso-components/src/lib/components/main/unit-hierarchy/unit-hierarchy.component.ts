@@ -16,7 +16,7 @@ export class UnitHierarchyComponent implements DialogContent<null> {
   readonly windowTitle: Observable<string>;
   readonly taskTitle: Observable<string>;
 
-  readonly container: Observable<ContainerWithDependencies>;
+  readonly container: Observable<ContainerWithDependencies | null>;
 
   constructor(containerService: ContainerDataService, translateService: TranslateService) {
     this.container = containerService.getRootWithDependencies();
@@ -28,6 +28,6 @@ export class UnitHierarchyComponent implements DialogContent<null> {
     );
   }
 
-  set data(_) {
+  set data(_: any) {
   }
 }

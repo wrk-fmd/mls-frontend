@@ -19,7 +19,7 @@ export class MessageListComponent implements DialogContent {
 
   readonly channels: Observable<MessageChannelDto[]>;
   readonly messages: Observable<CombinedMessage[]>;
-  readonly channel = new BehaviorSubject<MessageChannelDto>(null);
+  readonly channel = new BehaviorSubject<MessageChannelDto | null>(null);
 
   readonly activePanels = new Set<number>();
 
@@ -32,7 +32,7 @@ export class MessageListComponent implements DialogContent {
     this.windowTitle = of(translateService.instant('main.nav.windows.showMessages'));
   }
 
-  set data(_) {
+  set data(_: any) {
   }
 
   setChannel(channel: MessageChannelDto) {

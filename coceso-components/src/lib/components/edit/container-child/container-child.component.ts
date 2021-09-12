@@ -18,20 +18,20 @@ import {ContainerDataService} from '../../../services';
 export class ContainerEditChildComponent implements OnDestroy {
 
   readonly form: TrackingFormGroup;
-  editing: boolean;
+  editing: boolean = false;
 
-  private readonly _id = new BehaviorSubject<number>(null);
-  readonly container: Observable<ContainerDto>;
+  private readonly _id = new BehaviorSubject<number | undefined>(undefined);
+  readonly container: Observable<ContainerDto | undefined>;
   readonly containerSubscription: Subscription;
 
   @Input()
-  level: number;
+  level: number = 0;
 
   @Input() set containerId(id: number) {
     this._id.next(id);
   }
 
-  @ViewChild('nameInput') nameInput: HTMLInputElement;
+  @ViewChild('nameInput') nameInput?: HTMLInputElement;
 
   constructor(private readonly containerService: ContainerDataService, private readonly notificationService: NotificationService,
               fb: TrackingFormBuilder) {
@@ -60,7 +60,12 @@ export class ContainerEditChildComponent implements OnDestroy {
       return;
     }
 
-    this.containerService.updateContainer(this._id.value, {
+    const id = this._id.value;
+    if (!id) {
+      return;
+    }
+
+    this.containerService.updateContainer(id, {
       name: this.form.value.name
     }).pipe(
         tap(() => this.editing = false)
@@ -77,7 +82,12 @@ export class ContainerEditChildComponent implements OnDestroy {
   }
 
   deleteContainer() {
-    this.containerService.deleteContainer(this._id.value)
+    const id = this._id.value;
+    if (!id) {
+      return;
+    }
+
+    this.containerService.deleteContainer(id)
         .subscribe(this.notificationService.onError('container.delete.error'));
   }
 

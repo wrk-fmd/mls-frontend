@@ -55,7 +55,7 @@ export class MessageDataService extends DataService<ReceivedMessageDto> implemen
     return this.concernService.runWithConcern(concern => this.endpoint.getChannels({concern}));
   }
 
-  public getCombined(channel: string): Observable<CombinedMessage[]> {
+  public getCombined(channel: string | null): Observable<CombinedMessage[]> {
     const options = new ListOptions<ReceivedMessageDto>();
     if (channel) {
       options.addFilters(m => !m.channel || m.channel === channel);
@@ -68,7 +68,7 @@ export class MessageDataService extends DataService<ReceivedMessageDto> implemen
 
   private buildCombined(contacts: Map<string, UnitWithIncidents>, messages: any[]): CombinedMessage[] {
     const result: CombinedMessage[] = [];
-    let last: CombinedMessage = null;
+    let last: CombinedMessage | null = null;
 
     messages.forEach(message => {
       if (last && last.messages[0].type === message.type && last.messages[0].sender === message.sender) {
@@ -108,6 +108,6 @@ export class MessageDataService extends DataService<ReceivedMessageDto> implemen
 }
 
 export interface CombinedMessage {
-  unit: UnitWithIncidents;
+  unit?: UnitWithIncidents;
   messages: ReceivedMessageDto[];
 }
