@@ -38,7 +38,7 @@ export class AuthService implements OnDestroy {
    * @return An observable containing the response
    */
   login(username: string, password: string): Observable<AuthResponseDto> {
-    return this.endpoint.authenticate({username, password}).pipe(
+    return this.endpoint.authenticate({body: {username, password}}).pipe(
         tap(response => this.tokenService.setRenewalToken(response.token))
     );
   }

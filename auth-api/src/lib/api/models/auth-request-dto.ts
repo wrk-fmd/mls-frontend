@@ -1,5 +1,6 @@
+/* tslint:disable */
 /* eslint-disable */
 export interface AuthRequestDto {
-  password?: string;
-  username?: string;
+  password: string;
+  username: string;
 }

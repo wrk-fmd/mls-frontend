@@ -1,0 +1,7 @@
+{
+  "input": "http://localhost:8090/auth/v3/api-docs",
+  "output": "src/lib/api",
+  "prefix": "AuthApi",
+  "module": "AuthApiModule",
+  "configuration": "AuthApiConfiguration"
+}

@@ -1,6 +1,7 @@
+/* tslint:disable */
 /* eslint-disable */
 export interface UnitTokenDto {
-  id?: number;
-  name?: string;
-  token?: string;
+  id: number;
+  name: string;
+  token: string;
 }

@@ -1,95 +1,82 @@
+/* tslint:disable */
 /* eslint-disable */
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpRequest, HttpResponse, HttpHeaders } from '@angular/common/http';
-import { BaseService as __BaseService } from '../base-service';
-import { AuthApiConfiguration as __Configuration } from '../auth-api-configuration';
-import { StrictHttpResponse as __StrictHttpResponse } from '../strict-http-response';
-import { Observable as __Observable } from 'rxjs';
-import { map as __map, filter as __filter } from 'rxjs/operators';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { BaseService } from '../base-service';
+import { AuthApiConfiguration } from '../auth-api-configuration';
+import { StrictHttpResponse } from '../strict-http-response';
+import { RequestBuilder } from '../request-builder';
+import { Observable } from 'rxjs';
+import { map, filter } from 'rxjs/operators';
 
 import { UnitTokenDto } from '../models/unit-token-dto';
 
-/**
- * Unit Endpoint
- */
 @Injectable({
   providedIn: 'root',
 })
-class UnitEndpointService extends __BaseService {
-  static readonly getTokensPath = '/concerns/{concern}/units/tokens';
-
+export class UnitEndpointService extends BaseService {
   constructor(
-    config: __Configuration,
+    config: AuthApiConfiguration,
     http: HttpClient
   ) {
     super(config, http);
   }
 
   /**
-   * @param params The `UnitEndpointService.GetTokensParams` containing the following parameters:
-   *
-   * - `concern`: concern
-   *
-   * - `expiration`: expiration
-   *
-   * @return OK
+   * Path part for operation getTokens
    */
-  getTokensResponse(params: UnitEndpointService.GetTokensParams): __Observable<__StrictHttpResponse<Array<UnitTokenDto>>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
+  static readonly GetTokensPath = '/concerns/{concern}/units/tokens';
 
-    if (params.expiration != null) __params = __params.set('expiration', params.expiration.toString());
-    let req = new HttpRequest<any>(
-      'GET',
-      this.rootUrl + `/concerns/${params.concern}/units/tokens`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
+  /**
+   * Gets all units for a concern with tokens.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getTokens()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getTokens$Response(params: {
+    concern: number;
+    expiration?: number;
+  }): Observable<StrictHttpResponse<Array<UnitTokenDto>>> {
 
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<Array<UnitTokenDto>>;
+    const rb = new RequestBuilder(this.rootUrl, UnitEndpointService.GetTokensPath, 'get');
+    if (params) {
+      rb.path('concern', params.concern, {});
+      rb.query('expiration', params.expiration, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<Array<UnitTokenDto>>;
       })
     );
   }
+
   /**
-   * @param params The `UnitEndpointService.GetTokensParams` containing the following parameters:
+   * Gets all units for a concern with tokens.
    *
-   * - `concern`: concern
    *
-   * - `expiration`: expiration
    *
-   * @return OK
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getTokens$Response()` instead.
+   *
+   * This method doesn't expect any request body.
    */
-  getTokens(params: UnitEndpointService.GetTokensParams): __Observable<Array<UnitTokenDto>> {
-    return this.getTokensResponse(params).pipe(
-      __map(_r => _r.body as Array<UnitTokenDto>)
+  getTokens(params: {
+    concern: number;
+    expiration?: number;
+  }): Observable<Array<UnitTokenDto>> {
+
+    return this.getTokens$Response(params).pipe(
+      map((r: StrictHttpResponse<Array<UnitTokenDto>>) => r.body as Array<UnitTokenDto>)
     );
   }
+
 }
-
-module UnitEndpointService {
-
-  /**
-   * Parameters for getTokens
-   */
-  export interface GetTokensParams {
-
-    /**
-     * concern
-     */
-    concern: number;
-
-    /**
-     * expiration
-     */
-    expiration?: string;
-  }
-}
-
-export { UnitEndpointService }

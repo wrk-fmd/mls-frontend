@@ -1,65 +1,76 @@
+/* tslint:disable */
 /* eslint-disable */
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpRequest, HttpResponse, HttpHeaders } from '@angular/common/http';
-import { BaseService as __BaseService } from '../base-service';
-import { AuthApiConfiguration as __Configuration } from '../auth-api-configuration';
-import { StrictHttpResponse as __StrictHttpResponse } from '../strict-http-response';
-import { Observable as __Observable } from 'rxjs';
-import { map as __map, filter as __filter } from 'rxjs/operators';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { BaseService } from '../base-service';
+import { AuthApiConfiguration } from '../auth-api-configuration';
+import { StrictHttpResponse } from '../strict-http-response';
+import { RequestBuilder } from '../request-builder';
+import { Observable } from 'rxjs';
+import { map, filter } from 'rxjs/operators';
 
 import { ConcernDto } from '../models/concern-dto';
 
-/**
- * Concern Endpoint
- */
 @Injectable({
   providedIn: 'root',
 })
-class ConcernEndpointService extends __BaseService {
-  static readonly getConcernsPath = '/concerns';
-
+export class ConcernEndpointService extends BaseService {
   constructor(
-    config: __Configuration,
+    config: AuthApiConfiguration,
     http: HttpClient
   ) {
     super(config, http);
   }
 
   /**
-   * @return OK
+   * Path part for operation getConcerns
    */
-  getConcernsResponse(): __Observable<__StrictHttpResponse<Array<ConcernDto>>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
-    let req = new HttpRequest<any>(
-      'GET',
-      this.rootUrl + `/concerns`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
+  static readonly GetConcernsPath = '/concerns';
 
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<Array<ConcernDto>>;
+  /**
+   * Get all concerns.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getConcerns()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getConcerns$Response(params?: {
+  }): Observable<StrictHttpResponse<Array<ConcernDto>>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ConcernEndpointService.GetConcernsPath, 'get');
+    if (params) {
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<Array<ConcernDto>>;
       })
     );
   }
+
   /**
-   * @return OK
+   * Get all concerns.
+   *
+   *
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getConcerns$Response()` instead.
+   *
+   * This method doesn't expect any request body.
    */
-  getConcerns(): __Observable<Array<ConcernDto>> {
-    return this.getConcernsResponse().pipe(
-      __map(_r => _r.body as Array<ConcernDto>)
+  getConcerns(params?: {
+  }): Observable<Array<ConcernDto>> {
+
+    return this.getConcerns$Response(params).pipe(
+      map((r: StrictHttpResponse<Array<ConcernDto>>) => r.body as Array<ConcernDto>)
     );
   }
-}
 
-module ConcernEndpointService {
 }
-
-export { ConcernEndpointService }
