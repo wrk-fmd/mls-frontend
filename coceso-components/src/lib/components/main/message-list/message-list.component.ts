@@ -4,7 +4,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {MessageChannelDto} from 'mls-coceso-api';
 import {DialogContent} from 'mls-common-ui';
 
-import {BehaviorSubject, Observable, of, Subject} from 'rxjs';
+import {BehaviorSubject, Observable, of} from 'rxjs';
 import {switchMap} from 'rxjs/operators';
 
 import {CombinedMessage, MessageDataService} from '../../../services';

@@ -8,7 +8,7 @@ import {NotificationService, TrackingFormBuilder, TrackingFormGroup} from 'mls-c
 import {DialogContent, WindowService} from 'mls-common-ui';
 
 import {BehaviorSubject, forkJoin, Observable, of, ReplaySubject, Subscription, throwError} from 'rxjs';
-import {flatMap, switchMap, tap} from 'rxjs/operators';
+import {mergeMap, switchMap, tap} from 'rxjs/operators';
 
 import {IncidentHelper, TaskFormControl, TaskHelper} from '../../../helpers';
 import {IncidentWithUnits, TaskWithUnit} from '../../../models';
@@ -237,11 +237,11 @@ export class IncidentFormComponent implements DialogContent<IncidentDto>, OnDest
     const incidentId = this.id.value;
     if (incidentId) {
       this.incidentService.updateIncident(incidentId, data)
-          .pipe(flatMap(() => this.saveUnits()))
+          .pipe(mergeMap(() => this.saveUnits()))
           .subscribe(this.notificationService.onError('incident.update.error'));
     } else {
       this.incidentService.createIncident(data)
-          .pipe(tap(id => this.id.next(id)), flatMap(() => this.saveUnits()))
+          .pipe(tap(id => this.id.next(id)), mergeMap(() => this.saveUnits()))
           .subscribe(this.notificationService.onError('incident.create.error'));
     }
   }

@@ -11,5 +11,5 @@ export interface ReplayStartDto {
  * @param object The object to check
  */
 export function isReplayStart(object: any): object is ReplayStartDto {
-  return object.replay === true && object.key !== undefined;
+  return object.replay && object.key !== undefined;
 }

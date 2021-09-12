@@ -11,5 +11,5 @@ export interface DeletionDto {
  * @param object The object to check
  */
 export function isDeletion(object: any): object is DeletionDto {
-  return object.deleted === true && object.id !== undefined;
+  return object.deleted && object.id !== undefined;
 }

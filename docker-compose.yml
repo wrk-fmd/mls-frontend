@@ -6,7 +6,7 @@ services:
     build:
       context: .
     ports:
-      - 8089:80
+      - "8089:80"
 
 networks:
   default:

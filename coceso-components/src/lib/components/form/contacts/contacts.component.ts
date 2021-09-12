@@ -5,8 +5,7 @@ import {MatChipInputEvent} from '@angular/material/chips';
 import {ContactDto} from 'mls-coceso-api';
 import {AddRemoveContainer, ChangedItems} from 'mls-common-forms';
 
-import {Observable, Subscription} from 'rxjs';
-import {map} from 'rxjs/operators';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'coceso-form-contacts',
