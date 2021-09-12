@@ -52,7 +52,7 @@ export class MessageDataService extends DataService<ReceivedMessageDto> implemen
   }
 
   public getChannels(): Observable<MessageChannelDto[]> {
-    return this.concernService.runWithConcern(c => this.endpoint.getChannels(c));
+    return this.concernService.runWithConcern(concern => this.endpoint.getChannels({concern}));
   }
 
   public getCombined(channel: string): Observable<CombinedMessage[]> {

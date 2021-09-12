@@ -116,7 +116,7 @@ export class UnitTaskComponent {
       // Do not display the state if at position already
       return null;
     }
-    if (incident.type === IncidentTypeDto.Standby && task.state === TaskStateDto.ABO) {
+    if (incident.type === IncidentTypeDto.Standby && task.state === TaskStateDto.Abo) {
       // Do not display the state if at standby
       return null;
     }

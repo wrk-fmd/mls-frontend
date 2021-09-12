@@ -26,11 +26,11 @@ export class UnitHelper {
         // Units without assigned incidents
         && (!unit.incidents || !unit.incidents.length)
         // Ignore units that are off duty or at home
-        && unit.state !== UnitStateDto.OFF_DUTY && !this.isHome(unit);
+        && unit.state !== UnitStateDto.OffDuty && !this.isHome(unit);
   }
 
   isAvailable(unit: UnitWithIncidents): boolean {
-    if (!unit || !unit.portable || unit.state !== UnitStateDto.READY) {
+    if (!unit || !unit.portable || unit.state !== UnitStateDto.Ready) {
       // Only consider portable, on-duty units
       return false;
     }
@@ -111,11 +111,11 @@ export class UnitHelper {
     }
 
     switch (unit.state) {
-      case UnitStateDto.READY:
+      case UnitStateDto.Ready:
         return this.isStandby(unit) ? 'unit-task-Standby' : 'unit-state-ready';
-      case UnitStateDto.NOT_READY:
+      case UnitStateDto.NotReady:
         return 'unit-state-not-ready';
-      case UnitStateDto.OFF_DUTY:
+      case UnitStateDto.OffDuty:
         return 'unit-state-off-duty';
     }
 

@@ -10,7 +10,7 @@ import {
 } from 'mls-coceso-api';
 import {DataService} from 'mls-common-data';
 
-import {combineLatest, Observable, of} from 'rxjs';
+import {combineLatest, EMPTY, Observable} from 'rxjs';
 import {auditTime, map, shareReplay, switchMap} from 'rxjs/operators';
 import {UnitHelper} from '../helpers/unit.helper';
 
@@ -24,7 +24,7 @@ export class ContainerDataService extends DataService<ContainerDto> {
   constructor(private readonly concernService: ConcernDataService, private readonly endpoint: ContainerEndpointService,
               private readonly taskService: TaskDataService, private readonly unitHelper: UnitHelper,
               watchService: CocesoWatchService) {
-    super(concernService.getActiveId().pipe(switchMap(c => c ? watchService.watchContainers(c) : of())));
+    super(concernService.getActiveId().pipe(switchMap(c => c ? watchService.watchContainers(c) : EMPTY)));
   }
 
   getRoot(): Observable<ContainerDto> {
@@ -71,7 +71,7 @@ export class ContainerDataService extends DataService<ContainerDto> {
 
     const totalUnits = unitsData.length
         + childrenData.map(c => c.totalUnits).reduce((a, b) => a + b, 0);
-    const availableUnits = unitsData.filter(u => this.unitHelper.isAvailable(u) || (!u.portable && u.state === UnitStateDto.READY)).length
+    const availableUnits = unitsData.filter(u => this.unitHelper.isAvailable(u) || (!u.portable && u.state === UnitStateDto.Ready)).length
         + childrenData.map(c => c.availableUnits).reduce((a, b) => a + b, 0);
 
     return {
@@ -81,31 +81,31 @@ export class ContainerDataService extends DataService<ContainerDto> {
     };
   }
 
-  createContainer(data: ContainerCreateDto): Observable<null> {
+  createContainer(body: ContainerCreateDto): Observable<void> {
     return this.concernService.runWithConcern(
-        concern => this.endpoint.createContainer({concern, data})
+        concern => this.endpoint.createContainer({concern, body})
     );
   }
 
-  updateContainer(container: number, data: ContainerUpdateDto): Observable<null> {
+  updateContainer(container: number, body: ContainerUpdateDto): Observable<void> {
     return this.concernService.runWithConcern(
-        concern => this.endpoint.updateContainer({concern, container, data})
+        concern => this.endpoint.updateContainer({concern, container, body})
     );
   }
 
-  deleteContainer(container: number): Observable<null> {
+  deleteContainer(container: number): Observable<void> {
     return this.concernService.runWithConcern(
         concern => this.endpoint.deleteContainer({concern, container})
     );
   }
 
-  updateUnit(container: number, unit: number, index: number): Observable<null> {
+  updateUnit(container: number, unit: number, index: number): Observable<void> {
     return this.concernService.runWithConcern(
-        concern => this.endpoint.updateContainerUnit({concern, container, unit, data: {index}})
+        concern => this.endpoint.updateContainerUnit({concern, container, unit, body: {index}})
     );
   }
 
-  removeUnit(container: number, unit: number): Observable<null> {
+  removeUnit(container: number, unit: number): Observable<void> {
     return this.concernService.runWithConcern(
         concern => this.endpoint.removeContainerUnit({concern, container, unit})
     );

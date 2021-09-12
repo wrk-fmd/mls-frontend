@@ -32,7 +32,7 @@ export class IncidentMessageFormComponent implements DialogContent<IncidentMessa
 
   private selectedUnits: number[] = [];
   private mode: AlarmRecipientsDto;
-  readonly modes = [AlarmRecipientsDto.UNSENT, AlarmRecipientsDto.ALL];
+  readonly modes = [AlarmRecipientsDto.Unsent, AlarmRecipientsDto.All];
 
   readonly form: TrackingFormGroup;
 
@@ -43,7 +43,7 @@ export class IncidentMessageFormComponent implements DialogContent<IncidentMessa
               private readonly incidentHelper: IncidentHelper, private readonly notificationService: NotificationService,
               private readonly translateService: TranslateService, private readonly  dialog: MatDialogRef<any>, fb: TrackingFormBuilder) {
     this.form = fb.group({
-      mode: [AlarmRecipientsDto.UNSENT, Validators.required],
+      mode: [AlarmRecipientsDto.Unsent, Validators.required],
       text: ['', Validators.required, null, true]
     });
     this.modeSubscription = this.form.controls.mode.valueChanges.subscribe(mode => this.updateUnits(this.incident, mode));
@@ -61,17 +61,17 @@ export class IncidentMessageFormComponent implements DialogContent<IncidentMessa
   set data(data: IncidentMessageFormOptions) {
     if (!data) {
       this.type = null;
-      this.mode = AlarmRecipientsDto.UNSENT;
+      this.mode = AlarmRecipientsDto.Unsent;
       this.id.next(null);
       return;
     }
 
     this.type = data.type;
     if (data.units) {
-      this.mode = AlarmRecipientsDto.LIST;
+      this.mode = AlarmRecipientsDto.List;
       this.selectedUnits = data.units;
     } else {
-      this.mode = data.mode || AlarmRecipientsDto.UNSENT;
+      this.mode = data.mode || AlarmRecipientsDto.Unsent;
     }
 
     this.id.next(data.incident || null);
@@ -92,9 +92,9 @@ export class IncidentMessageFormComponent implements DialogContent<IncidentMessa
 
     let tasks = incident.units;
 
-    if (mode === AlarmRecipientsDto.UNSENT) {
+    if (mode === AlarmRecipientsDto.Unsent) {
       tasks = tasks.filter(task => !this.getLastSent(task));
-    } else if (mode === AlarmRecipientsDto.LIST) {
+    } else if (mode === AlarmRecipientsDto.List) {
       tasks = tasks.filter(task => this.selectedUnits.includes(task.unit));
     }
 
@@ -103,9 +103,9 @@ export class IncidentMessageFormComponent implements DialogContent<IncidentMessa
 
   private getLastSent(task: TaskDto) {
     switch (this.type) {
-      case AlarmTypeDto.ALARM:
+      case AlarmTypeDto.Alarm:
         return task.alarmSent;
-      case AlarmTypeDto.CASUS:
+      case AlarmTypeDto.Casus:
         return task.casusSent;
       default:
         return null;
@@ -167,7 +167,7 @@ export class IncidentMessageFormComponent implements DialogContent<IncidentMessa
   }
 
   get showModeForm(): boolean {
-    return this.mode !== AlarmRecipientsDto.LIST;
+    return this.mode !== AlarmRecipientsDto.List;
   }
 
   get saveDisabled(): boolean {
@@ -181,8 +181,8 @@ export class IncidentMessageFormComponent implements DialogContent<IncidentMessa
       message: this.form.value.text || ''
     };
 
-    if (this.mode === AlarmRecipientsDto.LIST) {
-      data.recipients = AlarmRecipientsDto.LIST;
+    if (this.mode === AlarmRecipientsDto.List) {
+      data.recipients = AlarmRecipientsDto.List;
       data.units = this.selectedUnits;
     }
 

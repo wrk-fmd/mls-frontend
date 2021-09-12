@@ -90,15 +90,15 @@ export class TaskDataService {
     return this.combined.pipe(map(c => options.apply([...c.units.values()])));
   }
 
-  assign(incident: number, unit: number): Observable<null> {
+  assign(incident: number, unit: number): Observable<void> {
     return this.concernService.runWithConcern(
         concern => this.endpoint.assign({concern, incident, unit})
     );
   }
 
-  setState(incident: number, unit: number, state: TaskStateDto): Observable<null> {
+  setState(incident: number, unit: number, state: TaskStateDto): Observable<void> {
     return this.concernService.runWithConcern(
-        concern => this.endpoint.updateState({concern, incident, unit, data: {state}})
+        concern => this.endpoint.updateState({concern, incident, unit, body: {state}})
     );
   }
 }

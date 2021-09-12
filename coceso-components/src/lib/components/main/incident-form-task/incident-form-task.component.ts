@@ -53,11 +53,11 @@ export class IncidentFormTaskComponent {
     ]);
   }
 
-  get task(): TaskWithUnit {
+  get task(): Partial<TaskWithUnit> {
     return this.control ? this.control.task : {};
   }
 
-  get unit(): UnitDto {
+  get unit(): Partial<UnitDto> {
     return this.task.unitData || {};
   }
 
@@ -66,7 +66,7 @@ export class IncidentFormTaskComponent {
   }
 
   get sendAlarmTooltip(): string {
-    return this.getTooltip(this.task.alarmSent, AlarmTypeDto.ALARM);
+    return this.getTooltip(this.task.alarmSent, AlarmTypeDto.Alarm);
   }
 
   get sendCasusColor(): ThemePalette {
@@ -74,7 +74,7 @@ export class IncidentFormTaskComponent {
   }
 
   get sendCasusTooltip(): string {
-    return this.getTooltip(this.task.casusSent, AlarmTypeDto.CASUS);
+    return this.getTooltip(this.task.casusSent, AlarmTypeDto.Casus);
   }
 
   private getTooltip(timestamp: number, type: AlarmTypeDto) {
@@ -88,7 +88,7 @@ export class IncidentFormTaskComponent {
       this.windowService.open(IncidentMessageFormComponent, {
         incident: this.task.incident,
         units: [this.task.unit],
-        type: AlarmTypeDto.ALARM
+        type: AlarmTypeDto.Alarm
       });
     }
   }
@@ -98,7 +98,7 @@ export class IncidentFormTaskComponent {
       this.windowService.open(IncidentMessageFormComponent, {
         incident: this.task.incident,
         units: [this.task.unit],
-        type: AlarmTypeDto.CASUS
+        type: AlarmTypeDto.Casus
       });
     }
   }

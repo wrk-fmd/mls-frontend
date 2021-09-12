@@ -196,7 +196,7 @@ export class UnitEntryComponent implements OnDestroy {
       options: ['blue'],
       units: this.unit.portable ? [{
         unit: this.id,
-        state: TaskStateDto.ABO
+        state: TaskStateDto.Abo
       }] : []
     };
 

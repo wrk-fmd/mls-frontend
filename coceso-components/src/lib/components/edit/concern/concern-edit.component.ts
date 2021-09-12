@@ -38,13 +38,20 @@ export class ConcernEditComponent implements OnDestroy {
     this.concernSubscription.unsubscribe();
   }
 
-  private setConcern(concern: ConcernDto) {
-    concern = concern || {};
-    this.form.setServerValue({
-      name: concern.name || '',
-      info: concern.info || ''
-    });
-    this.sections = concern.sections ? concern.sections.sort() : [];
+  private setConcern(concern: ConcernDto | null) {
+    if (concern) {
+      this.form.setServerValue({
+        name: concern.name || '',
+        info: concern.info || ''
+      });
+      this.sections = concern.sections ? concern.sections.sort() : [];
+    } else {
+      this.form.setServerValue({
+        name: '',
+        info: ''
+      });
+      this.sections = [];
+    }
   }
 
   get saveDisabled(): boolean {

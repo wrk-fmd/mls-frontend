@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
 
-import {CocesoWatchService, ConcernDto, ConcernEndpointService, IncidentUpdateDto, SectionCreateDto} from 'mls-coceso-api';
+import {CocesoWatchService, ConcernCreateDto, ConcernDto, ConcernEndpointService, ConcernUpdateDto, SectionCreateDto} from 'mls-coceso-api';
 import {DataService} from 'mls-common-data';
 
 import {BehaviorSubject, Observable, throwError} from 'rxjs';
@@ -48,29 +48,29 @@ export class ConcernDataService extends DataService<ConcernDto> implements Resol
     this.section.next(section);
   }
 
-  createConcern(data: ConcernDto): Observable<number> {
-    return this.endpoint.createConcern(data).pipe(map(i => i.id));
+  createConcern(body: ConcernCreateDto): Observable<number> {
+    return this.endpoint.createConcern({body}).pipe(map(i => i.id));
   }
 
-  updateConcern(data: IncidentUpdateDto): Observable<null> {
+  updateConcern(body: ConcernUpdateDto): Observable<void> {
     return this.runWithConcern(
-        concern => this.endpoint.updateConcern({concern, data})
+        concern => this.endpoint.updateConcern({concern, body})
     );
   }
 
-  setConcernOpen(open: boolean): Observable<null> {
+  setConcernOpen(open: boolean): Observable<void> {
     return this.runWithConcern(
-        concern => open ? this.endpoint.openConcern(concern) : this.endpoint.closeConcern(concern)
+        concern => open ? this.endpoint.openConcern({concern}) : this.endpoint.closeConcern({concern})
     );
   }
 
-  addSection(data: SectionCreateDto): Observable<null> {
+  addSection(body: SectionCreateDto): Observable<void> {
     return this.runWithConcern(
-        concern => this.endpoint.addSection({concern, data})
+        concern => this.endpoint.addSection({concern, body})
     );
   }
 
-  removeSection(section: string): Observable<null> {
+  removeSection(section: string): Observable<void> {
     return this.runWithConcern(
         concern => this.endpoint.removeSection({concern, section: encodeURIComponent(section)})
     );

@@ -3,7 +3,7 @@ import {Injectable} from '@angular/core';
 import {CocesoWatchService, SendMessageDto, UnitCreateDto, UnitDto, UnitEndpointService, UnitUpdateDto} from 'mls-coceso-api';
 import {DataService} from 'mls-common-data';
 
-import {Observable, of} from 'rxjs';
+import {EMPTY, Observable} from 'rxjs';
 import {map, switchMap} from 'rxjs/operators';
 
 import {ConcernDataService} from './concern.data.service';
@@ -13,54 +13,54 @@ export class UnitDataService extends DataService<UnitDto> {
 
   constructor(private readonly concernService: ConcernDataService, private readonly endpoint: UnitEndpointService,
               watchService: CocesoWatchService) {
-    super(concernService.getActiveId().pipe(switchMap(c => c ? watchService.watchUnits(c) : of())));
+    super(concernService.getActiveId().pipe(switchMap(c => c ? watchService.watchUnits(c) : EMPTY)));
   }
 
-  createUnit(data: UnitCreateDto): Observable<number> {
+  createUnit(body: UnitCreateDto): Observable<number> {
     return this.concernService.runWithConcern(
-        concern => this.endpoint.createUnit({concern, data}).pipe(map(i => i.id))
+        concern => this.endpoint.createUnit({concern, body}).pipe(map(i => i.id))
     );
   }
 
-  updateUnit(unit: number, data: UnitUpdateDto): Observable<null> {
+  updateUnit(unit: number, body: UnitUpdateDto): Observable<void> {
     return this.concernService.runWithConcern(
-        concern => this.endpoint.updateUnit({concern, unit, data})
+        concern => this.endpoint.updateUnit({concern, unit, body})
     );
   }
 
-  assignCrewMember(unit: number, member: number): Observable<null> {
+  assignCrewMember(unit: number, member: number): Observable<void> {
     return this.concernService.runWithConcern(
         concern => this.endpoint.assignCrewMember({concern, unit, member})
     );
   }
 
-  removeCrewMember(unit: number, member: number): Observable<null> {
+  removeCrewMember(unit: number, member: number): Observable<void> {
     return this.concernService.runWithConcern(
         concern => this.endpoint.removeCrewMember({concern, unit, member})
     );
   }
 
-  sendHome(unit: number): Observable<null> {
+  sendHome(unit: number): Observable<void> {
     return this.concernService.runWithConcern(
         concern => this.endpoint.sendHome({concern, unit})
     );
   }
 
-  standby(unit: number): Observable<null> {
+  standby(unit: number): Observable<void> {
     return this.concernService.runWithConcern(
         concern => this.endpoint.standby({concern, unit})
     );
   }
 
-  holdPosition(unit: number): Observable<null> {
+  holdPosition(unit: number): Observable<void> {
     return this.concernService.runWithConcern(
         concern => this.endpoint.holdPosition({concern, unit})
     );
   }
 
-  sendMessage(unit: number, data: SendMessageDto) {
+  sendMessage(unit: number, body: SendMessageDto) {
     return this.concernService.runWithConcern(
-        concern => this.endpoint.sendMessage({concern, unit, data})
+        concern => this.endpoint.sendMessage({concern, unit, body})
     );
   }
 

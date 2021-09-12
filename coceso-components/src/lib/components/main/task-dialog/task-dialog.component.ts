@@ -102,7 +102,7 @@ export class TaskDialogComponent implements DialogContent<TaskDto> {
     switch (incident.type) {
       case IncidentTypeDto.Standby:
         switch (nextState) {
-          case TaskStateDto.ABO:
+          case TaskStateDto.Abo:
             info = 'task.dialog.standby.send';
             break;
           case TaskStateDto.Detached:
@@ -115,7 +115,7 @@ export class TaskDialogComponent implements DialogContent<TaskDto> {
         break;
       case IncidentTypeDto.Position:
         switch (nextState) {
-          case TaskStateDto.ABO:
+          case TaskStateDto.Abo:
             info = 'task.dialog.position.send';
             break;
           case TaskStateDto.Detached:
@@ -140,14 +140,14 @@ export class TaskDialogComponent implements DialogContent<TaskDto> {
 
     switch (state) {
       case TaskStateDto.Assigned:
-        return isStandby ? TaskStateDto.ABO : TaskStateDto.ZBO;
-      case TaskStateDto.ZBO:
-        return TaskStateDto.ABO;
-      case TaskStateDto.ABO:
-        return isTaskOrTransport ? TaskStateDto.ZAO : TaskStateDto.Detached;
-      case TaskStateDto.ZAO:
-        return isTaskOrTransport ? TaskStateDto.AAO : TaskStateDto.Detached;
-      case TaskStateDto.AAO:
+        return isStandby ? TaskStateDto.Abo : TaskStateDto.Zbo;
+      case TaskStateDto.Zbo:
+        return TaskStateDto.Abo;
+      case TaskStateDto.Abo:
+        return isTaskOrTransport ? TaskStateDto.Zao : TaskStateDto.Detached;
+      case TaskStateDto.Zao:
+        return isTaskOrTransport ? TaskStateDto.Aao : TaskStateDto.Detached;
+      case TaskStateDto.Aao:
         return TaskStateDto.Detached;
       default:
         return null;

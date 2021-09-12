@@ -39,13 +39,13 @@ export class TaskHelper {
   statesForType(type: IncidentTypeDto): TaskStateDto[] {
     switch (type) {
       case IncidentTypeDto.Standby:
-        return [TaskStateDto.Assigned, TaskStateDto.ABO, TaskStateDto.Detached];
+        return [TaskStateDto.Assigned, TaskStateDto.Abo, TaskStateDto.Detached];
       case IncidentTypeDto.Position:
       case IncidentTypeDto.ToHome:
-        return [TaskStateDto.Assigned, TaskStateDto.ZBO, TaskStateDto.ABO, TaskStateDto.Detached];
+        return [TaskStateDto.Assigned, TaskStateDto.Zbo, TaskStateDto.Abo, TaskStateDto.Detached];
       case IncidentTypeDto.Task:
       case IncidentTypeDto.Transport:
-        return [TaskStateDto.Assigned, TaskStateDto.ZBO, TaskStateDto.ABO, TaskStateDto.ZAO, TaskStateDto.AAO, TaskStateDto.Detached];
+        return [TaskStateDto.Assigned, TaskStateDto.Zbo, TaskStateDto.Abo, TaskStateDto.Zao, TaskStateDto.Aao, TaskStateDto.Detached];
     }
 
     return [];

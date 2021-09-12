@@ -81,16 +81,16 @@ export class IncidentHelper {
     return incident && incident.casusNr && !!incident.casusNr.trim();
   }
 
-  isTaskOrTransport(incident: IncidentDto): boolean {
+  isTaskOrTransport(incident: Partial<IncidentDto>): boolean {
     return incident ? incident.type === IncidentTypeDto.Task || incident.type === IncidentTypeDto.Transport : false;
   }
 
   isRelocation(task: TaskDto, incident: IncidentDto): boolean {
-    return incident ? incident.type === IncidentTypeDto.Position && task.state !== TaskStateDto.ABO : false;
+    return incident ? incident.type === IncidentTypeDto.Position && task.state !== TaskStateDto.Abo : false;
   }
 
   isHoldPosition(task: TaskDto, incident: IncidentDto): boolean {
-    return incident ? incident.type === IncidentTypeDto.Position && task.state === TaskStateDto.ABO : false;
+    return incident ? incident.type === IncidentTypeDto.Position && task.state === TaskStateDto.Abo : false;
   }
 
   pointEmpty(point: PointDto) {

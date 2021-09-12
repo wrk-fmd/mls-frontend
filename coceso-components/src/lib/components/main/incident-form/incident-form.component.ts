@@ -163,7 +163,14 @@ export class IncidentFormComponent implements DialogContent<IncidentDto>, OnDest
     const unit = event.item.data;
     const incidentId = this.id.value;
     if (unit.type === 'unit' && unit.id && incidentId && !this.units.find(c => c.task.unit === unit.id)) {
-      const control = new TaskFormControl({unit: unit.id, incident: incidentId, state: TaskStateDto.Assigned}, false);
+      const control = new TaskFormControl({
+        unit: unit.id,
+        incident: incidentId,
+        state: TaskStateDto.Assigned,
+        updated: Date.now() / 1000,
+        alarmSent: null,
+        casusSent: null
+      }, false);
       this.units.push(control);
       (this.form.controls.units as FormArray).push(control);
     }
@@ -193,7 +200,7 @@ export class IncidentFormComponent implements DialogContent<IncidentDto>, OnDest
 
   openSendAlarmForm() {
     if (this.id.value) {
-      this.windowService.open(IncidentMessageFormComponent, {incident: this.id.value, type: AlarmTypeDto.ALARM});
+      this.windowService.open(IncidentMessageFormComponent, {incident: this.id.value, type: AlarmTypeDto.Alarm});
     }
   }
 
@@ -203,7 +210,7 @@ export class IncidentFormComponent implements DialogContent<IncidentDto>, OnDest
 
   openSendCasusForm() {
     if (this.id.value) {
-      this.windowService.open(IncidentMessageFormComponent, {incident: this.id.value, type: AlarmTypeDto.CASUS});
+      this.windowService.open(IncidentMessageFormComponent, {incident: this.id.value, type: AlarmTypeDto.Casus});
     }
   }
 
