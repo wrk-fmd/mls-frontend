@@ -1,9 +1,11 @@
+/* tslint:disable */
 /* eslint-disable */
+import { TaskStateDto } from './task-state-dto';
 export interface TaskDto {
-  alarmSent?: number;
-  casusSent?: number;
-  incident?: number;
-  state?: 'Assigned' | 'ZBO' | 'ABO' | 'ZAO' | 'AAO' | 'Detached';
-  unit?: number;
-  updated?: number;
+  alarmSent: null | number;
+  casusSent: null | number;
+  incident: number;
+  state: TaskStateDto;
+  unit: number;
+  updated: number;
 }

@@ -1,6 +1,7 @@
+/* tslint:disable */
 /* eslint-disable */
 export interface CustomJournalEntryDto {
   incident?: number;
-  text?: string;
+  text: string;
   unit?: number;
 }

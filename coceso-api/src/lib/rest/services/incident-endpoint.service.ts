@@ -1,383 +1,326 @@
+/* tslint:disable */
 /* eslint-disable */
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpRequest, HttpResponse, HttpHeaders } from '@angular/common/http';
-import { BaseService as __BaseService } from '../base-service';
-import { CocesoRestConfiguration as __Configuration } from '../coceso-rest-configuration';
-import { StrictHttpResponse as __StrictHttpResponse } from '../strict-http-response';
-import { Observable as __Observable } from 'rxjs';
-import { map as __map, filter as __filter } from 'rxjs/operators';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { BaseService } from '../base-service';
+import { CocesoRestConfiguration } from '../coceso-rest-configuration';
+import { StrictHttpResponse } from '../strict-http-response';
+import { RequestBuilder } from '../request-builder';
+import { Observable } from 'rxjs';
+import { map, filter } from 'rxjs/operators';
 
-import { IncidentDto } from '../models/incident-dto';
 import { IncidentBriefDto } from '../models/incident-brief-dto';
 import { IncidentCreateDto } from '../models/incident-create-dto';
+import { IncidentDto } from '../models/incident-dto';
 import { IncidentUpdateDto } from '../models/incident-update-dto';
 import { SendAlarmDto } from '../models/send-alarm-dto';
 
-/**
- * Incident Endpoint
- */
 @Injectable({
   providedIn: 'root',
 })
-class IncidentEndpointService extends __BaseService {
-  static readonly getAllIncidentsPath = '/concerns/{concern}/incidents';
-  static readonly createIncidentPath = '/concerns/{concern}/incidents';
-  static readonly getAlarmTemplatesPath = '/concerns/{concern}/incidents/templates/alarm';
-  static readonly updateIncidentPath = '/concerns/{concern}/incidents/{incident}';
-  static readonly sendAlarmPath = '/concerns/{concern}/incidents/{incident}/alarm';
-  static readonly assignPatientPath = '/concerns/{concern}/incidents/{incident}/patients/{patient}';
-
+export class IncidentEndpointService extends BaseService {
   constructor(
-    config: __Configuration,
+    config: CocesoRestConfiguration,
     http: HttpClient
   ) {
     super(config, http);
   }
 
   /**
-   * @param concern concern
-   * @return OK
+   * Path part for operation getAllIncidents
    */
-  getAllIncidentsResponse(concern: number): __Observable<__StrictHttpResponse<Array<IncidentDto>>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
-
-    let req = new HttpRequest<any>(
-      'GET',
-      this.rootUrl + `/concerns/${concern}/incidents`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
-
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<Array<IncidentDto>>;
-      })
-    );
-  }
-  /**
-   * @param concern concern
-   * @return OK
-   */
-  getAllIncidents(concern: number): __Observable<Array<IncidentDto>> {
-    return this.getAllIncidentsResponse(concern).pipe(
-      __map(_r => _r.body as Array<IncidentDto>)
-    );
-  }
+  static readonly GetAllIncidentsPath = '/concerns/{concern}/incidents';
 
   /**
-   * @param params The `IncidentEndpointService.CreateIncidentParams` containing the following parameters:
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getAllIncidents()` instead.
    *
-   * - `data`: data
-   *
-   * - `concern`: concern
-   *
-   * @return OK
+   * This method doesn't expect any request body.
    */
-  createIncidentResponse(params: IncidentEndpointService.CreateIncidentParams): __Observable<__StrictHttpResponse<IncidentBriefDto>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
-    __body = params.data;
-
-    let req = new HttpRequest<any>(
-      'POST',
-      this.rootUrl + `/concerns/${params.concern}/incidents`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
-
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<IncidentBriefDto>;
-      })
-    );
-  }
-  /**
-   * @param params The `IncidentEndpointService.CreateIncidentParams` containing the following parameters:
-   *
-   * - `data`: data
-   *
-   * - `concern`: concern
-   *
-   * @return OK
-   */
-  createIncident(params: IncidentEndpointService.CreateIncidentParams): __Observable<IncidentBriefDto> {
-    return this.createIncidentResponse(params).pipe(
-      __map(_r => _r.body as IncidentBriefDto)
-    );
-  }
-
-  /**
-   * @param concern concern
-   * @return OK
-   */
-  getAlarmTemplatesResponse(concern: number): __Observable<__StrictHttpResponse<{[key: string]: string}>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
-
-    let req = new HttpRequest<any>(
-      'GET',
-      this.rootUrl + `/concerns/${concern}/incidents/templates/alarm`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
-
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<{[key: string]: string}>;
-      })
-    );
-  }
-  /**
-   * @param concern concern
-   * @return OK
-   */
-  getAlarmTemplates(concern: number): __Observable<{[key: string]: string}> {
-    return this.getAlarmTemplatesResponse(concern).pipe(
-      __map(_r => _r.body as {[key: string]: string})
-    );
-  }
-
-  /**
-   * @param params The `IncidentEndpointService.UpdateIncidentParams` containing the following parameters:
-   *
-   * - `incident`: incident
-   *
-   * - `data`: data
-   *
-   * - `concern`: concern
-   */
-  updateIncidentResponse(params: IncidentEndpointService.UpdateIncidentParams): __Observable<__StrictHttpResponse<null>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
-
-    __body = params.data;
-
-    let req = new HttpRequest<any>(
-      'PUT',
-      this.rootUrl + `/concerns/${params.concern}/incidents/${params.incident}`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
-
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
-      })
-    );
-  }
-  /**
-   * @param params The `IncidentEndpointService.UpdateIncidentParams` containing the following parameters:
-   *
-   * - `incident`: incident
-   *
-   * - `data`: data
-   *
-   * - `concern`: concern
-   */
-  updateIncident(params: IncidentEndpointService.UpdateIncidentParams): __Observable<null> {
-    return this.updateIncidentResponse(params).pipe(
-      __map(_r => _r.body as null)
-    );
-  }
-
-  /**
-   * @param params The `IncidentEndpointService.SendAlarmParams` containing the following parameters:
-   *
-   * - `incident`: incident
-   *
-   * - `data`: data
-   *
-   * - `concern`: concern
-   */
-  sendAlarmResponse(params: IncidentEndpointService.SendAlarmParams): __Observable<__StrictHttpResponse<null>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
-
-    __body = params.data;
-
-    let req = new HttpRequest<any>(
-      'PUT',
-      this.rootUrl + `/concerns/${params.concern}/incidents/${params.incident}/alarm`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
-
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
-      })
-    );
-  }
-  /**
-   * @param params The `IncidentEndpointService.SendAlarmParams` containing the following parameters:
-   *
-   * - `incident`: incident
-   *
-   * - `data`: data
-   *
-   * - `concern`: concern
-   */
-  sendAlarm(params: IncidentEndpointService.SendAlarmParams): __Observable<null> {
-    return this.sendAlarmResponse(params).pipe(
-      __map(_r => _r.body as null)
-    );
-  }
-
-  /**
-   * @param params The `IncidentEndpointService.AssignPatientParams` containing the following parameters:
-   *
-   * - `patient`: patient
-   *
-   * - `incident`: incident
-   *
-   * - `concern`: concern
-   */
-  assignPatientResponse(params: IncidentEndpointService.AssignPatientParams): __Observable<__StrictHttpResponse<null>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
-
-
-
-    let req = new HttpRequest<any>(
-      'PUT',
-      this.rootUrl + `/concerns/${params.concern}/incidents/${params.incident}/patients/${params.patient}`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
-
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
-      })
-    );
-  }
-  /**
-   * @param params The `IncidentEndpointService.AssignPatientParams` containing the following parameters:
-   *
-   * - `patient`: patient
-   *
-   * - `incident`: incident
-   *
-   * - `concern`: concern
-   */
-  assignPatient(params: IncidentEndpointService.AssignPatientParams): __Observable<null> {
-    return this.assignPatientResponse(params).pipe(
-      __map(_r => _r.body as null)
-    );
-  }
-}
-
-module IncidentEndpointService {
-
-  /**
-   * Parameters for createIncident
-   */
-  export interface CreateIncidentParams {
-
-    /**
-     * data
-     */
-    data: IncidentCreateDto;
-
-    /**
-     * concern
-     */
+  getAllIncidents$Response(params: {
     concern: number;
+  }): Observable<StrictHttpResponse<Array<IncidentDto>>> {
+
+    const rb = new RequestBuilder(this.rootUrl, IncidentEndpointService.GetAllIncidentsPath, 'get');
+    if (params) {
+      rb.path('concern', params.concern, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<Array<IncidentDto>>;
+      })
+    );
   }
 
   /**
-   * Parameters for updateIncident
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getAllIncidents$Response()` instead.
+   *
+   * This method doesn't expect any request body.
    */
-  export interface UpdateIncidentParams {
+  getAllIncidents(params: {
+    concern: number;
+  }): Observable<Array<IncidentDto>> {
 
-    /**
-     * incident
-     */
+    return this.getAllIncidents$Response(params).pipe(
+      map((r: StrictHttpResponse<Array<IncidentDto>>) => r.body as Array<IncidentDto>)
+    );
+  }
+
+  /**
+   * Path part for operation createIncident
+   */
+  static readonly CreateIncidentPath = '/concerns/{concern}/incidents';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `createIncident()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createIncident$Response(params: {
+    concern: number;
+    body: IncidentCreateDto
+  }): Observable<StrictHttpResponse<IncidentBriefDto>> {
+
+    const rb = new RequestBuilder(this.rootUrl, IncidentEndpointService.CreateIncidentPath, 'post');
+    if (params) {
+      rb.path('concern', params.concern, {});
+      rb.body(params.body, 'application/json');
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<IncidentBriefDto>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `createIncident$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createIncident(params: {
+    concern: number;
+    body: IncidentCreateDto
+  }): Observable<IncidentBriefDto> {
+
+    return this.createIncident$Response(params).pipe(
+      map((r: StrictHttpResponse<IncidentBriefDto>) => r.body as IncidentBriefDto)
+    );
+  }
+
+  /**
+   * Path part for operation getAlarmTemplates
+   */
+  static readonly GetAlarmTemplatesPath = '/concerns/{concern}/incidents/templates/alarm';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getAlarmTemplates()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAlarmTemplates$Response(params: {
+    concern: number;
+  }): Observable<StrictHttpResponse<{ [key: string]: string }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, IncidentEndpointService.GetAlarmTemplatesPath, 'get');
+    if (params) {
+      rb.path('concern', params.concern, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ [key: string]: string }>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getAlarmTemplates$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAlarmTemplates(params: {
+    concern: number;
+  }): Observable<{ [key: string]: string }> {
+
+    return this.getAlarmTemplates$Response(params).pipe(
+      map((r: StrictHttpResponse<{ [key: string]: string }>) => r.body as { [key: string]: string })
+    );
+  }
+
+  /**
+   * Path part for operation updateIncident
+   */
+  static readonly UpdateIncidentPath = '/concerns/{concern}/incidents/{incident}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateIncident()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateIncident$Response(params: {
+    concern: number;
     incident: number;
+    body: IncidentUpdateDto
+  }): Observable<StrictHttpResponse<void>> {
 
-    /**
-     * data
-     */
-    data: IncidentUpdateDto;
+    const rb = new RequestBuilder(this.rootUrl, IncidentEndpointService.UpdateIncidentPath, 'put');
+    if (params) {
+      rb.path('concern', params.concern, {});
+      rb.path('incident', params.incident, {});
+      rb.body(params.body, 'application/json');
+    }
 
-    /**
-     * concern
-     */
-    concern: number;
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
   }
 
   /**
-   * Parameters for sendAlarm
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `updateIncident$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  export interface SendAlarmParams {
-
-    /**
-     * incident
-     */
+  updateIncident(params: {
+    concern: number;
     incident: number;
+    body: IncidentUpdateDto
+  }): Observable<void> {
 
-    /**
-     * data
-     */
-    data: SendAlarmDto;
-
-    /**
-     * concern
-     */
-    concern: number;
+    return this.updateIncident$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
   }
 
   /**
-   * Parameters for assignPatient
+   * Path part for operation sendAlarm
    */
-  export interface AssignPatientParams {
+  static readonly SendAlarmPath = '/concerns/{concern}/incidents/{incident}/alarm';
 
-    /**
-     * patient
-     */
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `sendAlarm()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  sendAlarm$Response(params: {
+    concern: number;
+    incident: number;
+    body: SendAlarmDto
+  }): Observable<StrictHttpResponse<void>> {
+
+    const rb = new RequestBuilder(this.rootUrl, IncidentEndpointService.SendAlarmPath, 'put');
+    if (params) {
+      rb.path('concern', params.concern, {});
+      rb.path('incident', params.incident, {});
+      rb.body(params.body, 'application/json');
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `sendAlarm$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  sendAlarm(params: {
+    concern: number;
+    incident: number;
+    body: SendAlarmDto
+  }): Observable<void> {
+
+    return this.sendAlarm$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
+   * Path part for operation assignPatient
+   */
+  static readonly AssignPatientPath = '/concerns/{concern}/incidents/{incident}/patients/{patient}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `assignPatient()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  assignPatient$Response(params: {
+    concern: number;
+    incident: number;
     patient: number;
+  }): Observable<StrictHttpResponse<void>> {
 
-    /**
-     * incident
-     */
-    incident: number;
+    const rb = new RequestBuilder(this.rootUrl, IncidentEndpointService.AssignPatientPath, 'put');
+    if (params) {
+      rb.path('concern', params.concern, {});
+      rb.path('incident', params.incident, {});
+      rb.path('patient', params.patient, {});
+    }
 
-    /**
-     * concern
-     */
-    concern: number;
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
   }
-}
 
-export { IncidentEndpointService }
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `assignPatient$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  assignPatient(params: {
+    concern: number;
+    incident: number;
+    patient: number;
+  }): Observable<void> {
+
+    return this.assignPatient$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+}

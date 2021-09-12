@@ -1,12 +1,14 @@
+/* tslint:disable */
 /* eslint-disable */
 import { ContactDto } from './contact-dto';
 import { PointDto } from './point-dto';
+import { UnitTypeDto } from './unit-type-dto';
 export interface UnitCreateDto {
-  call?: string;
+  call: string;
   contacts?: Array<ContactDto>;
   home?: PointDto;
   info?: string;
   portable?: boolean;
   section?: string;
-  types?: Array<'Portable' | 'Triage' | 'Treatment' | 'Postprocessing' | 'Info' | 'Officer'>;
+  types?: Array<UnitTypeDto>;
 }

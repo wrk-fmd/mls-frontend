@@ -1,4 +1,7 @@
+/* tslint:disable */
 /* eslint-disable */
+import { IncidentClosedReasonDto } from './incident-closed-reason-dto';
+import { IncidentTypeDto } from './incident-type-dto';
 import { PointDto } from './point-dto';
 export interface IncidentUpdateDto {
   ao?: PointDto;
@@ -6,9 +9,9 @@ export interface IncidentUpdateDto {
   bo?: PointDto;
   caller?: string;
   casusNr?: string;
-  closed?: 'Active' | 'Closed' | 'Cancelled' | 'NoPatient' | 'NoTransport';
+  closed?: IncidentClosedReasonDto;
   info?: string;
   priority?: boolean;
   section?: string;
-  type?: 'Standby' | 'ToHome' | 'Position' | 'Task' | 'Transport';
+  type?: IncidentTypeDto;
 }

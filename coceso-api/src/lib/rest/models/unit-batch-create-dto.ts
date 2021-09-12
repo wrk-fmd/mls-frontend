@@ -1,7 +1,8 @@
+/* tslint:disable */
 /* eslint-disable */
 import { PointDto } from './point-dto';
 export interface UnitBatchCreateDto {
-  call?: string;
+  call: string;
   from?: number;
   home?: PointDto;
   portable?: boolean;

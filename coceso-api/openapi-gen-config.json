@@ -1,0 +1,7 @@
+{
+  "input": "http://localhost:8090/coceso/v3/api-docs",
+  "output": "src/lib/rest",
+  "prefix": "CocesoRest",
+  "module": "CocesoRestModule",
+  "configuration": "CocesoRestConfiguration"
+}

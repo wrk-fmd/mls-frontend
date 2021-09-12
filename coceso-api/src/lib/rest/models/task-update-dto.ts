@@ -1,4 +1,6 @@
+/* tslint:disable */
 /* eslint-disable */
+import { TaskStateDto } from './task-state-dto';
 export interface TaskUpdateDto {
-  state?: 'Assigned' | 'ZBO' | 'ABO' | 'ZAO' | 'AAO' | 'Detached';
+  state?: TaskStateDto;
 }

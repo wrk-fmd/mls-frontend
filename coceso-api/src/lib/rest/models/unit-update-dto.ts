@@ -1,6 +1,9 @@
+/* tslint:disable */
 /* eslint-disable */
 import { ContactDto } from './contact-dto';
 import { PointDto } from './point-dto';
+import { UnitStateDto } from './unit-state-dto';
+import { UnitTypeDto } from './unit-type-dto';
 export interface UnitUpdateDto {
   call?: string;
   contacts?: Array<ContactDto>;
@@ -9,6 +12,6 @@ export interface UnitUpdateDto {
   portable?: boolean;
   position?: PointDto;
   section?: string;
-  state?: 'OFF_DUTY' | 'READY' | 'NOT_READY';
-  types?: Array<'Portable' | 'Triage' | 'Treatment' | 'Postprocessing' | 'Info' | 'Officer'>;
+  state?: UnitStateDto;
+  types?: Array<UnitTypeDto>;
 }

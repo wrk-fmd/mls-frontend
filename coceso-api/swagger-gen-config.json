@@ -1,5 +1,0 @@
-{
-  "swagger": "http://localhost:8090/coceso/v2/api-docs",
-  "output": "src/lib/rest",
-  "prefix": "CocesoRest"
-}

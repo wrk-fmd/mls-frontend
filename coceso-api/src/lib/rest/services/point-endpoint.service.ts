@@ -1,94 +1,73 @@
+/* tslint:disable */
 /* eslint-disable */
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpRequest, HttpResponse, HttpHeaders } from '@angular/common/http';
-import { BaseService as __BaseService } from '../base-service';
-import { CocesoRestConfiguration as __Configuration } from '../coceso-rest-configuration';
-import { StrictHttpResponse as __StrictHttpResponse } from '../strict-http-response';
-import { Observable as __Observable } from 'rxjs';
-import { map as __map, filter as __filter } from 'rxjs/operators';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { BaseService } from '../base-service';
+import { CocesoRestConfiguration } from '../coceso-rest-configuration';
+import { StrictHttpResponse } from '../strict-http-response';
+import { RequestBuilder } from '../request-builder';
+import { Observable } from 'rxjs';
+import { map, filter } from 'rxjs/operators';
 
 
-/**
- * Point Endpoint
- */
 @Injectable({
   providedIn: 'root',
 })
-class PointEndpointService extends __BaseService {
-  static readonly poiAutocompletePath = '/points/poiAutocomplete';
-
+export class PointEndpointService extends BaseService {
   constructor(
-    config: __Configuration,
+    config: CocesoRestConfiguration,
     http: HttpClient
   ) {
     super(config, http);
   }
 
   /**
-   * @param params The `PointEndpointService.PoiAutocompleteParams` containing the following parameters:
-   *
-   * - `q`: q
-   *
-   * - `concern`: concern
-   *
-   * @return OK
+   * Path part for operation poiAutocomplete
    */
-  poiAutocompleteResponse(params: PointEndpointService.PoiAutocompleteParams): __Observable<__StrictHttpResponse<Array<string>>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
-    if (params.q != null) __params = __params.set('q', params.q.toString());
-    if (params.concern != null) __params = __params.set('concern', params.concern.toString());
-    let req = new HttpRequest<any>(
-      'GET',
-      this.rootUrl + `/points/poiAutocomplete`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
+  static readonly PoiAutocompletePath = '/points/poiAutocomplete';
 
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<Array<string>>;
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `poiAutocomplete()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  poiAutocomplete$Response(params: {
+    'q': string;
+    concern: number;
+  }): Observable<StrictHttpResponse<Array<string>>> {
+
+    const rb = new RequestBuilder(this.rootUrl, PointEndpointService.PoiAutocompletePath, 'get');
+    if (params) {
+      rb.query('q', params['q'], {});
+      rb.query('concern', params.concern, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<Array<string>>;
       })
     );
   }
+
   /**
-   * @param params The `PointEndpointService.PoiAutocompleteParams` containing the following parameters:
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `poiAutocomplete$Response()` instead.
    *
-   * - `q`: q
-   *
-   * - `concern`: concern
-   *
-   * @return OK
+   * This method doesn't expect any request body.
    */
-  poiAutocomplete(params: PointEndpointService.PoiAutocompleteParams): __Observable<Array<string>> {
-    return this.poiAutocompleteResponse(params).pipe(
-      __map(_r => _r.body as Array<string>)
+  poiAutocomplete(params: {
+    'q': string;
+    concern: number;
+  }): Observable<Array<string>> {
+
+    return this.poiAutocomplete$Response(params).pipe(
+      map((r: StrictHttpResponse<Array<string>>) => r.body as Array<string>)
     );
   }
+
 }
-
-module PointEndpointService {
-
-  /**
-   * Parameters for poiAutocomplete
-   */
-  export interface PoiAutocompleteParams {
-
-    /**
-     * q
-     */
-    q: string;
-
-    /**
-     * concern
-     */
-    concern?: number;
-  }
-}
-
-export { PointEndpointService }

@@ -1,7 +1,8 @@
+/* tslint:disable */
 /* eslint-disable */
-import { StaffMemberDto } from './staff-member-dto';
 import { Pageable } from './pageable';
 import { Sort } from './sort';
+import { StaffMemberDto } from './staff-member-dto';
 export interface PageStaffMemberDto {
   content?: Array<StaffMemberDto>;
   empty?: boolean;

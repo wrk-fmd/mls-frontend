@@ -1,411 +1,331 @@
+/* tslint:disable */
 /* eslint-disable */
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpRequest, HttpResponse, HttpHeaders } from '@angular/common/http';
-import { BaseService as __BaseService } from '../base-service';
-import { CocesoRestConfiguration as __Configuration } from '../coceso-rest-configuration';
-import { StrictHttpResponse as __StrictHttpResponse } from '../strict-http-response';
-import { Observable as __Observable } from 'rxjs';
-import { map as __map, filter as __filter } from 'rxjs/operators';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { BaseService } from '../base-service';
+import { CocesoRestConfiguration } from '../coceso-rest-configuration';
+import { StrictHttpResponse } from '../strict-http-response';
+import { RequestBuilder } from '../request-builder';
+import { Observable } from 'rxjs';
+import { map, filter } from 'rxjs/operators';
 
-import { ContainerDto } from '../models/container-dto';
 import { ContainerCreateDto } from '../models/container-create-dto';
-import { ContainerUpdateDto } from '../models/container-update-dto';
+import { ContainerDto } from '../models/container-dto';
 import { ContainerUnitDto } from '../models/container-unit-dto';
+import { ContainerUpdateDto } from '../models/container-update-dto';
 
-/**
- * Container Endpoint
- */
 @Injectable({
   providedIn: 'root',
 })
-class ContainerEndpointService extends __BaseService {
-  static readonly getAllContainersPath = '/concerns/{concern}/container';
-  static readonly createContainerPath = '/concerns/{concern}/container';
-  static readonly updateContainerPath = '/concerns/{concern}/container/{container}';
-  static readonly deleteContainerPath = '/concerns/{concern}/container/{container}';
-  static readonly updateContainerUnitPath = '/concerns/{concern}/container/{container}/units/{unit}';
-  static readonly removeContainerUnitPath = '/concerns/{concern}/container/{container}/units/{unit}';
-
+export class ContainerEndpointService extends BaseService {
   constructor(
-    config: __Configuration,
+    config: CocesoRestConfiguration,
     http: HttpClient
   ) {
     super(config, http);
   }
 
   /**
-   * @param concern concern
-   * @return OK
+   * Path part for operation getAllContainers
    */
-  getAllContainersResponse(concern: number): __Observable<__StrictHttpResponse<Array<ContainerDto>>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
-
-    let req = new HttpRequest<any>(
-      'GET',
-      this.rootUrl + `/concerns/${concern}/container`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
-
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<Array<ContainerDto>>;
-      })
-    );
-  }
-  /**
-   * @param concern concern
-   * @return OK
-   */
-  getAllContainers(concern: number): __Observable<Array<ContainerDto>> {
-    return this.getAllContainersResponse(concern).pipe(
-      __map(_r => _r.body as Array<ContainerDto>)
-    );
-  }
+  static readonly GetAllContainersPath = '/concerns/{concern}/container';
 
   /**
-   * @param params The `ContainerEndpointService.CreateContainerParams` containing the following parameters:
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getAllContainers()` instead.
    *
-   * - `data`: data
-   *
-   * - `concern`: concern
+   * This method doesn't expect any request body.
    */
-  createContainerResponse(params: ContainerEndpointService.CreateContainerParams): __Observable<__StrictHttpResponse<null>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
-    __body = params.data;
-
-    let req = new HttpRequest<any>(
-      'POST',
-      this.rootUrl + `/concerns/${params.concern}/container`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
-
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
-      })
-    );
-  }
-  /**
-   * @param params The `ContainerEndpointService.CreateContainerParams` containing the following parameters:
-   *
-   * - `data`: data
-   *
-   * - `concern`: concern
-   */
-  createContainer(params: ContainerEndpointService.CreateContainerParams): __Observable<null> {
-    return this.createContainerResponse(params).pipe(
-      __map(_r => _r.body as null)
-    );
-  }
-
-  /**
-   * @param params The `ContainerEndpointService.UpdateContainerParams` containing the following parameters:
-   *
-   * - `data`: data
-   *
-   * - `container`: container
-   *
-   * - `concern`: concern
-   */
-  updateContainerResponse(params: ContainerEndpointService.UpdateContainerParams): __Observable<__StrictHttpResponse<null>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
-    __body = params.data;
-
-
-    let req = new HttpRequest<any>(
-      'PUT',
-      this.rootUrl + `/concerns/${params.concern}/container/${params.container}`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
-
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
-      })
-    );
-  }
-  /**
-   * @param params The `ContainerEndpointService.UpdateContainerParams` containing the following parameters:
-   *
-   * - `data`: data
-   *
-   * - `container`: container
-   *
-   * - `concern`: concern
-   */
-  updateContainer(params: ContainerEndpointService.UpdateContainerParams): __Observable<null> {
-    return this.updateContainerResponse(params).pipe(
-      __map(_r => _r.body as null)
-    );
-  }
-
-  /**
-   * @param params The `ContainerEndpointService.DeleteContainerParams` containing the following parameters:
-   *
-   * - `container`: container
-   *
-   * - `concern`: concern
-   */
-  deleteContainerResponse(params: ContainerEndpointService.DeleteContainerParams): __Observable<__StrictHttpResponse<null>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
-
-
-    let req = new HttpRequest<any>(
-      'DELETE',
-      this.rootUrl + `/concerns/${params.concern}/container/${params.container}`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
-
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
-      })
-    );
-  }
-  /**
-   * @param params The `ContainerEndpointService.DeleteContainerParams` containing the following parameters:
-   *
-   * - `container`: container
-   *
-   * - `concern`: concern
-   */
-  deleteContainer(params: ContainerEndpointService.DeleteContainerParams): __Observable<null> {
-    return this.deleteContainerResponse(params).pipe(
-      __map(_r => _r.body as null)
-    );
-  }
-
-  /**
-   * @param params The `ContainerEndpointService.UpdateContainerUnitParams` containing the following parameters:
-   *
-   * - `unit`: unit
-   *
-   * - `data`: data
-   *
-   * - `container`: container
-   *
-   * - `concern`: concern
-   */
-  updateContainerUnitResponse(params: ContainerEndpointService.UpdateContainerUnitParams): __Observable<__StrictHttpResponse<null>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
-
-    __body = params.data;
-
-
-    let req = new HttpRequest<any>(
-      'PUT',
-      this.rootUrl + `/concerns/${params.concern}/container/${params.container}/units/${params.unit}`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
-
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
-      })
-    );
-  }
-  /**
-   * @param params The `ContainerEndpointService.UpdateContainerUnitParams` containing the following parameters:
-   *
-   * - `unit`: unit
-   *
-   * - `data`: data
-   *
-   * - `container`: container
-   *
-   * - `concern`: concern
-   */
-  updateContainerUnit(params: ContainerEndpointService.UpdateContainerUnitParams): __Observable<null> {
-    return this.updateContainerUnitResponse(params).pipe(
-      __map(_r => _r.body as null)
-    );
-  }
-
-  /**
-   * @param params The `ContainerEndpointService.RemoveContainerUnitParams` containing the following parameters:
-   *
-   * - `unit`: unit
-   *
-   * - `container`: container
-   *
-   * - `concern`: concern
-   */
-  removeContainerUnitResponse(params: ContainerEndpointService.RemoveContainerUnitParams): __Observable<__StrictHttpResponse<null>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
-
-
-
-    let req = new HttpRequest<any>(
-      'DELETE',
-      this.rootUrl + `/concerns/${params.concern}/container/${params.container}/units/${params.unit}`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
-
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
-      })
-    );
-  }
-  /**
-   * @param params The `ContainerEndpointService.RemoveContainerUnitParams` containing the following parameters:
-   *
-   * - `unit`: unit
-   *
-   * - `container`: container
-   *
-   * - `concern`: concern
-   */
-  removeContainerUnit(params: ContainerEndpointService.RemoveContainerUnitParams): __Observable<null> {
-    return this.removeContainerUnitResponse(params).pipe(
-      __map(_r => _r.body as null)
-    );
-  }
-}
-
-module ContainerEndpointService {
-
-  /**
-   * Parameters for createContainer
-   */
-  export interface CreateContainerParams {
-
-    /**
-     * data
-     */
-    data: ContainerCreateDto;
-
-    /**
-     * concern
-     */
+  getAllContainers$Response(params: {
     concern: number;
+  }): Observable<StrictHttpResponse<Array<ContainerDto>>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ContainerEndpointService.GetAllContainersPath, 'get');
+    if (params) {
+      rb.path('concern', params.concern, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<Array<ContainerDto>>;
+      })
+    );
   }
 
   /**
-   * Parameters for updateContainer
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getAllContainers$Response()` instead.
+   *
+   * This method doesn't expect any request body.
    */
-  export interface UpdateContainerParams {
+  getAllContainers(params: {
+    concern: number;
+  }): Observable<Array<ContainerDto>> {
 
-    /**
-     * data
-     */
-    data: ContainerUpdateDto;
+    return this.getAllContainers$Response(params).pipe(
+      map((r: StrictHttpResponse<Array<ContainerDto>>) => r.body as Array<ContainerDto>)
+    );
+  }
 
-    /**
-     * container
-     */
+  /**
+   * Path part for operation createContainer
+   */
+  static readonly CreateContainerPath = '/concerns/{concern}/container';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `createContainer()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createContainer$Response(params: {
+    concern: number;
+    body: ContainerCreateDto
+  }): Observable<StrictHttpResponse<void>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ContainerEndpointService.CreateContainerPath, 'post');
+    if (params) {
+      rb.path('concern', params.concern, {});
+      rb.body(params.body, 'application/json');
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `createContainer$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createContainer(params: {
+    concern: number;
+    body: ContainerCreateDto
+  }): Observable<void> {
+
+    return this.createContainer$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
+   * Path part for operation updateContainer
+   */
+  static readonly UpdateContainerPath = '/concerns/{concern}/container/{container}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateContainer()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateContainer$Response(params: {
+    concern: number;
     container: number;
+    body: ContainerUpdateDto
+  }): Observable<StrictHttpResponse<void>> {
 
-    /**
-     * concern
-     */
-    concern: number;
+    const rb = new RequestBuilder(this.rootUrl, ContainerEndpointService.UpdateContainerPath, 'put');
+    if (params) {
+      rb.path('concern', params.concern, {});
+      rb.path('container', params.container, {});
+      rb.body(params.body, 'application/json');
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
   }
 
   /**
-   * Parameters for deleteContainer
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `updateContainer$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  export interface DeleteContainerParams {
-
-    /**
-     * container
-     */
+  updateContainer(params: {
+    concern: number;
     container: number;
+    body: ContainerUpdateDto
+  }): Observable<void> {
 
-    /**
-     * concern
-     */
-    concern: number;
+    return this.updateContainer$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
   }
 
   /**
-   * Parameters for updateContainerUnit
+   * Path part for operation deleteContainer
    */
-  export interface UpdateContainerUnitParams {
+  static readonly DeleteContainerPath = '/concerns/{concern}/container/{container}';
 
-    /**
-     * unit
-     */
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteContainer()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteContainer$Response(params: {
+    concern: number;
+    container: number;
+  }): Observable<StrictHttpResponse<void>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ContainerEndpointService.DeleteContainerPath, 'delete');
+    if (params) {
+      rb.path('concern', params.concern, {});
+      rb.path('container', params.container, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `deleteContainer$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteContainer(params: {
+    concern: number;
+    container: number;
+  }): Observable<void> {
+
+    return this.deleteContainer$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
+   * Path part for operation updateContainerUnit
+   */
+  static readonly UpdateContainerUnitPath = '/concerns/{concern}/container/{container}/units/{unit}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateContainerUnit()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateContainerUnit$Response(params: {
+    concern: number;
+    container: number;
     unit: number;
+    body: ContainerUnitDto
+  }): Observable<StrictHttpResponse<void>> {
 
-    /**
-     * data
-     */
-    data: ContainerUnitDto;
+    const rb = new RequestBuilder(this.rootUrl, ContainerEndpointService.UpdateContainerUnitPath, 'put');
+    if (params) {
+      rb.path('concern', params.concern, {});
+      rb.path('container', params.container, {});
+      rb.path('unit', params.unit, {});
+      rb.body(params.body, 'application/json');
+    }
 
-    /**
-     * container
-     */
-    container: number;
-
-    /**
-     * concern
-     */
-    concern: number;
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
   }
 
   /**
-   * Parameters for removeContainerUnit
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `updateContainerUnit$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  export interface RemoveContainerUnitParams {
-
-    /**
-     * unit
-     */
-    unit: number;
-
-    /**
-     * container
-     */
-    container: number;
-
-    /**
-     * concern
-     */
+  updateContainerUnit(params: {
     concern: number;
-  }
-}
+    container: number;
+    unit: number;
+    body: ContainerUnitDto
+  }): Observable<void> {
 
-export { ContainerEndpointService }
+    return this.updateContainerUnit$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
+   * Path part for operation removeContainerUnit
+   */
+  static readonly RemoveContainerUnitPath = '/concerns/{concern}/container/{container}/units/{unit}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `removeContainerUnit()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  removeContainerUnit$Response(params: {
+    concern: number;
+    container: number;
+    unit: number;
+  }): Observable<StrictHttpResponse<void>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ContainerEndpointService.RemoveContainerUnitPath, 'delete');
+    if (params) {
+      rb.path('concern', params.concern, {});
+      rb.path('container', params.container, {});
+      rb.path('unit', params.unit, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `removeContainerUnit$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  removeContainerUnit(params: {
+    concern: number;
+    container: number;
+    unit: number;
+  }): Observable<void> {
+
+    return this.removeContainerUnit$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+}

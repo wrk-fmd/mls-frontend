@@ -1,133 +1,121 @@
+/* tslint:disable */
 /* eslint-disable */
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpRequest, HttpResponse, HttpHeaders } from '@angular/common/http';
-import { BaseService as __BaseService } from '../base-service';
-import { CocesoRestConfiguration as __Configuration } from '../coceso-rest-configuration';
-import { StrictHttpResponse as __StrictHttpResponse } from '../strict-http-response';
-import { Observable as __Observable } from 'rxjs';
-import { map as __map, filter as __filter } from 'rxjs/operators';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { BaseService } from '../base-service';
+import { CocesoRestConfiguration } from '../coceso-rest-configuration';
+import { StrictHttpResponse } from '../strict-http-response';
+import { RequestBuilder } from '../request-builder';
+import { Observable } from 'rxjs';
+import { map, filter } from 'rxjs/operators';
 
 import { MessageChannelDto } from '../models/message-channel-dto';
 import { ReceivedMessageDto } from '../models/received-message-dto';
 
-/**
- * Message Endpoint
- */
 @Injectable({
   providedIn: 'root',
 })
-class MessageEndpointService extends __BaseService {
-  static readonly getChannelsPath = '/concerns/{concern}/messages/channels';
-  static readonly getLastMessagePath = '/concerns/{concern}/messages/{minutes}';
-
+export class MessageEndpointService extends BaseService {
   constructor(
-    config: __Configuration,
+    config: CocesoRestConfiguration,
     http: HttpClient
   ) {
     super(config, http);
   }
 
   /**
-   * @param concern concern
-   * @return OK
+   * Path part for operation getChannels
    */
-  getChannelsResponse(concern: number): __Observable<__StrictHttpResponse<Array<MessageChannelDto>>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
-
-    let req = new HttpRequest<any>(
-      'GET',
-      this.rootUrl + `/concerns/${concern}/messages/channels`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
-
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<Array<MessageChannelDto>>;
-      })
-    );
-  }
-  /**
-   * @param concern concern
-   * @return OK
-   */
-  getChannels(concern: number): __Observable<Array<MessageChannelDto>> {
-    return this.getChannelsResponse(concern).pipe(
-      __map(_r => _r.body as Array<MessageChannelDto>)
-    );
-  }
+  static readonly GetChannelsPath = '/concerns/{concern}/messages/channels';
 
   /**
-   * @param params The `MessageEndpointService.GetLastMessageParams` containing the following parameters:
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getChannels()` instead.
    *
-   * - `minutes`: minutes
-   *
-   * - `concern`: concern
-   *
-   * @return OK
+   * This method doesn't expect any request body.
    */
-  getLastMessageResponse(params: MessageEndpointService.GetLastMessageParams): __Observable<__StrictHttpResponse<Array<ReceivedMessageDto>>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
-
-
-    let req = new HttpRequest<any>(
-      'GET',
-      this.rootUrl + `/concerns/${params.concern}/messages/${params.minutes}`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
-
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<Array<ReceivedMessageDto>>;
-      })
-    );
-  }
-  /**
-   * @param params The `MessageEndpointService.GetLastMessageParams` containing the following parameters:
-   *
-   * - `minutes`: minutes
-   *
-   * - `concern`: concern
-   *
-   * @return OK
-   */
-  getLastMessage(params: MessageEndpointService.GetLastMessageParams): __Observable<Array<ReceivedMessageDto>> {
-    return this.getLastMessageResponse(params).pipe(
-      __map(_r => _r.body as Array<ReceivedMessageDto>)
-    );
-  }
-}
-
-module MessageEndpointService {
-
-  /**
-   * Parameters for getLastMessage
-   */
-  export interface GetLastMessageParams {
-
-    /**
-     * minutes
-     */
-    minutes: number;
-
-    /**
-     * concern
-     */
+  getChannels$Response(params: {
     concern: number;
-  }
-}
+  }): Observable<StrictHttpResponse<Array<MessageChannelDto>>> {
 
-export { MessageEndpointService }
+    const rb = new RequestBuilder(this.rootUrl, MessageEndpointService.GetChannelsPath, 'get');
+    if (params) {
+      rb.path('concern', params.concern, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<Array<MessageChannelDto>>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getChannels$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getChannels(params: {
+    concern: number;
+  }): Observable<Array<MessageChannelDto>> {
+
+    return this.getChannels$Response(params).pipe(
+      map((r: StrictHttpResponse<Array<MessageChannelDto>>) => r.body as Array<MessageChannelDto>)
+    );
+  }
+
+  /**
+   * Path part for operation getLastMessage
+   */
+  static readonly GetLastMessagePath = '/concerns/{concern}/messages/{minutes}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getLastMessage()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getLastMessage$Response(params: {
+    concern: number;
+    minutes: number;
+  }): Observable<StrictHttpResponse<Array<ReceivedMessageDto>>> {
+
+    const rb = new RequestBuilder(this.rootUrl, MessageEndpointService.GetLastMessagePath, 'get');
+    if (params) {
+      rb.path('concern', params.concern, {});
+      rb.path('minutes', params.minutes, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<Array<ReceivedMessageDto>>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getLastMessage$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getLastMessage(params: {
+    concern: number;
+    minutes: number;
+  }): Observable<Array<ReceivedMessageDto>> {
+
+    return this.getLastMessage$Response(params).pipe(
+      map((r: StrictHttpResponse<Array<ReceivedMessageDto>>) => r.body as Array<ReceivedMessageDto>)
+    );
+  }
+
+}

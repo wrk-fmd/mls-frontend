@@ -1,16 +1,20 @@
+/* tslint:disable */
 /* eslint-disable */
 import { Injectable } from '@angular/core';
 
 /**
- * Global configuration for CocesoRest services
+ * Global configuration
  */
 @Injectable({
   providedIn: 'root',
 })
 export class CocesoRestConfiguration {
-  rootUrl: string = '//localhost:8090/coceso';
+  rootUrl: string = 'http://localhost:8093';
 }
 
-export interface CocesoRestConfigurationInterface {
+/**
+ * Parameters for `CocesoRestModule.forRoot()`
+ */
+export interface CocesoRestConfigurationParams {
   rootUrl?: string;
 }

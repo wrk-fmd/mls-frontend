@@ -1,10 +1,7 @@
+/* tslint:disable */
 /* eslint-disable */
-import { Sort } from './sort';
 export interface Pageable {
-  offset?: number;
-  pageNumber?: number;
-  pageSize?: number;
-  paged?: boolean;
-  sort?: Sort;
-  unpaged?: boolean;
+  page?: number;
+  size?: number;
+  sort?: Array<string>;
 }

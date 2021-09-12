@@ -1,14 +1,16 @@
+/* tslint:disable */
 /* eslint-disable */
 import { ChangeDto } from './change-dto';
+import { TaskStateDto } from './task-state-dto';
 export interface JournalEntryDto {
-  changes?: Array<ChangeDto>;
-  id?: number;
-  incident?: number;
-  patient?: number;
-  state?: 'Assigned' | 'ZBO' | 'ABO' | 'ZAO' | 'AAO' | 'Detached';
-  text?: string;
-  timestamp?: number;
-  type?: string;
-  unit?: number;
-  username?: string;
+  changes: null | Array<null | ChangeDto>;
+  id: number;
+  incident: null | number;
+  patient: null | number;
+  state: TaskStateDto;
+  text: null | string;
+  timestamp: number;
+  type: string;
+  unit: null | number;
+  username: null | string;
 }

@@ -1,181 +1,132 @@
+/* tslint:disable */
 /* eslint-disable */
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpRequest, HttpResponse, HttpHeaders } from '@angular/common/http';
-import { BaseService as __BaseService } from '../base-service';
-import { CocesoRestConfiguration as __Configuration } from '../coceso-rest-configuration';
-import { StrictHttpResponse as __StrictHttpResponse } from '../strict-http-response';
-import { Observable as __Observable } from 'rxjs';
-import { map as __map, filter as __filter } from 'rxjs/operators';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { BaseService } from '../base-service';
+import { CocesoRestConfiguration } from '../coceso-rest-configuration';
+import { StrictHttpResponse } from '../strict-http-response';
+import { RequestBuilder } from '../request-builder';
+import { Observable } from 'rxjs';
+import { map, filter } from 'rxjs/operators';
 
 import { TaskUpdateDto } from '../models/task-update-dto';
 
-/**
- * Task Endpoint
- */
 @Injectable({
   providedIn: 'root',
 })
-class TaskEndpointService extends __BaseService {
-  static readonly assignPath = '/concerns/{concern}/incidents/{incident}/units/{unit}';
-  static readonly updateStatePath = '/concerns/{concern}/incidents/{incident}/units/{unit}';
-
+export class TaskEndpointService extends BaseService {
   constructor(
-    config: __Configuration,
+    config: CocesoRestConfiguration,
     http: HttpClient
   ) {
     super(config, http);
   }
 
   /**
-   * @param params The `TaskEndpointService.AssignParams` containing the following parameters:
-   *
-   * - `unit`: unit
-   *
-   * - `incident`: incident
-   *
-   * - `concern`: concern
+   * Path part for operation updateState
    */
-  assignResponse(params: TaskEndpointService.AssignParams): __Observable<__StrictHttpResponse<null>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
+  static readonly UpdateStatePath = '/concerns/{concern}/incidents/{incident}/units/{unit}';
 
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateState()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateState$Response(params: {
+    concern: number;
+    incident: number;
+    unit: number;
+    body: TaskUpdateDto
+  }): Observable<StrictHttpResponse<void>> {
 
+    const rb = new RequestBuilder(this.rootUrl, TaskEndpointService.UpdateStatePath, 'put');
+    if (params) {
+      rb.path('concern', params.concern, {});
+      rb.path('incident', params.incident, {});
+      rb.path('unit', params.unit, {});
+      rb.body(params.body, 'application/json');
+    }
 
-    let req = new HttpRequest<any>(
-      'POST',
-      this.rootUrl + `/concerns/${params.concern}/incidents/${params.incident}/units/${params.unit}`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
-
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
       })
     );
   }
+
   /**
-   * @param params The `TaskEndpointService.AssignParams` containing the following parameters:
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `updateState$Response()` instead.
    *
-   * - `unit`: unit
-   *
-   * - `incident`: incident
-   *
-   * - `concern`: concern
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  assign(params: TaskEndpointService.AssignParams): __Observable<null> {
-    return this.assignResponse(params).pipe(
-      __map(_r => _r.body as null)
+  updateState(params: {
+    concern: number;
+    incident: number;
+    unit: number;
+    body: TaskUpdateDto
+  }): Observable<void> {
+
+    return this.updateState$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
 
   /**
-   * @param params The `TaskEndpointService.UpdateStateParams` containing the following parameters:
-   *
-   * - `unit`: unit
-   *
-   * - `incident`: incident
-   *
-   * - `data`: data
-   *
-   * - `concern`: concern
+   * Path part for operation assign
    */
-  updateStateResponse(params: TaskEndpointService.UpdateStateParams): __Observable<__StrictHttpResponse<null>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
+  static readonly AssignPath = '/concerns/{concern}/incidents/{incident}/units/{unit}';
 
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `assign()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  assign$Response(params: {
+    concern: number;
+    incident: number;
+    unit: number;
+  }): Observable<StrictHttpResponse<void>> {
 
-    __body = params.data;
+    const rb = new RequestBuilder(this.rootUrl, TaskEndpointService.AssignPath, 'post');
+    if (params) {
+      rb.path('concern', params.concern, {});
+      rb.path('incident', params.incident, {});
+      rb.path('unit', params.unit, {});
+    }
 
-    let req = new HttpRequest<any>(
-      'PUT',
-      this.rootUrl + `/concerns/${params.concern}/incidents/${params.incident}/units/${params.unit}`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
-
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
       })
     );
   }
+
   /**
-   * @param params The `TaskEndpointService.UpdateStateParams` containing the following parameters:
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `assign$Response()` instead.
    *
-   * - `unit`: unit
-   *
-   * - `incident`: incident
-   *
-   * - `data`: data
-   *
-   * - `concern`: concern
+   * This method doesn't expect any request body.
    */
-  updateState(params: TaskEndpointService.UpdateStateParams): __Observable<null> {
-    return this.updateStateResponse(params).pipe(
-      __map(_r => _r.body as null)
+  assign(params: {
+    concern: number;
+    incident: number;
+    unit: number;
+  }): Observable<void> {
+
+    return this.assign$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
+
 }
-
-module TaskEndpointService {
-
-  /**
-   * Parameters for assign
-   */
-  export interface AssignParams {
-
-    /**
-     * unit
-     */
-    unit: number;
-
-    /**
-     * incident
-     */
-    incident: number;
-
-    /**
-     * concern
-     */
-    concern: number;
-  }
-
-  /**
-   * Parameters for updateState
-   */
-  export interface UpdateStateParams {
-
-    /**
-     * unit
-     */
-    unit: number;
-
-    /**
-     * incident
-     */
-    incident: number;
-
-    /**
-     * data
-     */
-    data: TaskUpdateDto;
-
-    /**
-     * concern
-     */
-    concern: number;
-  }
-}
-
-export { TaskEndpointService }

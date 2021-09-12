@@ -1,11 +1,13 @@
+/* tslint:disable */
 /* eslint-disable */
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpRequest, HttpResponse, HttpHeaders } from '@angular/common/http';
-import { BaseService as __BaseService } from '../base-service';
-import { CocesoRestConfiguration as __Configuration } from '../coceso-rest-configuration';
-import { StrictHttpResponse as __StrictHttpResponse } from '../strict-http-response';
-import { Observable as __Observable } from 'rxjs';
-import { map as __map, filter as __filter } from 'rxjs/operators';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { BaseService } from '../base-service';
+import { CocesoRestConfiguration } from '../coceso-rest-configuration';
+import { StrictHttpResponse } from '../strict-http-response';
+import { RequestBuilder } from '../request-builder';
+import { Observable } from 'rxjs';
+import { map, filter } from 'rxjs/operators';
 
 import { ConcernBriefDto } from '../models/concern-brief-dto';
 import { ConcernCreateDto } from '../models/concern-create-dto';
@@ -13,381 +15,389 @@ import { ConcernDto } from '../models/concern-dto';
 import { ConcernUpdateDto } from '../models/concern-update-dto';
 import { SectionCreateDto } from '../models/section-create-dto';
 
-/**
- * Concern Endpoint
- */
 @Injectable({
   providedIn: 'root',
 })
-class ConcernEndpointService extends __BaseService {
-  static readonly getAllConcernsPath = '/concerns';
-  static readonly createConcernPath = '/concerns';
-  static readonly getConcernPath = '/concerns/{concern}';
-  static readonly updateConcernPath = '/concerns/{concern}';
-  static readonly closeConcernPath = '/concerns/{concern}/close';
-  static readonly openConcernPath = '/concerns/{concern}/open';
-  static readonly addSectionPath = '/concerns/{concern}/sections';
-  static readonly removeSectionPath = '/concerns/{concern}/sections/{section}';
-
+export class ConcernEndpointService extends BaseService {
   constructor(
-    config: __Configuration,
+    config: CocesoRestConfiguration,
     http: HttpClient
   ) {
     super(config, http);
   }
 
   /**
-   * @return OK
+   * Path part for operation getAllConcerns
    */
-  getAllConcernsResponse(): __Observable<__StrictHttpResponse<Array<ConcernBriefDto>>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
-    let req = new HttpRequest<any>(
-      'GET',
-      this.rootUrl + `/concerns`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
+  static readonly GetAllConcernsPath = '/concerns';
 
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<Array<ConcernBriefDto>>;
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getAllConcerns()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllConcerns$Response(params?: {
+  }): Observable<StrictHttpResponse<Array<ConcernBriefDto>>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ConcernEndpointService.GetAllConcernsPath, 'get');
+    if (params) {
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<Array<ConcernBriefDto>>;
       })
     );
   }
+
   /**
-   * @return OK
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getAllConcerns$Response()` instead.
+   *
+   * This method doesn't expect any request body.
    */
-  getAllConcerns(): __Observable<Array<ConcernBriefDto>> {
-    return this.getAllConcernsResponse().pipe(
-      __map(_r => _r.body as Array<ConcernBriefDto>)
+  getAllConcerns(params?: {
+  }): Observable<Array<ConcernBriefDto>> {
+
+    return this.getAllConcerns$Response(params).pipe(
+      map((r: StrictHttpResponse<Array<ConcernBriefDto>>) => r.body as Array<ConcernBriefDto>)
     );
   }
 
   /**
-   * @param data data
-   * @return OK
+   * Path part for operation createConcern
    */
-  createConcernResponse(data: ConcernCreateDto): __Observable<__StrictHttpResponse<ConcernBriefDto>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
-    __body = data;
-    let req = new HttpRequest<any>(
-      'POST',
-      this.rootUrl + `/concerns`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
+  static readonly CreateConcernPath = '/concerns';
 
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<ConcernBriefDto>;
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `createConcern()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createConcern$Response(params: {
+    body: ConcernCreateDto
+  }): Observable<StrictHttpResponse<ConcernBriefDto>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ConcernEndpointService.CreateConcernPath, 'post');
+    if (params) {
+      rb.body(params.body, 'application/json');
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<ConcernBriefDto>;
       })
     );
   }
-  /**
-   * @param data data
-   * @return OK
-   */
-  createConcern(data: ConcernCreateDto): __Observable<ConcernBriefDto> {
-    return this.createConcernResponse(data).pipe(
-      __map(_r => _r.body as ConcernBriefDto)
-    );
-  }
 
   /**
-   * @param concern concern
-   * @return OK
-   */
-  getConcernResponse(concern: number): __Observable<__StrictHttpResponse<ConcernDto>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
-
-    let req = new HttpRequest<any>(
-      'GET',
-      this.rootUrl + `/concerns/${concern}`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
-
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<ConcernDto>;
-      })
-    );
-  }
-  /**
-   * @param concern concern
-   * @return OK
-   */
-  getConcern(concern: number): __Observable<ConcernDto> {
-    return this.getConcernResponse(concern).pipe(
-      __map(_r => _r.body as ConcernDto)
-    );
-  }
-
-  /**
-   * @param params The `ConcernEndpointService.UpdateConcernParams` containing the following parameters:
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `createConcern$Response()` instead.
    *
-   * - `data`: data
-   *
-   * - `concern`: concern
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  updateConcernResponse(params: ConcernEndpointService.UpdateConcernParams): __Observable<__StrictHttpResponse<null>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
-    __body = params.data;
+  createConcern(params: {
+    body: ConcernCreateDto
+  }): Observable<ConcernBriefDto> {
 
-    let req = new HttpRequest<any>(
-      'PUT',
-      this.rootUrl + `/concerns/${params.concern}`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
-
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
-      })
-    );
-  }
-  /**
-   * @param params The `ConcernEndpointService.UpdateConcernParams` containing the following parameters:
-   *
-   * - `data`: data
-   *
-   * - `concern`: concern
-   */
-  updateConcern(params: ConcernEndpointService.UpdateConcernParams): __Observable<null> {
-    return this.updateConcernResponse(params).pipe(
-      __map(_r => _r.body as null)
+    return this.createConcern$Response(params).pipe(
+      map((r: StrictHttpResponse<ConcernBriefDto>) => r.body as ConcernBriefDto)
     );
   }
 
   /**
-   * @param concern concern
+   * Path part for operation getConcern
    */
-  closeConcernResponse(concern: number): __Observable<__StrictHttpResponse<null>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
-
-    let req = new HttpRequest<any>(
-      'PUT',
-      this.rootUrl + `/concerns/${concern}/close`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
-
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
-      })
-    );
-  }
-  /**
-   * @param concern concern
-   */
-  closeConcern(concern: number): __Observable<null> {
-    return this.closeConcernResponse(concern).pipe(
-      __map(_r => _r.body as null)
-    );
-  }
+  static readonly GetConcernPath = '/concerns/{concern}';
 
   /**
-   * @param concern concern
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getConcern()` instead.
+   *
+   * This method doesn't expect any request body.
    */
-  openConcernResponse(concern: number): __Observable<__StrictHttpResponse<null>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
-
-    let req = new HttpRequest<any>(
-      'PUT',
-      this.rootUrl + `/concerns/${concern}/open`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
-
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
-      })
-    );
-  }
-  /**
-   * @param concern concern
-   */
-  openConcern(concern: number): __Observable<null> {
-    return this.openConcernResponse(concern).pipe(
-      __map(_r => _r.body as null)
-    );
-  }
-
-  /**
-   * @param params The `ConcernEndpointService.AddSectionParams` containing the following parameters:
-   *
-   * - `data`: data
-   *
-   * - `concern`: concern
-   */
-  addSectionResponse(params: ConcernEndpointService.AddSectionParams): __Observable<__StrictHttpResponse<null>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
-    __body = params.data;
-
-    let req = new HttpRequest<any>(
-      'POST',
-      this.rootUrl + `/concerns/${params.concern}/sections`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
-
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
-      })
-    );
-  }
-  /**
-   * @param params The `ConcernEndpointService.AddSectionParams` containing the following parameters:
-   *
-   * - `data`: data
-   *
-   * - `concern`: concern
-   */
-  addSection(params: ConcernEndpointService.AddSectionParams): __Observable<null> {
-    return this.addSectionResponse(params).pipe(
-      __map(_r => _r.body as null)
-    );
-  }
-
-  /**
-   * @param params The `ConcernEndpointService.RemoveSectionParams` containing the following parameters:
-   *
-   * - `section`: section
-   *
-   * - `concern`: concern
-   */
-  removeSectionResponse(params: ConcernEndpointService.RemoveSectionParams): __Observable<__StrictHttpResponse<null>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
-
-
-    let req = new HttpRequest<any>(
-      'DELETE',
-      this.rootUrl + `/concerns/${params.concern}/sections/${params.section}`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
-
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
-      })
-    );
-  }
-  /**
-   * @param params The `ConcernEndpointService.RemoveSectionParams` containing the following parameters:
-   *
-   * - `section`: section
-   *
-   * - `concern`: concern
-   */
-  removeSection(params: ConcernEndpointService.RemoveSectionParams): __Observable<null> {
-    return this.removeSectionResponse(params).pipe(
-      __map(_r => _r.body as null)
-    );
-  }
-}
-
-module ConcernEndpointService {
-
-  /**
-   * Parameters for updateConcern
-   */
-  export interface UpdateConcernParams {
-
-    /**
-     * data
-     */
-    data: ConcernUpdateDto;
-
-    /**
-     * concern
-     */
+  getConcern$Response(params: {
     concern: number;
+  }): Observable<StrictHttpResponse<ConcernDto>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ConcernEndpointService.GetConcernPath, 'get');
+    if (params) {
+      rb.path('concern', params.concern, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<ConcernDto>;
+      })
+    );
   }
 
   /**
-   * Parameters for addSection
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getConcern$Response()` instead.
+   *
+   * This method doesn't expect any request body.
    */
-  export interface AddSectionParams {
-
-    /**
-     * data
-     */
-    data: SectionCreateDto;
-
-    /**
-     * concern
-     */
+  getConcern(params: {
     concern: number;
+  }): Observable<ConcernDto> {
+
+    return this.getConcern$Response(params).pipe(
+      map((r: StrictHttpResponse<ConcernDto>) => r.body as ConcernDto)
+    );
   }
 
   /**
-   * Parameters for removeSection
+   * Path part for operation updateConcern
    */
-  export interface RemoveSectionParams {
+  static readonly UpdateConcernPath = '/concerns/{concern}';
 
-    /**
-     * section
-     */
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateConcern()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateConcern$Response(params: {
+    concern: number;
+    body: ConcernUpdateDto
+  }): Observable<StrictHttpResponse<void>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ConcernEndpointService.UpdateConcernPath, 'put');
+    if (params) {
+      rb.path('concern', params.concern, {});
+      rb.body(params.body, 'application/json');
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `updateConcern$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateConcern(params: {
+    concern: number;
+    body: ConcernUpdateDto
+  }): Observable<void> {
+
+    return this.updateConcern$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
+   * Path part for operation closeConcern
+   */
+  static readonly CloseConcernPath = '/concerns/{concern}/close';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `closeConcern()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  closeConcern$Response(params: {
+    concern: number;
+  }): Observable<StrictHttpResponse<void>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ConcernEndpointService.CloseConcernPath, 'put');
+    if (params) {
+      rb.path('concern', params.concern, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `closeConcern$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  closeConcern(params: {
+    concern: number;
+  }): Observable<void> {
+
+    return this.closeConcern$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
+   * Path part for operation openConcern
+   */
+  static readonly OpenConcernPath = '/concerns/{concern}/open';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `openConcern()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  openConcern$Response(params: {
+    concern: number;
+  }): Observable<StrictHttpResponse<void>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ConcernEndpointService.OpenConcernPath, 'put');
+    if (params) {
+      rb.path('concern', params.concern, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `openConcern$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  openConcern(params: {
+    concern: number;
+  }): Observable<void> {
+
+    return this.openConcern$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
+   * Path part for operation addSection
+   */
+  static readonly AddSectionPath = '/concerns/{concern}/sections';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `addSection()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  addSection$Response(params: {
+    concern: number;
+    body: SectionCreateDto
+  }): Observable<StrictHttpResponse<void>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ConcernEndpointService.AddSectionPath, 'post');
+    if (params) {
+      rb.path('concern', params.concern, {});
+      rb.body(params.body, 'application/json');
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `addSection$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  addSection(params: {
+    concern: number;
+    body: SectionCreateDto
+  }): Observable<void> {
+
+    return this.addSection$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
+   * Path part for operation removeSection
+   */
+  static readonly RemoveSectionPath = '/concerns/{concern}/sections/{section}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `removeSection()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  removeSection$Response(params: {
+    concern: number;
     section: string;
+  }): Observable<StrictHttpResponse<void>> {
 
-    /**
-     * concern
-     */
-    concern: number;
+    const rb = new RequestBuilder(this.rootUrl, ConcernEndpointService.RemoveSectionPath, 'delete');
+    if (params) {
+      rb.path('concern', params.concern, {});
+      rb.path('section', params.section, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
   }
-}
 
-export { ConcernEndpointService }
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `removeSection$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  removeSection(params: {
+    concern: number;
+    section: string;
+  }): Observable<void> {
+
+    return this.removeSection$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+}

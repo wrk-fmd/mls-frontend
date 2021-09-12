@@ -1,6 +1,7 @@
+/* tslint:disable */
 /* eslint-disable */
 export interface ChangeDto {
-  key?: string;
-  newValue?: {};
-  oldValue?: {};
+  key: string;
+  newValue: null | {  };
+  oldValue: null | {  };
 }

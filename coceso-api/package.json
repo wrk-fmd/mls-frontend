@@ -2,7 +2,7 @@
   "name": "mls-coceso-api",
   "version": "3.0.0-SNAPSHOT",
   "scripts": {
-    "generate": "ng-swagger-gen -c swagger-gen-config.json"
+    "generate": "ng-openapi-gen -c openapi-gen-config.json"
   },
   "private": true,
   "dependencies": {
@@ -10,9 +10,10 @@
   },
   "peerDependencies": {
     "@angular/common": "*",
-    "@angular/core": "*"
+    "@angular/core": "*",
+    "rxjs": "^6.6.3"
   },
   "devDependencies": {
-    "ng-swagger-gen": "^2.3.0"
+    "ng-openapi-gen": "^0.17.3"
   }
 }

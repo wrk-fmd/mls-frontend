@@ -1,4 +1,6 @@
+/* tslint:disable */
 /* eslint-disable */
+import { SexDto } from './sex-dto';
 export interface PatientCreateDto {
   birthday?: string;
   diagnosis?: string;
@@ -8,5 +10,5 @@ export interface PatientCreateDto {
   info?: string;
   insurance?: string;
   lastname?: string;
-  sex?: 'Male' | 'Female';
+  sex?: SexDto;
 }

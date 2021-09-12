@@ -1,66 +1,71 @@
+/* tslint:disable */
 /* eslint-disable */
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpRequest, HttpResponse, HttpHeaders } from '@angular/common/http';
-import { BaseService as __BaseService } from '../base-service';
-import { CocesoRestConfiguration as __Configuration } from '../coceso-rest-configuration';
-import { StrictHttpResponse as __StrictHttpResponse } from '../strict-http-response';
-import { Observable as __Observable } from 'rxjs';
-import { map as __map, filter as __filter } from 'rxjs/operators';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { BaseService } from '../base-service';
+import { CocesoRestConfiguration } from '../coceso-rest-configuration';
+import { StrictHttpResponse } from '../strict-http-response';
+import { RequestBuilder } from '../request-builder';
+import { Observable } from 'rxjs';
+import { map, filter } from 'rxjs/operators';
 
 import { ClientLog } from '../models/client-log';
 
-/**
- * Logging Endpoint
- */
 @Injectable({
   providedIn: 'root',
 })
-class LoggingEndpointService extends __BaseService {
-  static readonly clientLogPath = '/logging';
-
+export class LoggingEndpointService extends BaseService {
   constructor(
-    config: __Configuration,
+    config: CocesoRestConfiguration,
     http: HttpClient
   ) {
     super(config, http);
   }
 
   /**
-   * @param clientLog clientLog
+   * Path part for operation clientLog
    */
-  clientLogResponse(clientLog: ClientLog): __Observable<__StrictHttpResponse<null>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
-    __body = clientLog;
-    let req = new HttpRequest<any>(
-      'POST',
-      this.rootUrl + `/logging`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
+  static readonly ClientLogPath = '/logging';
 
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `clientLog()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  clientLog$Response(params: {
+    body: ClientLog
+  }): Observable<StrictHttpResponse<void>> {
+
+    const rb = new RequestBuilder(this.rootUrl, LoggingEndpointService.ClientLogPath, 'post');
+    if (params) {
+      rb.body(params.body, 'application/json');
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
       })
     );
   }
+
   /**
-   * @param clientLog clientLog
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `clientLog$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  clientLog(clientLog: ClientLog): __Observable<null> {
-    return this.clientLogResponse(clientLog).pipe(
-      __map(_r => _r.body as null)
+  clientLog(params: {
+    body: ClientLog
+  }): Observable<void> {
+
+    return this.clientLog$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
-}
 
-module LoggingEndpointService {
 }
-
-export { LoggingEndpointService }

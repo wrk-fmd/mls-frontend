@@ -1,205 +1,175 @@
+/* tslint:disable */
 /* eslint-disable */
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpRequest, HttpResponse, HttpHeaders } from '@angular/common/http';
-import { BaseService as __BaseService } from '../base-service';
-import { CocesoRestConfiguration as __Configuration } from '../coceso-rest-configuration';
-import { StrictHttpResponse as __StrictHttpResponse } from '../strict-http-response';
-import { Observable as __Observable } from 'rxjs';
-import { map as __map, filter as __filter } from 'rxjs/operators';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { BaseService } from '../base-service';
+import { CocesoRestConfiguration } from '../coceso-rest-configuration';
+import { StrictHttpResponse } from '../strict-http-response';
+import { RequestBuilder } from '../request-builder';
+import { Observable } from 'rxjs';
+import { map, filter } from 'rxjs/operators';
 
-import { PatientDto } from '../models/patient-dto';
 import { PatientBriefDto } from '../models/patient-brief-dto';
 import { PatientCreateDto } from '../models/patient-create-dto';
+import { PatientDto } from '../models/patient-dto';
 import { PatientUpdateDto } from '../models/patient-update-dto';
 
-/**
- * Patient Endpoint
- */
 @Injectable({
   providedIn: 'root',
 })
-class PatientEndpointService extends __BaseService {
-  static readonly getAllPatientsPath = '/concerns/{concern}/patients';
-  static readonly createPatientPath = '/concerns/{concern}/patients';
-  static readonly updatePatientPath = '/concerns/{concern}/patients/{patient}';
-
+export class PatientEndpointService extends BaseService {
   constructor(
-    config: __Configuration,
+    config: CocesoRestConfiguration,
     http: HttpClient
   ) {
     super(config, http);
   }
 
   /**
-   * @param concern concern
-   * @return OK
+   * Path part for operation getAllPatients
    */
-  getAllPatientsResponse(concern: number): __Observable<__StrictHttpResponse<Array<PatientDto>>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
-
-    let req = new HttpRequest<any>(
-      'GET',
-      this.rootUrl + `/concerns/${concern}/patients`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
-
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<Array<PatientDto>>;
-      })
-    );
-  }
-  /**
-   * @param concern concern
-   * @return OK
-   */
-  getAllPatients(concern: number): __Observable<Array<PatientDto>> {
-    return this.getAllPatientsResponse(concern).pipe(
-      __map(_r => _r.body as Array<PatientDto>)
-    );
-  }
+  static readonly GetAllPatientsPath = '/concerns/{concern}/patients';
 
   /**
-   * @param params The `PatientEndpointService.CreatePatientParams` containing the following parameters:
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getAllPatients()` instead.
    *
-   * - `data`: data
-   *
-   * - `concern`: concern
-   *
-   * @return OK
+   * This method doesn't expect any request body.
    */
-  createPatientResponse(params: PatientEndpointService.CreatePatientParams): __Observable<__StrictHttpResponse<PatientBriefDto>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
-    __body = params.data;
-
-    let req = new HttpRequest<any>(
-      'POST',
-      this.rootUrl + `/concerns/${params.concern}/patients`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
-
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<PatientBriefDto>;
-      })
-    );
-  }
-  /**
-   * @param params The `PatientEndpointService.CreatePatientParams` containing the following parameters:
-   *
-   * - `data`: data
-   *
-   * - `concern`: concern
-   *
-   * @return OK
-   */
-  createPatient(params: PatientEndpointService.CreatePatientParams): __Observable<PatientBriefDto> {
-    return this.createPatientResponse(params).pipe(
-      __map(_r => _r.body as PatientBriefDto)
-    );
-  }
-
-  /**
-   * @param params The `PatientEndpointService.UpdatePatientParams` containing the following parameters:
-   *
-   * - `patient`: patient
-   *
-   * - `data`: data
-   *
-   * - `concern`: concern
-   */
-  updatePatientResponse(params: PatientEndpointService.UpdatePatientParams): __Observable<__StrictHttpResponse<null>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
-
-    __body = params.data;
-
-    let req = new HttpRequest<any>(
-      'PUT',
-      this.rootUrl + `/concerns/${params.concern}/patients/${params.patient}`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
-
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
-      })
-    );
-  }
-  /**
-   * @param params The `PatientEndpointService.UpdatePatientParams` containing the following parameters:
-   *
-   * - `patient`: patient
-   *
-   * - `data`: data
-   *
-   * - `concern`: concern
-   */
-  updatePatient(params: PatientEndpointService.UpdatePatientParams): __Observable<null> {
-    return this.updatePatientResponse(params).pipe(
-      __map(_r => _r.body as null)
-    );
-  }
-}
-
-module PatientEndpointService {
-
-  /**
-   * Parameters for createPatient
-   */
-  export interface CreatePatientParams {
-
-    /**
-     * data
-     */
-    data: PatientCreateDto;
-
-    /**
-     * concern
-     */
+  getAllPatients$Response(params: {
     concern: number;
+  }): Observable<StrictHttpResponse<Array<PatientDto>>> {
+
+    const rb = new RequestBuilder(this.rootUrl, PatientEndpointService.GetAllPatientsPath, 'get');
+    if (params) {
+      rb.path('concern', params.concern, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<Array<PatientDto>>;
+      })
+    );
   }
 
   /**
-   * Parameters for updatePatient
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getAllPatients$Response()` instead.
+   *
+   * This method doesn't expect any request body.
    */
-  export interface UpdatePatientParams {
+  getAllPatients(params: {
+    concern: number;
+  }): Observable<Array<PatientDto>> {
 
-    /**
-     * patient
-     */
+    return this.getAllPatients$Response(params).pipe(
+      map((r: StrictHttpResponse<Array<PatientDto>>) => r.body as Array<PatientDto>)
+    );
+  }
+
+  /**
+   * Path part for operation createPatient
+   */
+  static readonly CreatePatientPath = '/concerns/{concern}/patients';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `createPatient()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createPatient$Response(params: {
+    concern: number;
+    body: PatientCreateDto
+  }): Observable<StrictHttpResponse<PatientBriefDto>> {
+
+    const rb = new RequestBuilder(this.rootUrl, PatientEndpointService.CreatePatientPath, 'post');
+    if (params) {
+      rb.path('concern', params.concern, {});
+      rb.body(params.body, 'application/json');
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<PatientBriefDto>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `createPatient$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createPatient(params: {
+    concern: number;
+    body: PatientCreateDto
+  }): Observable<PatientBriefDto> {
+
+    return this.createPatient$Response(params).pipe(
+      map((r: StrictHttpResponse<PatientBriefDto>) => r.body as PatientBriefDto)
+    );
+  }
+
+  /**
+   * Path part for operation updatePatient
+   */
+  static readonly UpdatePatientPath = '/concerns/{concern}/patients/{patient}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updatePatient()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updatePatient$Response(params: {
+    concern: number;
     patient: number;
+    body: PatientUpdateDto
+  }): Observable<StrictHttpResponse<void>> {
 
-    /**
-     * data
-     */
-    data: PatientUpdateDto;
+    const rb = new RequestBuilder(this.rootUrl, PatientEndpointService.UpdatePatientPath, 'put');
+    if (params) {
+      rb.path('concern', params.concern, {});
+      rb.path('patient', params.patient, {});
+      rb.body(params.body, 'application/json');
+    }
 
-    /**
-     * concern
-     */
-    concern: number;
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
   }
-}
 
-export { PatientEndpointService }
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `updatePatient$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updatePatient(params: {
+    concern: number;
+    patient: number;
+    body: PatientUpdateDto
+  }): Observable<void> {
+
+    return this.updatePatient$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+}

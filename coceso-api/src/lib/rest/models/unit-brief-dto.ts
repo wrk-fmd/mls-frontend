@@ -1,5 +1,6 @@
+/* tslint:disable */
 /* eslint-disable */
 export interface UnitBriefDto {
-  call?: string;
-  id?: number;
+  call: string;
+  id: number;
 }

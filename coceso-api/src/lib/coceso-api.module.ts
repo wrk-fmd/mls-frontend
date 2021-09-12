@@ -3,7 +3,7 @@ import {InjectableRxStompConfig} from '@stomp/ng2-stompjs';
 
 import {buildWebSocketUrl, CommonDataModule} from 'mls-common-data';
 
-import {CocesoRestConfiguration, CocesoRestConfigurationInterface} from './rest/coceso-rest-configuration';
+import {CocesoRestConfiguration, CocesoRestConfigurationParams} from './rest/coceso-rest-configuration';
 import {CocesoRestModule} from './rest/coceso-rest.module';
 import {CocesoWatchService} from './stomp/coceso.watch.service';
 
@@ -13,7 +13,7 @@ import {CocesoWatchService} from './stomp/coceso.watch.service';
   ]
 })
 export class CocesoApiModule {
-  static forRoot(customParams: CocesoRestConfigurationInterface): ModuleWithProviders<CocesoApiModule> {
+  static forRoot(customParams: CocesoRestConfigurationParams): ModuleWithProviders<CocesoApiModule> {
     return {
       ngModule: CocesoApiModule,
       providers: [

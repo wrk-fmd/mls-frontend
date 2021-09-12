@@ -1,7 +1,10 @@
+/* tslint:disable */
 /* eslint-disable */
+import { AlarmRecipientsDto } from './alarm-recipients-dto';
+import { AlarmTypeDto } from './alarm-type-dto';
 export interface SendAlarmDto {
-  message?: string;
-  recipients?: 'ALL' | 'UNSENT' | 'LIST';
-  type?: 'ALARM' | 'CASUS';
+  message: string;
+  recipients: AlarmRecipientsDto;
+  type: AlarmTypeDto;
   units?: Array<number>;
 }

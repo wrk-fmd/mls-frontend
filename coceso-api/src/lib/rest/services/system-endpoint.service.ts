@@ -1,100 +1,112 @@
+/* tslint:disable */
 /* eslint-disable */
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpRequest, HttpResponse, HttpHeaders } from '@angular/common/http';
-import { BaseService as __BaseService } from '../base-service';
-import { CocesoRestConfiguration as __Configuration } from '../coceso-rest-configuration';
-import { StrictHttpResponse as __StrictHttpResponse } from '../strict-http-response';
-import { Observable as __Observable } from 'rxjs';
-import { map as __map, filter as __filter } from 'rxjs/operators';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { BaseService } from '../base-service';
+import { CocesoRestConfiguration } from '../coceso-rest-configuration';
+import { StrictHttpResponse } from '../strict-http-response';
+import { RequestBuilder } from '../request-builder';
+import { Observable } from 'rxjs';
+import { map, filter } from 'rxjs/operators';
 
 import { SystemInfoDto } from '../models/system-info-dto';
 import { SystemTimeDto } from '../models/system-time-dto';
 
-/**
- * System Endpoint
- */
 @Injectable({
   providedIn: 'root',
 })
-class SystemEndpointService extends __BaseService {
-  static readonly getVersionPath = '/system';
-  static readonly getSystemTimePath = '/system/time';
-
+export class SystemEndpointService extends BaseService {
   constructor(
-    config: __Configuration,
+    config: CocesoRestConfiguration,
     http: HttpClient
   ) {
     super(config, http);
   }
 
   /**
-   * @return OK
+   * Path part for operation getVersion
    */
-  getVersionResponse(): __Observable<__StrictHttpResponse<SystemInfoDto>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
-    let req = new HttpRequest<any>(
-      'GET',
-      this.rootUrl + `/system`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
+  static readonly GetVersionPath = '/system';
 
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<SystemInfoDto>;
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getVersion()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getVersion$Response(params?: {
+  }): Observable<StrictHttpResponse<SystemInfoDto>> {
+
+    const rb = new RequestBuilder(this.rootUrl, SystemEndpointService.GetVersionPath, 'get');
+    if (params) {
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<SystemInfoDto>;
       })
     );
   }
+
   /**
-   * @return OK
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getVersion$Response()` instead.
+   *
+   * This method doesn't expect any request body.
    */
-  getVersion(): __Observable<SystemInfoDto> {
-    return this.getVersionResponse().pipe(
-      __map(_r => _r.body as SystemInfoDto)
+  getVersion(params?: {
+  }): Observable<SystemInfoDto> {
+
+    return this.getVersion$Response(params).pipe(
+      map((r: StrictHttpResponse<SystemInfoDto>) => r.body as SystemInfoDto)
     );
   }
 
   /**
-   * @return OK
+   * Path part for operation getSystemTime
    */
-  getSystemTimeResponse(): __Observable<__StrictHttpResponse<SystemTimeDto>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
-    let req = new HttpRequest<any>(
-      'GET',
-      this.rootUrl + `/system/time`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
+  static readonly GetSystemTimePath = '/system/time';
 
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<SystemTimeDto>;
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getSystemTime()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getSystemTime$Response(params?: {
+  }): Observable<StrictHttpResponse<SystemTimeDto>> {
+
+    const rb = new RequestBuilder(this.rootUrl, SystemEndpointService.GetSystemTimePath, 'get');
+    if (params) {
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<SystemTimeDto>;
       })
     );
   }
+
   /**
-   * @return OK
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getSystemTime$Response()` instead.
+   *
+   * This method doesn't expect any request body.
    */
-  getSystemTime(): __Observable<SystemTimeDto> {
-    return this.getSystemTimeResponse().pipe(
-      __map(_r => _r.body as SystemTimeDto)
+  getSystemTime(params?: {
+  }): Observable<SystemTimeDto> {
+
+    return this.getSystemTime$Response(params).pipe(
+      map((r: StrictHttpResponse<SystemTimeDto>) => r.body as SystemTimeDto)
     );
   }
-}
 
-module SystemEndpointService {
 }
-
-export { SystemEndpointService }

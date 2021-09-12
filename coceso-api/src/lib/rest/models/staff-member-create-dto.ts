@@ -1,9 +1,10 @@
+/* tslint:disable */
 /* eslint-disable */
 import { ContactDto } from './contact-dto';
 export interface StaffMemberCreateDto {
   contacts?: Array<ContactDto>;
-  firstname?: string;
+  firstname: string;
   info?: string;
-  lastname?: string;
+  lastname: string;
   personnelId?: Array<number>;
 }

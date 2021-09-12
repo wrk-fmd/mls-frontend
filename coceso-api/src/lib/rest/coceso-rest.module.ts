@@ -1,7 +1,8 @@
+/* tslint:disable */
 /* eslint-disable */
-import { NgModule, ModuleWithProviders } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
-import { CocesoRestConfiguration, CocesoRestConfigurationInterface } from './coceso-rest-configuration';
+import { NgModule, ModuleWithProviders, SkipSelf, Optional } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { CocesoRestConfiguration, CocesoRestConfigurationParams } from './coceso-rest-configuration';
 
 import { ConcernEndpointService } from './services/concern-endpoint.service';
 import { ContainerEndpointService } from './services/container-endpoint.service';
@@ -17,18 +18,13 @@ import { StaffEndpointService } from './services/staff-endpoint.service';
 import { SystemEndpointService } from './services/system-endpoint.service';
 
 /**
- * Provider for all CocesoRest services, plus CocesoRestConfiguration
+ * Module that provides all services and configuration.
  */
 @NgModule({
-  imports: [
-    HttpClientModule
-  ],
-  exports: [
-    HttpClientModule
-  ],
+  imports: [],
+  exports: [],
   declarations: [],
   providers: [
-    CocesoRestConfiguration,
     ConcernEndpointService,
     ContainerEndpointService,
     IncidentEndpointService,
@@ -40,19 +36,33 @@ import { SystemEndpointService } from './services/system-endpoint.service';
     LoggingEndpointService,
     PointEndpointService,
     StaffEndpointService,
-    SystemEndpointService
+    SystemEndpointService,
+    CocesoRestConfiguration
   ],
 })
 export class CocesoRestModule {
-  static forRoot(customParams: CocesoRestConfigurationInterface): ModuleWithProviders<CocesoRestModule> {
+  static forRoot(params: CocesoRestConfigurationParams): ModuleWithProviders<CocesoRestModule> {
     return {
       ngModule: CocesoRestModule,
       providers: [
         {
           provide: CocesoRestConfiguration,
-          useValue: {rootUrl: customParams.rootUrl}
+          useValue: params
         }
       ]
+    }
+  }
+
+  constructor( 
+    @Optional() @SkipSelf() parentModule: CocesoRestModule,
+    @Optional() http: HttpClient
+  ) {
+    if (parentModule) {
+      throw new Error('CocesoRestModule is already loaded. Import in your base AppModule only.');
+    }
+    if (!http) {
+      throw new Error('You need to import the HttpClientModule in your AppModule! \n' +
+      'See also https://github.com/angular/angular/issues/20575');
     }
   }
 }

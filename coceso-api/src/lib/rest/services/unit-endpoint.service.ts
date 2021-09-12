@@ -1,721 +1,578 @@
+/* tslint:disable */
 /* eslint-disable */
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpRequest, HttpResponse, HttpHeaders } from '@angular/common/http';
-import { BaseService as __BaseService } from '../base-service';
-import { CocesoRestConfiguration as __Configuration } from '../coceso-rest-configuration';
-import { StrictHttpResponse as __StrictHttpResponse } from '../strict-http-response';
-import { Observable as __Observable } from 'rxjs';
-import { map as __map, filter as __filter } from 'rxjs/operators';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { BaseService } from '../base-service';
+import { CocesoRestConfiguration } from '../coceso-rest-configuration';
+import { StrictHttpResponse } from '../strict-http-response';
+import { RequestBuilder } from '../request-builder';
+import { Observable } from 'rxjs';
+import { map, filter } from 'rxjs/operators';
 
-import { UnitDto } from '../models/unit-dto';
+import { SendMessageDto } from '../models/send-message-dto';
+import { UnitBatchCreateDto } from '../models/unit-batch-create-dto';
 import { UnitBriefDto } from '../models/unit-brief-dto';
 import { UnitCreateDto } from '../models/unit-create-dto';
-import { UnitBatchCreateDto } from '../models/unit-batch-create-dto';
+import { UnitDto } from '../models/unit-dto';
 import { UnitUpdateDto } from '../models/unit-update-dto';
-import { SendMessageDto } from '../models/send-message-dto';
 
-/**
- * Unit Endpoint
- */
 @Injectable({
   providedIn: 'root',
 })
-class UnitEndpointService extends __BaseService {
-  static readonly getAllUnitsPath = '/concerns/{concern}/units';
-  static readonly createUnitPath = '/concerns/{concern}/units';
-  static readonly createUnitsBatchPath = '/concerns/{concern}/units/batch';
-  static readonly updateUnitPath = '/concerns/{concern}/units/{unit}';
-  static readonly removeUnitPath = '/concerns/{concern}/units/{unit}';
-  static readonly assignCrewMemberPath = '/concerns/{concern}/units/{unit}/crew/{member}';
-  static readonly removeCrewMemberPath = '/concerns/{concern}/units/{unit}/crew/{member}';
-  static readonly sendMessagePath = '/concerns/{concern}/units/{unit}/message';
-  static readonly holdPositionPath = '/concerns/{concern}/units/{unit}/tasks/holdPosition';
-  static readonly sendHomePath = '/concerns/{concern}/units/{unit}/tasks/home';
-  static readonly standbyPath = '/concerns/{concern}/units/{unit}/tasks/standby';
-
+export class UnitEndpointService extends BaseService {
   constructor(
-    config: __Configuration,
+    config: CocesoRestConfiguration,
     http: HttpClient
   ) {
     super(config, http);
   }
 
   /**
-   * @param concern concern
-   * @return OK
+   * Path part for operation getAllUnits
    */
-  getAllUnitsResponse(concern: number): __Observable<__StrictHttpResponse<Array<UnitDto>>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
-
-    let req = new HttpRequest<any>(
-      'GET',
-      this.rootUrl + `/concerns/${concern}/units`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
-
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<Array<UnitDto>>;
-      })
-    );
-  }
-  /**
-   * @param concern concern
-   * @return OK
-   */
-  getAllUnits(concern: number): __Observable<Array<UnitDto>> {
-    return this.getAllUnitsResponse(concern).pipe(
-      __map(_r => _r.body as Array<UnitDto>)
-    );
-  }
+  static readonly GetAllUnitsPath = '/concerns/{concern}/units';
 
   /**
-   * @param params The `UnitEndpointService.CreateUnitParams` containing the following parameters:
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getAllUnits()` instead.
    *
-   * - `data`: data
-   *
-   * - `concern`: concern
-   *
-   * @return OK
+   * This method doesn't expect any request body.
    */
-  createUnitResponse(params: UnitEndpointService.CreateUnitParams): __Observable<__StrictHttpResponse<UnitBriefDto>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
-    __body = params.data;
-
-    let req = new HttpRequest<any>(
-      'POST',
-      this.rootUrl + `/concerns/${params.concern}/units`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
-
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<UnitBriefDto>;
-      })
-    );
-  }
-  /**
-   * @param params The `UnitEndpointService.CreateUnitParams` containing the following parameters:
-   *
-   * - `data`: data
-   *
-   * - `concern`: concern
-   *
-   * @return OK
-   */
-  createUnit(params: UnitEndpointService.CreateUnitParams): __Observable<UnitBriefDto> {
-    return this.createUnitResponse(params).pipe(
-      __map(_r => _r.body as UnitBriefDto)
-    );
-  }
-
-  /**
-   * @param params The `UnitEndpointService.CreateUnitsBatchParams` containing the following parameters:
-   *
-   * - `data`: data
-   *
-   * - `concern`: concern
-   *
-   * @return OK
-   */
-  createUnitsBatchResponse(params: UnitEndpointService.CreateUnitsBatchParams): __Observable<__StrictHttpResponse<Array<UnitBriefDto>>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
-    __body = params.data;
-
-    let req = new HttpRequest<any>(
-      'POST',
-      this.rootUrl + `/concerns/${params.concern}/units/batch`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
-
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<Array<UnitBriefDto>>;
-      })
-    );
-  }
-  /**
-   * @param params The `UnitEndpointService.CreateUnitsBatchParams` containing the following parameters:
-   *
-   * - `data`: data
-   *
-   * - `concern`: concern
-   *
-   * @return OK
-   */
-  createUnitsBatch(params: UnitEndpointService.CreateUnitsBatchParams): __Observable<Array<UnitBriefDto>> {
-    return this.createUnitsBatchResponse(params).pipe(
-      __map(_r => _r.body as Array<UnitBriefDto>)
-    );
-  }
-
-  /**
-   * @param params The `UnitEndpointService.UpdateUnitParams` containing the following parameters:
-   *
-   * - `unit`: unit
-   *
-   * - `data`: data
-   *
-   * - `concern`: concern
-   */
-  updateUnitResponse(params: UnitEndpointService.UpdateUnitParams): __Observable<__StrictHttpResponse<null>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
-
-    __body = params.data;
-
-    let req = new HttpRequest<any>(
-      'PUT',
-      this.rootUrl + `/concerns/${params.concern}/units/${params.unit}`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
-
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
-      })
-    );
-  }
-  /**
-   * @param params The `UnitEndpointService.UpdateUnitParams` containing the following parameters:
-   *
-   * - `unit`: unit
-   *
-   * - `data`: data
-   *
-   * - `concern`: concern
-   */
-  updateUnit(params: UnitEndpointService.UpdateUnitParams): __Observable<null> {
-    return this.updateUnitResponse(params).pipe(
-      __map(_r => _r.body as null)
-    );
-  }
-
-  /**
-   * @param params The `UnitEndpointService.RemoveUnitParams` containing the following parameters:
-   *
-   * - `unit`: unit
-   *
-   * - `concern`: concern
-   */
-  removeUnitResponse(params: UnitEndpointService.RemoveUnitParams): __Observable<__StrictHttpResponse<null>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
-
-
-    let req = new HttpRequest<any>(
-      'DELETE',
-      this.rootUrl + `/concerns/${params.concern}/units/${params.unit}`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
-
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
-      })
-    );
-  }
-  /**
-   * @param params The `UnitEndpointService.RemoveUnitParams` containing the following parameters:
-   *
-   * - `unit`: unit
-   *
-   * - `concern`: concern
-   */
-  removeUnit(params: UnitEndpointService.RemoveUnitParams): __Observable<null> {
-    return this.removeUnitResponse(params).pipe(
-      __map(_r => _r.body as null)
-    );
-  }
-
-  /**
-   * @param params The `UnitEndpointService.AssignCrewMemberParams` containing the following parameters:
-   *
-   * - `unit`: unit
-   *
-   * - `member`: member
-   *
-   * - `concern`: concern
-   */
-  assignCrewMemberResponse(params: UnitEndpointService.AssignCrewMemberParams): __Observable<__StrictHttpResponse<null>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
-
-
-
-    let req = new HttpRequest<any>(
-      'PUT',
-      this.rootUrl + `/concerns/${params.concern}/units/${params.unit}/crew/${params.member}`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
-
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
-      })
-    );
-  }
-  /**
-   * @param params The `UnitEndpointService.AssignCrewMemberParams` containing the following parameters:
-   *
-   * - `unit`: unit
-   *
-   * - `member`: member
-   *
-   * - `concern`: concern
-   */
-  assignCrewMember(params: UnitEndpointService.AssignCrewMemberParams): __Observable<null> {
-    return this.assignCrewMemberResponse(params).pipe(
-      __map(_r => _r.body as null)
-    );
-  }
-
-  /**
-   * @param params The `UnitEndpointService.RemoveCrewMemberParams` containing the following parameters:
-   *
-   * - `unit`: unit
-   *
-   * - `member`: member
-   *
-   * - `concern`: concern
-   */
-  removeCrewMemberResponse(params: UnitEndpointService.RemoveCrewMemberParams): __Observable<__StrictHttpResponse<null>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
-
-
-
-    let req = new HttpRequest<any>(
-      'DELETE',
-      this.rootUrl + `/concerns/${params.concern}/units/${params.unit}/crew/${params.member}`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
-
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
-      })
-    );
-  }
-  /**
-   * @param params The `UnitEndpointService.RemoveCrewMemberParams` containing the following parameters:
-   *
-   * - `unit`: unit
-   *
-   * - `member`: member
-   *
-   * - `concern`: concern
-   */
-  removeCrewMember(params: UnitEndpointService.RemoveCrewMemberParams): __Observable<null> {
-    return this.removeCrewMemberResponse(params).pipe(
-      __map(_r => _r.body as null)
-    );
-  }
-
-  /**
-   * @param params The `UnitEndpointService.SendMessageParams` containing the following parameters:
-   *
-   * - `unit`: unit
-   *
-   * - `data`: data
-   *
-   * - `concern`: concern
-   */
-  sendMessageResponse(params: UnitEndpointService.SendMessageParams): __Observable<__StrictHttpResponse<null>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
-
-    __body = params.data;
-
-    let req = new HttpRequest<any>(
-      'PUT',
-      this.rootUrl + `/concerns/${params.concern}/units/${params.unit}/message`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
-
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
-      })
-    );
-  }
-  /**
-   * @param params The `UnitEndpointService.SendMessageParams` containing the following parameters:
-   *
-   * - `unit`: unit
-   *
-   * - `data`: data
-   *
-   * - `concern`: concern
-   */
-  sendMessage(params: UnitEndpointService.SendMessageParams): __Observable<null> {
-    return this.sendMessageResponse(params).pipe(
-      __map(_r => _r.body as null)
-    );
-  }
-
-  /**
-   * @param params The `UnitEndpointService.HoldPositionParams` containing the following parameters:
-   *
-   * - `unit`: unit
-   *
-   * - `concern`: concern
-   */
-  holdPositionResponse(params: UnitEndpointService.HoldPositionParams): __Observable<__StrictHttpResponse<null>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
-
-
-    let req = new HttpRequest<any>(
-      'POST',
-      this.rootUrl + `/concerns/${params.concern}/units/${params.unit}/tasks/holdPosition`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
-
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
-      })
-    );
-  }
-  /**
-   * @param params The `UnitEndpointService.HoldPositionParams` containing the following parameters:
-   *
-   * - `unit`: unit
-   *
-   * - `concern`: concern
-   */
-  holdPosition(params: UnitEndpointService.HoldPositionParams): __Observable<null> {
-    return this.holdPositionResponse(params).pipe(
-      __map(_r => _r.body as null)
-    );
-  }
-
-  /**
-   * @param params The `UnitEndpointService.SendHomeParams` containing the following parameters:
-   *
-   * - `unit`: unit
-   *
-   * - `concern`: concern
-   */
-  sendHomeResponse(params: UnitEndpointService.SendHomeParams): __Observable<__StrictHttpResponse<null>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
-
-
-    let req = new HttpRequest<any>(
-      'POST',
-      this.rootUrl + `/concerns/${params.concern}/units/${params.unit}/tasks/home`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
-
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
-      })
-    );
-  }
-  /**
-   * @param params The `UnitEndpointService.SendHomeParams` containing the following parameters:
-   *
-   * - `unit`: unit
-   *
-   * - `concern`: concern
-   */
-  sendHome(params: UnitEndpointService.SendHomeParams): __Observable<null> {
-    return this.sendHomeResponse(params).pipe(
-      __map(_r => _r.body as null)
-    );
-  }
-
-  /**
-   * @param params The `UnitEndpointService.StandbyParams` containing the following parameters:
-   *
-   * - `unit`: unit
-   *
-   * - `concern`: concern
-   */
-  standbyResponse(params: UnitEndpointService.StandbyParams): __Observable<__StrictHttpResponse<null>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
-
-
-    let req = new HttpRequest<any>(
-      'POST',
-      this.rootUrl + `/concerns/${params.concern}/units/${params.unit}/tasks/standby`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
-
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
-      })
-    );
-  }
-  /**
-   * @param params The `UnitEndpointService.StandbyParams` containing the following parameters:
-   *
-   * - `unit`: unit
-   *
-   * - `concern`: concern
-   */
-  standby(params: UnitEndpointService.StandbyParams): __Observable<null> {
-    return this.standbyResponse(params).pipe(
-      __map(_r => _r.body as null)
-    );
-  }
-}
-
-module UnitEndpointService {
-
-  /**
-   * Parameters for createUnit
-   */
-  export interface CreateUnitParams {
-
-    /**
-     * data
-     */
-    data: UnitCreateDto;
-
-    /**
-     * concern
-     */
+  getAllUnits$Response(params: {
     concern: number;
+  }): Observable<StrictHttpResponse<Array<UnitDto>>> {
+
+    const rb = new RequestBuilder(this.rootUrl, UnitEndpointService.GetAllUnitsPath, 'get');
+    if (params) {
+      rb.path('concern', params.concern, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<Array<UnitDto>>;
+      })
+    );
   }
 
   /**
-   * Parameters for createUnitsBatch
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getAllUnits$Response()` instead.
+   *
+   * This method doesn't expect any request body.
    */
-  export interface CreateUnitsBatchParams {
-
-    /**
-     * data
-     */
-    data: UnitBatchCreateDto;
-
-    /**
-     * concern
-     */
+  getAllUnits(params: {
     concern: number;
+  }): Observable<Array<UnitDto>> {
+
+    return this.getAllUnits$Response(params).pipe(
+      map((r: StrictHttpResponse<Array<UnitDto>>) => r.body as Array<UnitDto>)
+    );
   }
 
   /**
-   * Parameters for updateUnit
+   * Path part for operation createUnit
    */
-  export interface UpdateUnitParams {
+  static readonly CreateUnitPath = '/concerns/{concern}/units';
 
-    /**
-     * unit
-     */
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `createUnit()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createUnit$Response(params: {
+    concern: number;
+    body: UnitCreateDto
+  }): Observable<StrictHttpResponse<UnitBriefDto>> {
+
+    const rb = new RequestBuilder(this.rootUrl, UnitEndpointService.CreateUnitPath, 'post');
+    if (params) {
+      rb.path('concern', params.concern, {});
+      rb.body(params.body, 'application/json');
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<UnitBriefDto>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `createUnit$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createUnit(params: {
+    concern: number;
+    body: UnitCreateDto
+  }): Observable<UnitBriefDto> {
+
+    return this.createUnit$Response(params).pipe(
+      map((r: StrictHttpResponse<UnitBriefDto>) => r.body as UnitBriefDto)
+    );
+  }
+
+  /**
+   * Path part for operation createUnitsBatch
+   */
+  static readonly CreateUnitsBatchPath = '/concerns/{concern}/units/batch';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `createUnitsBatch()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createUnitsBatch$Response(params: {
+    concern: number;
+    body: UnitBatchCreateDto
+  }): Observable<StrictHttpResponse<Array<UnitBriefDto>>> {
+
+    const rb = new RequestBuilder(this.rootUrl, UnitEndpointService.CreateUnitsBatchPath, 'post');
+    if (params) {
+      rb.path('concern', params.concern, {});
+      rb.body(params.body, 'application/json');
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<Array<UnitBriefDto>>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `createUnitsBatch$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createUnitsBatch(params: {
+    concern: number;
+    body: UnitBatchCreateDto
+  }): Observable<Array<UnitBriefDto>> {
+
+    return this.createUnitsBatch$Response(params).pipe(
+      map((r: StrictHttpResponse<Array<UnitBriefDto>>) => r.body as Array<UnitBriefDto>)
+    );
+  }
+
+  /**
+   * Path part for operation updateUnit
+   */
+  static readonly UpdateUnitPath = '/concerns/{concern}/units/{unit}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateUnit()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateUnit$Response(params: {
+    concern: number;
     unit: number;
+    body: UnitUpdateDto
+  }): Observable<StrictHttpResponse<void>> {
 
-    /**
-     * data
-     */
-    data: UnitUpdateDto;
+    const rb = new RequestBuilder(this.rootUrl, UnitEndpointService.UpdateUnitPath, 'put');
+    if (params) {
+      rb.path('concern', params.concern, {});
+      rb.path('unit', params.unit, {});
+      rb.body(params.body, 'application/json');
+    }
 
-    /**
-     * concern
-     */
-    concern: number;
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
   }
 
   /**
-   * Parameters for removeUnit
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `updateUnit$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  export interface RemoveUnitParams {
-
-    /**
-     * unit
-     */
-    unit: number;
-
-    /**
-     * concern
-     */
+  updateUnit(params: {
     concern: number;
+    unit: number;
+    body: UnitUpdateDto
+  }): Observable<void> {
+
+    return this.updateUnit$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
   }
 
   /**
-   * Parameters for assignCrewMember
+   * Path part for operation removeUnit
    */
-  export interface AssignCrewMemberParams {
+  static readonly RemoveUnitPath = '/concerns/{concern}/units/{unit}';
 
-    /**
-     * unit
-     */
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `removeUnit()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  removeUnit$Response(params: {
+    concern: number;
     unit: number;
+  }): Observable<StrictHttpResponse<void>> {
 
-    /**
-     * member
-     */
+    const rb = new RequestBuilder(this.rootUrl, UnitEndpointService.RemoveUnitPath, 'delete');
+    if (params) {
+      rb.path('concern', params.concern, {});
+      rb.path('unit', params.unit, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `removeUnit$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  removeUnit(params: {
+    concern: number;
+    unit: number;
+  }): Observable<void> {
+
+    return this.removeUnit$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
+   * Path part for operation assignCrewMember
+   */
+  static readonly AssignCrewMemberPath = '/concerns/{concern}/units/{unit}/crew/{member}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `assignCrewMember()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  assignCrewMember$Response(params: {
+    concern: number;
+    unit: number;
     member: number;
+  }): Observable<StrictHttpResponse<void>> {
 
-    /**
-     * concern
-     */
-    concern: number;
+    const rb = new RequestBuilder(this.rootUrl, UnitEndpointService.AssignCrewMemberPath, 'put');
+    if (params) {
+      rb.path('concern', params.concern, {});
+      rb.path('unit', params.unit, {});
+      rb.path('member', params.member, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
   }
 
   /**
-   * Parameters for removeCrewMember
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `assignCrewMember$Response()` instead.
+   *
+   * This method doesn't expect any request body.
    */
-  export interface RemoveCrewMemberParams {
-
-    /**
-     * unit
-     */
+  assignCrewMember(params: {
+    concern: number;
     unit: number;
-
-    /**
-     * member
-     */
     member: number;
+  }): Observable<void> {
 
-    /**
-     * concern
-     */
-    concern: number;
+    return this.assignCrewMember$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
   }
 
   /**
-   * Parameters for sendMessage
+   * Path part for operation removeCrewMember
    */
-  export interface SendMessageParams {
+  static readonly RemoveCrewMemberPath = '/concerns/{concern}/units/{unit}/crew/{member}';
 
-    /**
-     * unit
-     */
-    unit: number;
-
-    /**
-     * data
-     */
-    data: SendMessageDto;
-
-    /**
-     * concern
-     */
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `removeCrewMember()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  removeCrewMember$Response(params: {
     concern: number;
+    unit: number;
+    member: number;
+  }): Observable<StrictHttpResponse<void>> {
+
+    const rb = new RequestBuilder(this.rootUrl, UnitEndpointService.RemoveCrewMemberPath, 'delete');
+    if (params) {
+      rb.path('concern', params.concern, {});
+      rb.path('unit', params.unit, {});
+      rb.path('member', params.member, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
   }
 
   /**
-   * Parameters for holdPosition
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `removeCrewMember$Response()` instead.
+   *
+   * This method doesn't expect any request body.
    */
-  export interface HoldPositionParams {
-
-    /**
-     * unit
-     */
-    unit: number;
-
-    /**
-     * concern
-     */
+  removeCrewMember(params: {
     concern: number;
+    unit: number;
+    member: number;
+  }): Observable<void> {
+
+    return this.removeCrewMember$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
   }
 
   /**
-   * Parameters for sendHome
+   * Path part for operation sendMessage
    */
-  export interface SendHomeParams {
+  static readonly SendMessagePath = '/concerns/{concern}/units/{unit}/message';
 
-    /**
-     * unit
-     */
-    unit: number;
-
-    /**
-     * concern
-     */
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `sendMessage()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  sendMessage$Response(params: {
     concern: number;
+    unit: number;
+    body: SendMessageDto
+  }): Observable<StrictHttpResponse<void>> {
+
+    const rb = new RequestBuilder(this.rootUrl, UnitEndpointService.SendMessagePath, 'put');
+    if (params) {
+      rb.path('concern', params.concern, {});
+      rb.path('unit', params.unit, {});
+      rb.body(params.body, 'application/json');
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
   }
 
   /**
-   * Parameters for standby
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `sendMessage$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  export interface StandbyParams {
-
-    /**
-     * unit
-     */
-    unit: number;
-
-    /**
-     * concern
-     */
+  sendMessage(params: {
     concern: number;
+    unit: number;
+    body: SendMessageDto
+  }): Observable<void> {
+
+    return this.sendMessage$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
   }
+
+  /**
+   * Path part for operation holdPosition
+   */
+  static readonly HoldPositionPath = '/concerns/{concern}/units/{unit}/tasks/holdPosition';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `holdPosition()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  holdPosition$Response(params: {
+    concern: number;
+    unit: number;
+  }): Observable<StrictHttpResponse<void>> {
+
+    const rb = new RequestBuilder(this.rootUrl, UnitEndpointService.HoldPositionPath, 'post');
+    if (params) {
+      rb.path('concern', params.concern, {});
+      rb.path('unit', params.unit, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `holdPosition$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  holdPosition(params: {
+    concern: number;
+    unit: number;
+  }): Observable<void> {
+
+    return this.holdPosition$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
+   * Path part for operation sendHome
+   */
+  static readonly SendHomePath = '/concerns/{concern}/units/{unit}/tasks/home';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `sendHome()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  sendHome$Response(params: {
+    concern: number;
+    unit: number;
+  }): Observable<StrictHttpResponse<void>> {
+
+    const rb = new RequestBuilder(this.rootUrl, UnitEndpointService.SendHomePath, 'post');
+    if (params) {
+      rb.path('concern', params.concern, {});
+      rb.path('unit', params.unit, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `sendHome$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  sendHome(params: {
+    concern: number;
+    unit: number;
+  }): Observable<void> {
+
+    return this.sendHome$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
+   * Path part for operation standby
+   */
+  static readonly StandbyPath = '/concerns/{concern}/units/{unit}/tasks/standby';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `standby()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  standby$Response(params: {
+    concern: number;
+    unit: number;
+  }): Observable<StrictHttpResponse<void>> {
+
+    const rb = new RequestBuilder(this.rootUrl, UnitEndpointService.StandbyPath, 'post');
+    if (params) {
+      rb.path('concern', params.concern, {});
+      rb.path('unit', params.unit, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `standby$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  standby(params: {
+    concern: number;
+    unit: number;
+  }): Observable<void> {
+
+    return this.standby$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
 }
-
-export { UnitEndpointService }
