@@ -6,7 +6,7 @@ RUN npm set unsafe-perm true
 
 # Add only configuration and run npm install to download dependencies
 # This causes Docker to use the cached dependencies instead of downloading them every time
-COPY ./package.json ./package-lock.json ./angular.json ./tsconfig.json ./tsconfig.base.json ./
+COPY ./package.json ./package-lock.json ./angular.json ./tsconfig.json ./
 RUN npm install
 
 # Add the i18n library and build it
@@ -33,7 +33,6 @@ RUN npm run build auth-api
 COPY ./auth-login/ ./auth-login/
 RUN npm run build auth-login
 
-
 # Add the Auth service components library and build it
 COPY ./auth-components/ ./auth-components/
 RUN npm run build auth-components
@@ -49,7 +48,7 @@ RUN npm run build coceso-components
 # Add the application and build it
 COPY ./mls/ ./mls/
 COPY ./styles/ ./styles/
-RUN npm run build mls -- --prod
+RUN npm run build mls
 
 # Second stage: Configure nginx
 FROM nginx:alpine AS runtime
