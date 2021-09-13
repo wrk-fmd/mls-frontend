@@ -85,10 +85,6 @@ export class UnitFormComponent implements DialogContent<any>, OnDestroy {
     return unit ? `${prefix}: ${unit.call}` : prefix;
   }
 
-  getName(member: StaffMemberDto): string {
-    return this.staffHelper.getName(member);
-  }
-
   get saveDisabled(): boolean {
     return this.form.invalid || this.form.pristine;
   }

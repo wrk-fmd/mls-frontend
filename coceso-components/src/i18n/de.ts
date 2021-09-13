@@ -212,10 +212,24 @@ export default {
       tetra: 'Tetra'
     }
   },
+  staff: {
+    lastname: 'Nachname',
+    firstname: 'Vorname',
+    info: 'Info',
+    personnelId: 'Dienstnummer',
+    link: 'Personal',
+    header: 'Personal verwalten',
+    back: 'Zurück zur Übersicht',
+    actions: {
+      filter: 'Personal filtern',
+      addStaff: 'Mitarbeiter_in erstellen',
+      editStaff: 'Mitarbeiter_in bearbeiten'
+    }
+  },
   message: {
     text: 'Text',
     recipients: {
-      label:  'Empfänger',
+      label: 'Empfänger',
       none: 'Keine Empfänger verfügbar'
     },
     received: {

@@ -1,0 +1,12 @@
+﻿<mat-form-field>
+  <mat-label translate>staff.personnelId</mat-label>
+
+  <mat-chip-list #idList>
+    <mat-chip *ngFor="let id of ids" [removable]="true" (removed)="removeId(id)">
+      {{id}}
+      <mat-icon matChipRemove>cancel</mat-icon>
+    </mat-chip>
+
+    <input matInput [formControl]="control" type=number [matChipInputFor]="idList" (matChipInputTokenEnd)="addId($event)">
+  </mat-chip-list>
+</mat-form-field>

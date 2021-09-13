@@ -9,7 +9,8 @@ import { RequestBuilder } from '../request-builder';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
-import { PageStaffMemberDto } from '../models/page-staff-member-dto';
+import { PageStaffMemberBriefDto } from '../models/page-staff-member-brief-dto';
+import { StaffMemberBriefDto } from '../models/staff-member-brief-dto';
 import { StaffMemberCreateDto } from '../models/staff-member-create-dto';
 import { StaffMemberDto } from '../models/staff-member-dto';
 import { StaffMemberUpdateDto } from '../models/staff-member-update-dto';
@@ -37,11 +38,29 @@ export class StaffEndpointService extends BaseService {
    * This method doesn't expect any request body.
    */
   getAllStaff$Response(params?: {
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
     filter?: string;
-  }): Observable<StrictHttpResponse<PageStaffMemberDto>> {
+  }): Observable<StrictHttpResponse<PageStaffMemberBriefDto>> {
 
     const rb = new RequestBuilder(this.rootUrl, StaffEndpointService.GetAllStaffPath, 'get');
     if (params) {
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
       rb.query('filter', params.filter, {});
     }
 
@@ -51,7 +70,7 @@ export class StaffEndpointService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<PageStaffMemberDto>;
+        return r as StrictHttpResponse<PageStaffMemberBriefDto>;
       })
     );
   }
@@ -63,11 +82,26 @@ export class StaffEndpointService extends BaseService {
    * This method doesn't expect any request body.
    */
   getAllStaff(params?: {
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
     filter?: string;
-  }): Observable<PageStaffMemberDto> {
+  }): Observable<PageStaffMemberBriefDto> {
 
     return this.getAllStaff$Response(params).pipe(
-      map((r: StrictHttpResponse<PageStaffMemberDto>) => r.body as PageStaffMemberDto)
+      map((r: StrictHttpResponse<PageStaffMemberBriefDto>) => r.body as PageStaffMemberBriefDto)
     );
   }
 
@@ -84,11 +118,57 @@ export class StaffEndpointService extends BaseService {
    */
   createStaffMember$Response(params: {
     body: StaffMemberCreateDto
-  }): Observable<StrictHttpResponse<StaffMemberDto>> {
+  }): Observable<StrictHttpResponse<StaffMemberBriefDto>> {
 
     const rb = new RequestBuilder(this.rootUrl, StaffEndpointService.CreateStaffMemberPath, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<StaffMemberBriefDto>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `createStaffMember$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createStaffMember(params: {
+    body: StaffMemberCreateDto
+  }): Observable<StaffMemberBriefDto> {
+
+    return this.createStaffMember$Response(params).pipe(
+      map((r: StrictHttpResponse<StaffMemberBriefDto>) => r.body as StaffMemberBriefDto)
+    );
+  }
+
+  /**
+   * Path part for operation getStaffMember
+   */
+  static readonly GetStaffMemberPath = '/staff/{staffMember}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getStaffMember()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getStaffMember$Response(params: {
+    staffMember: number;
+  }): Observable<StrictHttpResponse<StaffMemberDto>> {
+
+    const rb = new RequestBuilder(this.rootUrl, StaffEndpointService.GetStaffMemberPath, 'get');
+    if (params) {
+      rb.path('staffMember', params.staffMember, {});
     }
 
     return this.http.request(rb.build({
@@ -104,15 +184,15 @@ export class StaffEndpointService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `createStaffMember$Response()` instead.
+   * To access the full response (for headers, for example), `getStaffMember$Response()` instead.
    *
-   * This method sends `application/json` and handles request body of type `application/json`.
+   * This method doesn't expect any request body.
    */
-  createStaffMember(params: {
-    body: StaffMemberCreateDto
+  getStaffMember(params: {
+    staffMember: number;
   }): Observable<StaffMemberDto> {
 
-    return this.createStaffMember$Response(params).pipe(
+    return this.getStaffMember$Response(params).pipe(
       map((r: StrictHttpResponse<StaffMemberDto>) => r.body as StaffMemberDto)
     );
   }

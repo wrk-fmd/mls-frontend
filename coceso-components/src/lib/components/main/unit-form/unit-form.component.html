@@ -28,7 +28,7 @@
         <dt translate>unit.crew.label</dt>
 
         <ng-container *ngFor="let member of crew">
-          <dt>{{getName(member)}}</dt>
+          <dt>{{member | cocesoStaffName}}</dt>
           <dd *ngIf="member.info"><span class="pre">{{member.info}}</span></dd>
           <dd *ngFor="let contact of member.contacts">
             <coceso-main-contact [contact]="contact"></coceso-main-contact>

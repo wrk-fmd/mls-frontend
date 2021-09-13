@@ -1,69 +1,66 @@
 ﻿import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {FormBuilder, FormControl} from '@angular/forms';
 
-import {StaffEndpointService, StaffMemberDto} from 'mls-coceso-api';
+import {StaffMemberBriefDto} from 'mls-coceso-api';
 import {AddRemoveContainer, ChangedItems} from 'mls-common-forms';
 
 import {Observable, of} from 'rxjs';
 import {map, switchMap} from 'rxjs/operators';
 
 import {StaffHelper} from '../../../helpers';
+import {StaffDataService} from '../../../services/staff.data.service';
 
 @Component({
   selector: 'coceso-form-crew',
-  templateUrl: './crew.component.html',
-  styleUrls: ['./crew.component.scss']
+  templateUrl: './crew.component.html'
 })
 export class FormCrewComponent {
 
-  private readonly data = new AddRemoveContainer<number, StaffMemberDto>(m => m.id);
+  private readonly data = new AddRemoveContainer<number, StaffMemberBriefDto>(m => m.id);
 
   @Output()
-  readonly changed = new EventEmitter<ChangedItems<StaffMemberDto>>();
+  readonly changed = new EventEmitter<ChangedItems<StaffMemberBriefDto>>();
 
   @ViewChild('input')
   input?: ElementRef<HTMLInputElement>;
 
   form: FormControl;
-  staff: Observable<StaffMemberDto[]>;
+  staff: Observable<StaffMemberBriefDto[]>;
 
-  constructor(private readonly staffService: StaffEndpointService, private readonly staffHelper: StaffHelper, fb: FormBuilder) {
+  constructor(private readonly staffService: StaffDataService, private readonly staffHelper: StaffHelper, fb: FormBuilder) {
     this.form = fb.control('');
     this.staff = this.form.valueChanges.pipe(switchMap(filter => this.loadStaff(filter)));
   }
 
-  get crew(): StaffMemberDto[] {
+  get crew(): StaffMemberBriefDto[] {
     return this.data.values;
   }
 
   @Input()
-  set crew(values: StaffMemberDto[]) {
+  set crew(values: StaffMemberBriefDto[]) {
     this.data.values = values;
     this.changed.emit(this.data);
   }
 
-  private loadStaff(filter: string): Observable<StaffMemberDto[]> {
+  private loadStaff(filter: string): Observable<StaffMemberBriefDto[]> {
     return filter && filter.length >= 3
-        ? this.staffService.getAllStaff({filter}).pipe(map(p => p.content || []))
+        ? this.staffService.getAll({sort: ['lastname,asc', 'firstname,asc']}, filter).pipe(map(p => p.content || []))
         : of([]);
   }
 
-  getName(member: StaffMemberDto): string {
-    return this.staffHelper.getName(member);
-  }
-
-  addMember(member: StaffMemberDto) {
+  addMember(member: StaffMemberBriefDto) {
     if (this.data.add(member)) {
       this.changed.emit(this.data);
     }
 
     this.form.setValue('');
+    this.form.markAsPristine();
     if (this.input) {
       this.input.nativeElement.value = '';
     }
   }
 
-  removeMember(member: StaffMemberDto) {
+  removeMember(member: StaffMemberBriefDto) {
     if (this.data.remove(member)) {
       this.changed.emit(this.data);
     }

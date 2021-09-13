@@ -16,6 +16,7 @@ export * from './unit-entry/unit-entry.component';
 export * from './unit-task/unit-task.component';
 export * from './unit-hierarchy/unit-hierarchy.component';
 export * from './unit-container/unit-container.component';
+export * from './unit-message-form/unit-message-form.component';
 
 export * from './message-list/message-list.component';
 export * from './message-entry/message-entry.component';

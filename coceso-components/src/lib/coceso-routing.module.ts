@@ -2,6 +2,7 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 
 import {ConcernListComponent, ConcernOverviewComponent, EditComponent, MainComponent} from './components';
+import {StaffListComponent} from './components/staff/staff-list/staff-list.component';
 import {ConcernDataService} from './services';
 
 const routes: Routes = [
@@ -20,6 +21,10 @@ const routes: Routes = [
         ]
       }
     ]
+  },
+  {
+    path: 'staff',
+    component: StaffListComponent
   },
   {path: '**', redirectTo: 'concerns'}
 ];

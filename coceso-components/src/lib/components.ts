@@ -8,3 +8,5 @@ export * from './components/edit/edit';
 
 export * from './components/main/main.component';
 export * from './components/main/main';
+
+export * from './components/staff/staff';

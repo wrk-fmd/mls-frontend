@@ -2,9 +2,9 @@
 /* eslint-disable */
 import { Pageable } from './pageable';
 import { Sort } from './sort';
-import { StaffMemberDto } from './staff-member-dto';
-export interface PageStaffMemberDto {
-  content?: Array<StaffMemberDto>;
+import { StaffMemberBriefDto } from './staff-member-brief-dto';
+export interface PageStaffMemberBriefDto {
+  content?: Array<StaffMemberBriefDto>;
   empty?: boolean;
   first?: boolean;
   last?: boolean;

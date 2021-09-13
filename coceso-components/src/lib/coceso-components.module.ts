@@ -18,6 +18,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
 import {MatListModule} from '@angular/material/list';
 import {MatMenuModule} from '@angular/material/menu';
+import {MAT_PAGINATOR_DEFAULT_OPTIONS, MatPaginatorModule} from '@angular/material/paginator';
 import {MatSelectModule} from '@angular/material/select';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatTableModule} from '@angular/material/table';
@@ -38,7 +39,8 @@ import {
   ClockComponent,
   ConcernEditComponent,
   ConcernListComponent,
-  ConcernOverviewComponent, ContactComponent,
+  ConcernOverviewComponent,
+  ContactComponent,
   ContainerEditChildComponent,
   ContainerEditRootComponent,
   ContainerEditUnitComponent,
@@ -57,6 +59,9 @@ import {
   MainComponent,
   MessageEntryComponent,
   MessageListComponent,
+  StaffEditFormComponent,
+  StaffIdFormComponent,
+  StaffListComponent,
   TaskDialogComponent,
   UnitContainerComponent,
   UnitEditFormComponent,
@@ -64,12 +69,13 @@ import {
   UnitFormComponent,
   UnitHierarchyComponent,
   UnitListComponent,
+  UnitMessageFormComponent,
   UnitsEditComponent,
   UnitTaskComponent
 } from './components';
-import {UnitMessageFormComponent} from './components/main/unit-message-form/unit-message-form.component';
 
 import {IncidentHelper, StaffHelper, TaskHelper, UnitHelper} from './helpers';
+import {StaffIdPipe, StaffNamePipe} from './pipes';
 
 import {
   ClockService,
@@ -77,6 +83,7 @@ import {
   ContainerDataService,
   IncidentDataService,
   MessageDataService,
+  StaffDataService,
   TaskDataService,
   UnitDataService
 } from './services';
@@ -84,6 +91,7 @@ import {
 @NgModule({
   declarations: [
     ConcernListComponent, ConcernOverviewComponent,
+    StaffListComponent, StaffEditFormComponent, StaffIdFormComponent, StaffNamePipe, StaffIdPipe,
     FormContactsComponent, FormCrewComponent, FormIncidentCloseComponent, FormPointComponent, FormSectionComponent, FormUnitTypeComponent,
     EditComponent, ConcernEditComponent,
     UnitsEditComponent, UnitEditFormComponent,
@@ -114,6 +122,7 @@ import {
     MatInputModule,
     MatListModule,
     MatMenuModule,
+    MatPaginatorModule,
     MatSelectModule,
     MatSnackBarModule,
     MatTableModule,
@@ -127,9 +136,13 @@ import {
     CocesoRoutingModule
   ],
   providers: [
+    {
+      provide: MAT_PAGINATOR_DEFAULT_OPTIONS,
+      useValue: {formFieldAppearance: 'standard'}
+    },
     IncidentHelper, UnitHelper, TaskHelper, StaffHelper,
     ClockService,
-    ConcernDataService, IncidentDataService, UnitDataService, ContainerDataService, TaskDataService, MessageDataService
+    ConcernDataService, IncidentDataService, UnitDataService, ContainerDataService, TaskDataService, MessageDataService, StaffDataService
   ]
 })
 export class CocesoComponentsModule {

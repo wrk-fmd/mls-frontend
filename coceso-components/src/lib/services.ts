@@ -6,3 +6,4 @@ export * from './services/unit.data.service';
 export * from './services/task.data.service';
 export * from './services/container.data.service';
 export * from './services/message.data.service';
+export * from './services/staff.data.service';

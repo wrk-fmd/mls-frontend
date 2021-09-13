@@ -2,7 +2,7 @@ import {Component, OnDestroy} from '@angular/core';
 import {Validators} from '@angular/forms';
 import {TranslateService} from '@ngx-translate/core';
 
-import {ContactDto, StaffMemberDto, UnitDto} from 'mls-coceso-api';
+import {ContactDto, StaffMemberBriefDto, UnitDto} from 'mls-coceso-api';
 import {ChangedItems, NotificationService, TrackingFormBuilder, TrackingFormGroup} from 'mls-common-forms';
 import {DialogContent} from 'mls-common-ui';
 
@@ -23,10 +23,10 @@ export class UnitEditFormComponent implements DialogContent<any>, OnDestroy {
 
   form: TrackingFormGroup;
   contacts: ContactDto[] = [];
-  crew: StaffMemberDto[] = [];
+  crew: StaffMemberBriefDto[] = [];
 
   private contactChanges?: ChangedItems<ContactDto>;
-  private crewChanges?: ChangedItems<StaffMemberDto>;
+  private crewChanges?: ChangedItems<StaffMemberBriefDto>;
 
   constructor(private readonly unitService: UnitDataService, private readonly translateService: TranslateService,
               private readonly notificationService: NotificationService, fb: TrackingFormBuilder) {
@@ -111,7 +111,7 @@ export class UnitEditFormComponent implements DialogContent<any>, OnDestroy {
     this.contactChanges = changes;
   }
 
-  setCrewChanges(changes: ChangedItems<StaffMemberDto>) {
+  setCrewChanges(changes: ChangedItems<StaffMemberBriefDto>) {
     this.crewChanges = changes;
   }
 
