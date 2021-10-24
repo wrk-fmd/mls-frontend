@@ -12,9 +12,9 @@
     </div>
 
     <dl *ngIf="unit | async as unit">
-      <ng-container *ngIf="unit.home && unit.home.info">
+      <ng-container *ngIf="unit.home">
         <dt translate>unit.home</dt>
-        <dd><span class="pre">{{unit.home.info}}</span></dd>
+        <dd><span class="pre">{{unit.home | cocesoPoint}}</span></dd>
       </ng-container>
 
       <ng-container *ngIf="unit.contacts && unit.contacts.length">

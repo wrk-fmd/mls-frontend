@@ -49,6 +49,7 @@ import {
   FormCrewComponent,
   FormIncidentCloseComponent,
   FormPointComponent,
+  FormPointInputComponent,
   FormSectionComponent,
   FormUnitTypeComponent,
   IncidentDataComponent,
@@ -59,6 +60,7 @@ import {
   MainComponent,
   MessageEntryComponent,
   MessageListComponent,
+  PointAutocompleteTriggerDirective,
   StaffEditFormComponent,
   StaffIdFormComponent,
   StaffListComponent,
@@ -74,8 +76,9 @@ import {
   UnitTaskComponent
 } from './components';
 
-import {IncidentHelper, StaffHelper, TaskHelper, UnitHelper} from './helpers';
-import {StaffIdPipe, StaffNamePipe} from './pipes';
+import {ContentEditableDirective} from './directives';
+import {IncidentHelper, PointHelper, StaffHelper, TaskHelper, UnitHelper} from './helpers';
+import {PointPipe, StaffIdPipe, StaffNamePipe} from './pipes';
 
 import {
   ClockService,
@@ -92,7 +95,8 @@ import {
   declarations: [
     ConcernListComponent, ConcernOverviewComponent,
     StaffListComponent, StaffEditFormComponent, StaffIdFormComponent, StaffNamePipe, StaffIdPipe,
-    FormContactsComponent, FormCrewComponent, FormIncidentCloseComponent, FormPointComponent, FormSectionComponent, FormUnitTypeComponent,
+    FormContactsComponent, FormCrewComponent, FormIncidentCloseComponent, FormSectionComponent, FormUnitTypeComponent,
+    FormPointComponent, FormPointInputComponent, PointPipe, ContentEditableDirective, PointAutocompleteTriggerDirective,
     EditComponent, ConcernEditComponent,
     UnitsEditComponent, UnitEditFormComponent,
     ContainerEditRootComponent, ContainerEditChildComponent, ContainerEditUnitComponent,
@@ -140,7 +144,7 @@ import {
       provide: MAT_PAGINATOR_DEFAULT_OPTIONS,
       useValue: {formFieldAppearance: 'standard'}
     },
-    IncidentHelper, UnitHelper, TaskHelper, StaffHelper,
+    IncidentHelper, UnitHelper, TaskHelper, StaffHelper, PointHelper,
     ClockService,
     ConcernDataService, IncidentDataService, UnitDataService, ContainerDataService, TaskDataService, MessageDataService, StaffDataService
   ]

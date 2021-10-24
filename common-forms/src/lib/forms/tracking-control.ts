@@ -67,10 +67,33 @@ export class TrackingFormControl extends FormControl implements TrackingControl 
       return true;
     }
 
-    if (!(a instanceof Array) || !(b instanceof Array)) {
+    if (a instanceof Array && b instanceof Array) {
+      return this.arrayElementsEqual(a, b);
+    }
+
+    if (a instanceof Object && b instanceof Object) {
+      return this.objectsEquals(a, b);
+    }
+
+    return false;
+  }
+
+  private objectsEquals(a: any, b: any): boolean {
+    const keys = Object.keys(a);
+    if (keys.length !== Object.keys(b).length) {
       return false;
     }
 
+    for (const key of keys) {
+      if (!b.hasOwnProperty(key) || !this.valueEquals(a[key], b[key])) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  private arrayElementsEqual(a: any[], b: any[]): boolean {
     if (a.length !== b.length) {
       return false;
     }

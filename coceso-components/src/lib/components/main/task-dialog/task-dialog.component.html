@@ -6,14 +6,14 @@
       <dt translate>task.state.current</dt>
       <dd>{{'task.state.' + options.currentState | translate}}</dd>
 
-      <ng-container *ngIf="incident.bo && incident.bo.info">
+      <ng-container *ngIf="incident.bo">
         <dt translate>incident.bo</dt>
-        <dd><span class="pre">{{incident.bo.info}}</span></dd>
+        <dd><span class="pre">{{incident.bo | cocesoPoint}}</span></dd>
       </ng-container>
 
-      <ng-container *ngIf="incident.ao && incident.ao.info">
+      <ng-container *ngIf="incident.ao">
         <dt translate>incident.ao</dt>
-        <dd><span class="pre">{{incident.ao.info}}</span></dd>
+        <dd><span class="pre">{{incident.ao | cocesoPoint}}</span></dd>
       </ng-container>
 
       <ng-container *ngIf="incident.blue">

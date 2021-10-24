@@ -9,3 +9,5 @@ export * from './lib/rest/models';
 export * from './lib/rest/services';
 
 export * from './lib/stomp/coceso.watch.service';
+
+export * from './lib/geocoding';

@@ -194,7 +194,7 @@ export class UnitEntryComponent implements OnDestroy {
 
     const data = {
       caller: this.unit.call,
-      bo: this.unit.portable && this.unit.position ? this.unit.position.info : '',
+      bo: this.unit.portable && this.unit.position ? this.unit.position : null,
       type: IncidentTypeDto.Task,
       options: ['blue'],
       units: this.unit.portable ? [{

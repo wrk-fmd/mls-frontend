@@ -1,20 +1,20 @@
 import {Injectable} from '@angular/core';
-import {IncidentTypeDto, PointDto, TaskStateDto, UnitDto, UnitStateDto} from 'mls-coceso-api';
+import {IncidentTypeDto, TaskStateDto, UnitDto, UnitStateDto} from 'mls-coceso-api';
 import {TaskWithIncident, UnitWithIncidents} from '../models/unit-with-incidents';
+import {PointHelper} from './point.helper';
 
 @Injectable()
 export class UnitHelper {
 
-  private pointNotEmpty(point?: PointDto): boolean {
-    return !!point && !!point.info;
+  constructor(private readonly pointHelper: PointHelper) {
   }
 
   hasHome(unit?: UnitDto): boolean {
-    return this.pointNotEmpty(unit?.home);
+    return !this.pointHelper.isEmpty(unit?.home);
   }
 
   isHome(unit?: UnitDto): boolean {
-    return this.hasHome(unit) && unit?.position?.info === unit?.home?.info;
+    return this.hasHome(unit) && this.pointHelper.equals(unit?.home, unit?.position);
   }
 
   hasAssigned(unit?: UnitDto): boolean {
@@ -91,7 +91,7 @@ export class UnitHelper {
   }
 
   allowHoldPosition(unit?: UnitWithIncidents): boolean {
-    if (!unit || !unit.portable || !unit.position || !unit.position.info) {
+    if (!unit || !unit.portable || this.pointHelper.isEmpty(unit.position)) {
       return false;
     }
 

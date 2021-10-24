@@ -1,7 +1,9 @@
 import {Injectable} from '@angular/core';
 import {DeletionDto, ReplayStartDto, WatchService} from 'mls-common-data';
 import {Observable} from 'rxjs';
-import {ConcernDto, ContainerDto, IncidentDto, ReceivedMessageDto, UnitDto} from '../rest/models';
+
+import {GeocodingResult} from '../geocoding';
+import {ConcernDto, ContainerDto, IncidentDto, PointDto, ReceivedMessageDto, UnitDto} from '../rest/models';
 
 /**
  * This service provides methods for watching data through STOMP
@@ -30,5 +32,9 @@ export class CocesoWatchService {
 
   watchMessages(): Observable<ReceivedMessageDto | DeletionDto | ReplayStartDto> {
     return this.watchService.watch<ReceivedMessageDto>('messages');
+  }
+
+  requestGeocode(body: PointDto): Observable<GeocodingResult> {
+    return this.watchService.request<PointDto, GeocodingResult>('geocoding.requests', body);
   }
 }

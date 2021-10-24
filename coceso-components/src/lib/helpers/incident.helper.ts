@@ -1,15 +1,21 @@
 import {Injectable} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
-import {IncidentDto, IncidentTypeDto, PointDto, TaskDto, TaskStateDto} from 'mls-coceso-api';
+
+import {IncidentDto, IncidentTypeDto, TaskDto, TaskStateDto} from 'mls-coceso-api';
+
 import {Observable, of} from 'rxjs';
 import {map} from 'rxjs/operators';
+
 import {TaskWithIncident} from '../models/unit-with-incidents';
 import {ClockService} from '../services/clock.service';
+import {PointHelper} from './point.helper';
 
+// TODO Cleanup: A lot of this should be in directives!
 @Injectable()
 export class IncidentHelper {
 
-  constructor(private readonly translateService: TranslateService, private readonly clockService: ClockService) {
+  constructor(private readonly translateService: TranslateService, private readonly clockService: ClockService,
+              private readonly pointHelper: PointHelper) {
   }
 
   shortType(incident?: IncidentDto): string | null {
@@ -24,15 +30,8 @@ export class IncidentHelper {
   }
 
   shortBo(incident?: IncidentDto): string {
-    return incident && !this.pointEmpty(incident.bo)
-        ? this.trimPoint(incident.bo)
-        : this.translateService.instant('incident.boMissing');
-  }
-
-  shortAo(incident?: IncidentDto): string | null {
-    return incident && this.isTaskOrTransport(incident) && !this.pointEmpty(incident.ao)
-        ? this.trimPoint(incident.ao)
-        : null;
+    // TODO Do we really need this method here?
+    return this.pointHelper.toString(incident?.bo, null, 'incident.boMissing');
   }
 
   title(incident?: IncidentDto): string {
@@ -76,7 +75,7 @@ export class IncidentHelper {
       return false;
     }
 
-    return this.pointEmpty(incident.ao) || !this.hasCasusNr(incident);
+    return this.pointHelper.isEmpty(incident.ao) || !this.hasCasusNr(incident);
   }
 
   hasCasusNr(incident?: IncidentDto): boolean {
@@ -93,14 +92,6 @@ export class IncidentHelper {
 
   isHoldPosition(task: TaskDto, incident?: IncidentDto): boolean {
     return incident ? incident.type === IncidentTypeDto.Position && task.state === TaskStateDto.Abo : false;
-  }
-
-  pointEmpty(point?: PointDto): point is PointDto {
-    return !point || !point.info;
-  }
-
-  trimPoint(point: PointDto): string {
-    return point.info.split('\n')[0];
   }
 
   timer(incident: IncidentDto): Observable<TimerData | null> {

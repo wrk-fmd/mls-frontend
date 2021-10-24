@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {RxStompService} from '@stomp/ng2-stompjs';
+import {RxStompRPCService, RxStompService} from '@stomp/ng2-stompjs';
 
 import {WatchService} from './services';
 
@@ -7,7 +7,7 @@ import {WatchService} from './services';
  * This module provides and configures the STOMP services
  */
 @NgModule({
-  providers: [WatchService, RxStompService]
+  providers: [WatchService, RxStompService, RxStompRPCService]
 })
 export class CommonDataModule {
 }

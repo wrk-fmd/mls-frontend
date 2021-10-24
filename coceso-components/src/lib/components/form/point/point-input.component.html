@@ -1,0 +1,46 @@
+﻿<div class="point-input-container">
+  <div class="coordinates-indicator" *ngIf="!empty">
+    <span *ngIf="hasCoordinates" class="material-icons coordinates-ok">gps_fixed</span>
+    <span *ngIf="!hasCoordinates" class="material-icons coordinates-missing">gps_off</span>
+  </div>
+
+  <div role="group" class="point-input-form" [formGroup]="form" (focusin)="onFocusIn($event)" (focusout)="onFocusOut($event)">
+    <div class="point-input-line" *ngIf="isPoi">
+      <span contenteditable="true" formControlName="poi"
+            (keydown.backspace)="clearPoi()" (keydown.delete)="clearPoi()" (keypress)="ignoreInput()"></span>
+    </div>
+
+    <ng-container *ngIf="hasAddress" formGroupName="address">
+      <div class="point-input-line">
+        <span contenteditable="true" formControlName="street"
+              (input)="onInput()" (keydown.enter)="ignoreInput()" #addressStreet></span>
+        <span>&nbsp;</span>
+        <ng-container *ngIf="form.value.address.intersection">
+          <span>#&nbsp;</span>
+          <span contenteditable="true" formControlName="intersection"
+                (input)="onInput()" (keydown.enter)="ignoreInput()" #addressIntersection></span>
+        </ng-container>
+        <span contenteditable="true" formControlName="number"
+              (input)="onInput()" (keydown.enter)="ignoreInput()" #addressNumber></span>
+        <span>/</span>
+        <span contenteditable="true" formControlName="block"
+              (input)="onInput()" (keydown.enter)="ignoreInput()" #addressBlock></span>
+        <span>/</span>
+        <span contenteditable="true" formControlName="details"
+              (input)="onInput()" (keydown.enter)="ignoreInput()" #addressDetails></span>
+      </div>
+
+      <div class="point-input-line">
+        <span contenteditable="true" formControlName="postCode"
+              (input)="onInput()" (keydown.enter)="ignoreInput()" #addressPostCode></span>
+        <span>&nbsp;</span>
+        <span contenteditable="true" formControlName="city"
+              (input)="onInput()" (keydown.enter)="ignoreInput()" #addressCity></span>
+      </div>
+    </ng-container>
+
+    <div class="point-input-line">
+      <span class="point-details" contenteditable="true" formControlName="details" (input)="onInput()" #details></span>
+    </div>
+  </div>
+</div>

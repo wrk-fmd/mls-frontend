@@ -1,5 +1,5 @@
 import {Inject, Injectable, InjectionToken} from '@angular/core';
-import {InjectableRxStompConfig, RxStompService} from '@stomp/ng2-stompjs';
+import {InjectableRxStompConfig, RxStompRPCService, RxStompService} from '@stomp/ng2-stompjs';
 
 import {Observable, Subscription} from 'rxjs';
 import {map, tap} from 'rxjs/operators';
@@ -24,6 +24,7 @@ export class WatchService {
   private token: string | null = null;
 
   constructor(private readonly stompService: RxStompService,
+              private readonly rpcService: RxStompRPCService,
               stompConfig: InjectableRxStompConfig,
               @Inject(REQUEST_TOKEN) requestToken: Observable<string>) {
     // Subscribe to changes of the request token
@@ -39,7 +40,7 @@ export class WatchService {
     this.stompService.configure(stompConfig);
 
     // Generate a unique prefix for all subscriptions
-    this.subscriptionPrefix = Math.random().toString(16);
+    this.subscriptionPrefix = Math.random().toString(16).substring(2);
   }
 
   private tokenChanged(token: string) {
@@ -71,11 +72,20 @@ export class WatchService {
     //      maybe use a combination of subscription receipt and overall last connection?
     let lastConnection: number;
     Object.defineProperties(headers, {
-      'last-connection': {get: () => lastConnection, enumerable: true}
+      'last-connection': {get: () => lastConnection || null, enumerable: true}
     });
 
     return this.stompService.watch(`/exchange/${path}/${key}`, headers).pipe(
         tap(_ => lastConnection = Math.floor(Date.now() / 1000)),
+        map(message => JSON.parse(message.body))
+    );
+  }
+
+  request<T, R>(path: string, body: T): Observable<R> {
+    return this.rpcService.stream({
+      destination: `/exchange/${path}/`,
+      body: JSON.stringify(body)
+    }).pipe(
         map(message => JSON.parse(message.body))
     );
   }

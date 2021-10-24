@@ -23,14 +23,9 @@ export class IncidentDataComponent {
   private _incident?: IncidentWithUnits;
   private _highlighted?: Predicate<IncidentDto>;
 
-  shortBo: string = '';
-  shortAo: string | null = null;
   typeChar: string | null = null;
 
   timer: Observable<TimerData | null> = of(null);
-
-  showBo: boolean = false;
-  showAo: boolean = false;
 
   isHighlighted: boolean = false;
 
@@ -81,15 +76,8 @@ export class IncidentDataComponent {
   }
 
   private setIncident(incident: IncidentDto) {
-    this.shortBo = this.incidentHelper.shortBo(incident);
-    this.shortAo = this.incidentHelper.shortAo(incident);
     this.typeChar = this.incidentHelper.shortType(incident);
-
     this.timer = this.incidentHelper.timer(incident);
-
-    this.showBo = incident && !this.incidentHelper.pointEmpty(incident.bo);
-    this.showAo = incident && !this.incidentHelper.pointEmpty(incident.ao);
-
     this.isHighlighted = this._highlighted ? this._highlighted(incident) : false;
   }
 

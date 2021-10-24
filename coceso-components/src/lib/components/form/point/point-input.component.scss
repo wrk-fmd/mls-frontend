@@ -1,0 +1,64 @@
+// The following lines are needed to show exactly a given number of rows in the field and match neighboring regular textareas
+$min-rows: 3;
+$max-rows: 6;
+$row-height: 14px;
+$margin-x: 1px;
+$padding-x: 1px;
+$padding-y: 4px;
+
+.point-input-container {
+  position: relative;
+
+  .coordinates-indicator {
+    position: absolute;
+    top: -5px;
+    right: -1px;
+
+    .coordinates-ok {
+      font-size: 14px;
+      color: green;
+    }
+
+    .coordinates-missing {
+      font-size: 14px;
+      color: #f44336;
+    }
+  }
+
+  .point-input-form {
+    min-height: $min-rows * ($row-height + 2 * $margin-x + 2 * $padding-x);
+    max-height: $max-rows * ($row-height + 2 * $margin-x + 2 * $padding-x);
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    margin: (-$min-rows * ($margin-x + $padding-x)) (-$padding-y);
+
+    .point-input-line {
+      display: flex;
+      width: 100%;
+      margin: $margin-x 0;
+
+      &:last-child, :last-child {
+        flex-grow: 1;
+      }
+
+      span {
+        padding: $padding-x 0;
+      }
+
+      span[contenteditable] {
+        padding: $padding-x $padding-y;
+        caret-color: #b70e0c;
+
+        &:not(.point-details) {
+          background: transparentize(#6ea8ff, 0.8);
+          border-radius: 5px;
+        }
+
+        &:focus {
+          outline: none;
+        }
+      }
+    }
+  }
+}

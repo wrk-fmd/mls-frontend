@@ -83,7 +83,7 @@ export class UnitEditFormComponent implements DialogContent<any>, OnDestroy {
       section: unit.section,
       types: unit.types,
       info: unit.info,
-      home: unit.home ? unit.home.info : '',
+      home: unit.home || null,
       options: unit.portable ? ['portable'] : []
     });
 
@@ -121,7 +121,7 @@ export class UnitEditFormComponent implements DialogContent<any>, OnDestroy {
       section: this.form.value.section || '',
       types: this.form.value.types,
       info: this.form.value.info,
-      home: {info: this.form.value.home},
+      home: this.form.value.home || {},
       portable: this.form.value.options.includes('portable'),
       contacts: this.contactChanges && this.contactChanges.dirty ? this.contactChanges.values : undefined
     };

@@ -6,21 +6,21 @@
         incident.type.short.{{typeChar}}
       </span>
       <span class="incident-timer" *ngIf="timer | async as timer" [ngClass]="timer.css">{{timer.elapsed}}'</span>
-      <span>{{shortBo}}</span>
-      <span class="incident-subtitle" *ngIf="shortAo as subtitle">&#x2794; {{subtitle}}</span>
+      <span>{{incident.bo | cocesoPoint : null : 'incident.boMissing'}}</span>
+      <span class="incident-subtitle" *ngIf="incident.ao">&#x2794; {{incident.ao | cocesoPoint : null}}</span>
 
     </mat-panel-title>
   </mat-expansion-panel-header>
 
   <dl>
-    <ng-container *ngIf="showBo">
+    <ng-container *ngIf="incident.bo">
       <dt translate>incident.bo</dt>
-      <dd><span class="pre">{{incident.bo.info}}</span></dd>
+      <dd><span class="pre">{{incident.bo | cocesoPoint}}</span></dd>
     </ng-container>
 
-    <ng-container *ngIf="showAo">
+    <ng-container *ngIf="incident.ao">
       <dt translate>incident.ao</dt>
-      <dd><span class="pre">{{incident.ao.info}}</span></dd>
+      <dd><span class="pre">{{incident.ao | cocesoPoint}}</span></dd>
     </ng-container>
 
     <ng-container *ngIf="incident.caller">

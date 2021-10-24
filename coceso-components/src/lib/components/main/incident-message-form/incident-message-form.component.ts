@@ -9,8 +9,8 @@ import {DialogContent} from 'mls-common-ui';
 
 import {BehaviorSubject, ReplaySubject, Subscription} from 'rxjs';
 import {switchMap, tap} from 'rxjs/operators';
-import {IncidentHelper} from '../../../helpers/incident.helper';
 
+import {IncidentHelper, PointHelper} from '../../../helpers';
 import {IncidentWithUnits, TaskWithUnit} from '../../../models';
 import {IncidentDataService, TaskDataService} from '../../../services';
 
@@ -40,8 +40,9 @@ export class IncidentMessageFormComponent implements DialogContent<IncidentMessa
   private readonly modeSubscription: Subscription;
 
   constructor(private readonly incidentService: IncidentDataService, taskService: TaskDataService,
-              private readonly incidentHelper: IncidentHelper, private readonly notificationService: NotificationService,
-              private readonly translateService: TranslateService, private readonly dialog: MatDialogRef<any>, fb: TrackingFormBuilder) {
+              private readonly incidentHelper: IncidentHelper, private readonly pointHelper: PointHelper,
+              private readonly notificationService: NotificationService, private readonly translateService: TranslateService,
+              private readonly dialog: MatDialogRef<any>, fb: TrackingFormBuilder) {
     this.form = fb.group({
       mode: [AlarmRecipientsDto.Unsent, Validators.required],
       text: ['', Validators.required, null, true]
@@ -126,8 +127,8 @@ export class IncidentMessageFormComponent implements DialogContent<IncidentMessa
     const params = {
       incidentId: incident.id,
       type: this.translateService.instant(`incident.type.${this.incidentHelper.shortType(incident)}`),
-      bo: incident.bo ? incident.bo.info : this.translateService.instant('incident.boMissing'),
-      ao: incident.ao ? incident.ao.info : this.translateService.instant('incident.aoMissing'),
+      bo: this.pointHelper.toString(incident.bo, '\n', 'incident.boMissing'),
+      ao: this.pointHelper.toString(incident.ao, '\n', 'incident.aoMissing'),
       boUrl: this.buildCoordinateUrl(incident.bo),
       aoUrl: this.buildCoordinateUrl(incident.ao),
       info: this.limitString(incident.info, 80),
@@ -155,15 +156,13 @@ export class IncidentMessageFormComponent implements DialogContent<IncidentMessa
     return this.limitString(units, 50);
   }
 
-  private buildCoordinateUrl(point: PointDto): string {
-    // TODO
-    if (!point) {
+  private buildCoordinateUrl(point?: PointDto): string {
+    if (!point || !point.coordinates) {
+      // TODO i18n
       return 'no coordinates';
     }
 
-    const lat = 48;
-    const lng = 16;
-    return `https://google.com/maps/place/${lat},${lng}`;
+    return `https://google.com/maps/place/${point.coordinates.lat},${point.coordinates.lng}`;
   }
 
   get showModeForm(): boolean {

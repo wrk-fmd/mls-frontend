@@ -7,6 +7,5 @@ export { MessageEndpointService } from './services/message-endpoint.service';
 export { PatientEndpointService } from './services/patient-endpoint.service';
 export { UnitEndpointService } from './services/unit-endpoint.service';
 export { LoggingEndpointService } from './services/logging-endpoint.service';
-export { PointEndpointService } from './services/point-endpoint.service';
 export { StaffEndpointService } from './services/staff-endpoint.service';
 export { SystemEndpointService } from './services/system-endpoint.service';

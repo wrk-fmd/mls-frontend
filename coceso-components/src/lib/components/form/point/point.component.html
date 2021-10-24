@@ -1,7 +1,16 @@
 ﻿<mat-form-field appearance="outline" *ngIf="control">
   <mat-label translate>{{label}}</mat-label>
-  <!--suppress HtmlFormInputWithoutLabel -->
-  <textarea matInput [formControl]="control" [required]="required" rows="3"></textarea>
+
+  <coceso-form-point-input [formControl]="control" [matAutocomplete]="completion"></coceso-form-point-input>
+
+  <mat-autocomplete #completion="matAutocomplete" panelWidth="auto">
+    <mat-option *ngFor="let option of suggestions! | async" [value]="option.data">
+      <!-- TODO Implement the icon thing properly -->
+      <img *ngIf="option.source === 'vienna'" width="12px" src="https://www.wien.gv.at/favicon.ico" [alt]="option.source">
+      <img *ngIf="option.source.startsWith('gmaps')" width="12px" src="https://maps.google.com/favicon.ico" [alt]="option.source">
+      {{option.data | cocesoPoint : ', '}}
+    </mat-option>
+  </mat-autocomplete>
 
   <mat-hint>
     <mls-form-server [control]="control"></mls-form-server>

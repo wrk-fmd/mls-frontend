@@ -18,9 +18,9 @@
   </p>
 
   <dl>
-    <ng-container *ngIf="data.unit && data.unit.portable && data.unit.position && data.unit.position.info">
+    <ng-container *ngIf="data.unit && data.unit.portable && data.unit.position">
       <dt translate>unit.position</dt>
-      <dd><span class="pre">{{data.unit.position.info}}</span></dd>
+      <dd><span class="pre">{{data.unit.position | cocesoPoint}}</span></dd>
     </ng-container>
 
     <ng-container *ngFor="let task of incidents">

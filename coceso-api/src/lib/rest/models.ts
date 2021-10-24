@@ -1,3 +1,4 @@
+export { Address } from './models/address';
 export { AlarmRecipientsDto } from './models/alarm-recipients-dto';
 export { AlarmTypeDto } from './models/alarm-type-dto';
 export { ChangeDto } from './models/change-dto';
@@ -20,6 +21,7 @@ export { IncidentDto } from './models/incident-dto';
 export { IncidentTypeDto } from './models/incident-type-dto';
 export { IncidentUpdateDto } from './models/incident-update-dto';
 export { JournalEntryDto } from './models/journal-entry-dto';
+export { LatLng } from './models/lat-lng';
 export { MessageChannelDto } from './models/message-channel-dto';
 export { PageStaffMemberBriefDto } from './models/page-staff-member-brief-dto';
 export { Pageable } from './models/pageable';

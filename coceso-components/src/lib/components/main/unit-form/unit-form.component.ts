@@ -72,8 +72,8 @@ export class UnitFormComponent implements DialogContent<any>, OnDestroy {
       call: unit.call,
       state: unit.state,
       info: unit.info,
-      home: unit.home ? unit.home.info : '',
-      position: unit.position ? unit.position.info : ''
+      home: unit.home || null,
+      position: unit.position || null
     });
 
     this.contacts = unit.contacts;
@@ -98,7 +98,7 @@ export class UnitFormComponent implements DialogContent<any>, OnDestroy {
     const data = {
       state: this.form.value.state,
       info: this.form.value.info,
-      position: {info: this.form.value.position}
+      position: this.form.value.position || {}
     };
 
     this.unitService.updateUnit(unitId, data)
