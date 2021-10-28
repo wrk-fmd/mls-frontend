@@ -1,6 +1,6 @@
 # First stage: Build the source code with Node
 # Base on slim node image, nothing more is needed
-FROM node:slim AS build
+FROM node:lts-alpine AS build
 WORKDIR /app
 RUN npm set unsafe-perm true
 
