@@ -81,7 +81,7 @@ export class UnitFormComponent implements DialogContent<any>, OnDestroy {
   }
 
   private buildTitle(unit?: UnitDto): string {
-    const prefix = this.translateService.instant('unit.form.edit');
+    const prefix = this.translateService.instant('unit.form.edit.label');
     return unit ? `${prefix}: ${unit.call}` : prefix;
   }
 
@@ -102,6 +102,6 @@ export class UnitFormComponent implements DialogContent<any>, OnDestroy {
     };
 
     this.unitService.updateUnit(unitId, data)
-        .subscribe(this.notificationService.onError('unit.update.error'));
+        .subscribe(this.notificationService.onError('unit.form.edit.error'));
   }
 }

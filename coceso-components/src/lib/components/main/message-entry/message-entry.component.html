@@ -3,7 +3,7 @@
     <mat-panel-title [ngClass]="{'message-emergency': emergency}">
       <ng-container *ngIf="isLast">
         {{timer | async}}''
-        <span translate>message.received.last</span>:
+        <span translate>data.message.received.last</span>:
       </ng-container>
       <ng-container *ngIf="!isLast">
         <span>{{data.messages[0].timestamp * 1000 | date:'mediumTime'}}</span>:
@@ -14,12 +14,12 @@
   </mat-expansion-panel-header>
 
   <p *ngIf="data.unit">
-    <button mat-button (click)="openDetails(data.unit.id)">{{'message.received.details' | translate}}</button>
+    <button mat-button (click)="openDetails(data.unit.id)">{{'data.message.received.details' | translate}}</button>
   </p>
 
   <dl>
     <ng-container *ngIf="data.unit && data.unit.portable && data.unit.position">
-      <dt translate>unit.position</dt>
+      <dt translate>data.unit.position.label</dt>
       <dd><span class="pre">{{data.unit.position | cocesoPoint}}</span></dd>
     </ng-container>
 

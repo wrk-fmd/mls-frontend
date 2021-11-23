@@ -1,22 +1,22 @@
 <main>
   <form [formGroup]="form" (ngSubmit)="save()">
     <mat-card class="mat-elevation-z4">
-      <mat-card-title translate>concern.edit.header</mat-card-title>
+      <mat-card-title translate>concern.actions.edit.header</mat-card-title>
       <mat-card-content>
-        <mls-form-text [control]="form.control('name')" label="concern.name" [required]="true" [max]="100"></mls-form-text>
-        <mls-form-multiline [control]="form.control('info')" label="concern.info"></mls-form-multiline>
+        <mls-form-text [control]="form.control('name')" label="concern.data.name.label" [required]="true" [max]="100"></mls-form-text>
+        <mls-form-multiline [control]="form.control('info')" label="concern.data.info.label"></mls-form-multiline>
       </mat-card-content>
 
       <mat-card-actions>
         <button mat-flat-button color="primary" [disabled]="saveDisabled">
-          {{'concern.edit.submit' | translate}}
+          {{'concern.actions.edit.submit' | translate}}
         </button>
       </mat-card-actions>
     </mat-card>
   </form>
 
   <mat-card class="mat-elevation-z4">
-    <mat-card-title translate>concern.edit.sections</mat-card-title>
+    <mat-card-title translate>concern.data.section.list</mat-card-title>
     <mat-card-content>
       <mat-form-field>
         <mat-chip-list #sectionList>

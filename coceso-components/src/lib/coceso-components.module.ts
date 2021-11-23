@@ -30,8 +30,7 @@ import {CommonFormsModule} from 'mls-common-forms';
 import {CommonI18nModule, TRANSLATE_REGISTRAR, Translations} from 'mls-common-i18n';
 import {CommonUiModule} from 'mls-common-ui';
 
-import de from '../i18n/de';
-import en from '../i18n/en';
+import i18n from '../i18n';
 
 import {CocesoRoutingModule} from './coceso-routing.module';
 
@@ -151,6 +150,6 @@ import {
 })
 export class CocesoComponentsModule {
   constructor(@Inject(TRANSLATE_REGISTRAR) registerTranslations: (translations: Translations) => void) {
-    registerTranslations({en, de});
+    registerTranslations(i18n);
   }
 }

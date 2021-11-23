@@ -1,10 +1,10 @@
 <form [formGroup]="form">
   <mat-dialog-content>
     <div class="form-grid">
-      <mls-form-text [control]="form.control('lastname')" label="staff.lastname" [required]="true"></mls-form-text>
-      <mls-form-text [control]="form.control('firstname')" label="staff.firstname" [required]="true"></mls-form-text>
+      <mls-form-text [control]="form.control('lastname')" label="staff.data.lastname.label" [required]="true"></mls-form-text>
+      <mls-form-text [control]="form.control('firstname')" label="staff.data.firstname.label" [required]="true"></mls-form-text>
 
-      <mls-form-multiline [control]="form.control('info')" label="staff.info"></mls-form-multiline>
+      <mls-form-multiline [control]="form.control('info')" label="staff.data.info.label"></mls-form-multiline>
       <coceso-staff-id-form [ids]="personnelId" (changed)="setPersonnelIdChanges($event)"></coceso-staff-id-form>
 
       <coceso-form-contacts [contacts]="contacts" (changed)="setContactChanges($event)" class="form-stretch"></coceso-form-contacts>

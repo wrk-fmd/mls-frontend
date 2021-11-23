@@ -44,6 +44,6 @@ export class ConcernListComponent {
     this.concernService.createConcern({name: this.form.value.name}).pipe(
         tap(() => this.form.reset()),
         finalize(() => this.loading = false)
-    ).subscribe(this.notificationService.onError('concern.create.error'));
+    ).subscribe(this.notificationService.onError('concern.actions.create.error'));
   }
 }

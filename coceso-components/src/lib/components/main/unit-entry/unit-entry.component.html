@@ -16,36 +16,36 @@
   </button>
 
   <mat-menu class="mat-menu-small" #unitMenu="matMenu">
-    <button mat-menu-item disabled translate>unit.state.set</button>
+    <button mat-menu-item disabled translate>unit.actions.state.set</button>
     <ng-container *ngFor="let state of states">
-      <button mat-menu-item (click)="setState(state)" translate>unit.state.{{state}}</button>
+      <button mat-menu-item (click)="setState(state)" translate>unit.data.state.values.{{state}}</button>
     </ng-container>
 
     <ng-container *ngIf="showActions">
       <mat-divider></mat-divider>
       <button mat-menu-item disabled translate>unit.actions.label</button>
-      <button mat-menu-item *ngIf="allowSendHome" (click)="sendHome()" translate>unit.actions.sendHome</button>
-      <button mat-menu-item *ngIf="allowStandby" (click)="setStandby()" translate>unit.actions.standby</button>
-      <button mat-menu-item *ngIf="allowHoldPosition" (click)="setHoldPosition()" translate>unit.actions.holdPosition</button>
+      <button mat-menu-item *ngIf="allowSendHome" (click)="sendHome()" translate>unit.actions.task.sendHome</button>
+      <button mat-menu-item *ngIf="allowStandby" (click)="setStandby()" translate>unit.actions.task.standby</button>
+      <button mat-menu-item *ngIf="allowHoldPosition" (click)="setHoldPosition()" translate>unit.actions.task.holdPosition</button>
     </ng-container>
 
     <mat-divider></mat-divider>
-    <button mat-menu-item (click)="openMessageForm()" translate>unit.message.title</button>
+    <button mat-menu-item (click)="openMessageForm()" translate>message.form.title</button>
 
     <ng-container *ngIf="dropdownIncidents">
       <mat-divider></mat-divider>
-      <button mat-menu-item disabled translate>unit.incidents</button>
+      <button mat-menu-item disabled translate>unit.data.incidents.label</button>
       <button mat-menu-item *ngFor="let incident of dropdownIncidents" (click)="openIncident(incident.id)">{{incident.title}}</button>
     </ng-container>
 
     <mat-divider></mat-divider>
-    <button mat-menu-item *ngIf="unit.portable" (click)="createTask()" translate>unit.actions.createIncident</button>
-    <button mat-menu-item *ngIf="unit.portable" (click)="createRelocation()" translate>unit.actions.createRelocation</button>
-    <button mat-menu-item (click)="reportIncident()" translate>unit.actions.reportIncident</button>
-    <button mat-menu-item (click)="addJournalEntry()" translate>unit.actions.addJournalEntry</button>
+    <button mat-menu-item *ngIf="unit.portable" (click)="createTask()" translate>incident.form.create.incident</button>
+    <button mat-menu-item *ngIf="unit.portable" (click)="createRelocation()" translate>incident.form.create.relocation</button>
+    <button mat-menu-item (click)="reportIncident()" translate>incident.form.create.report</button>
+    <button mat-menu-item (click)="addJournalEntry()" translate>journal.actions.add</button>
 
     <mat-divider></mat-divider>
-    <button mat-menu-item (click)="editUnit()" translate>unit.actions.editUnit</button>
-    <button mat-menu-item (click)="showJournal()" translate>unit.actions.showJournal</button>
+    <button mat-menu-item (click)="editUnit()" translate>unit.form.edit.label</button>
+    <button mat-menu-item (click)="showJournal()" translate>journal.views.log</button>
   </mat-menu>
 </li>

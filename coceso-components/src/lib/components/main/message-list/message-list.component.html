@@ -1,8 +1,8 @@
 <mat-dialog-content>
   <mat-form-field *ngIf="channels | async as channels" appearance="outline">
-    <mat-label translate>message.received.channels.label</mat-label>
+    <mat-label translate>data.message.received.channels.label</mat-label>
     <mat-select (valueChange)="setChannel($event)">
-      <mat-option [value]="null">{{'message.received.channels.all' | translate}}</mat-option>
+      <mat-option [value]="null">{{'data.message.received.channels.all' | translate}}</mat-option>
       <mat-option *ngFor="let channel of channels" [value]="channel">{{channel.name}}</mat-option>
     </mat-select>
   </mat-form-field>

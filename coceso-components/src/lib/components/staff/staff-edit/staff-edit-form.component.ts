@@ -94,10 +94,10 @@ export class StaffEditFormComponent implements DialogContent<any>, OnDestroy {
 
   private buildTitle(member?: StaffMemberDto): string {
     if (!this.id) {
-      return this.translateService.instant('staff.actions.addStaff');
+      return this.translateService.instant('staff.form.create.label');
     }
 
-    const prefix = this.translateService.instant('staff.actions.editStaff');
+    const prefix = this.translateService.instant('staff.form.edit.label');
     return member ? `${prefix}: ${this.staffHelper.getName(member)}` : prefix;
   }
 
@@ -128,11 +128,11 @@ export class StaffEditFormComponent implements DialogContent<any>, OnDestroy {
     if (this.id) {
       this.staffService.updateStaffMember(this.id, data)
           .pipe(tap(() => this.afterSave()))
-          .subscribe(this.notificationService.onError('staff.error.update'));
+          .subscribe(this.notificationService.onError('staff.form.edit.error'));
     } else {
       this.staffService.createStaffMember(data)
           .pipe(tap(id => this.afterSave(id)))
-          .subscribe(this.notificationService.onError('staff.error.create'));
+          .subscribe(this.notificationService.onError('staff.form.create.error'));
     }
   }
 

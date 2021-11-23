@@ -1,13 +1,15 @@
 <ng-container *ngIf="concern | async as concern">
   <mat-toolbar color="primary">
-    <h2 translate>coceso.header</h2>
+    <h2 translate>nav.header</h2>
     <h3 class="concern-name">{{concern.name}}</h3>
 
     <ul class="nav">
-      <li><a mat-button routerLink="main">{{'concern.links.main' | translate}}</a></li>
-      <li><a mat-button routerLink="edit">{{'concern.links.edit' | translate}}</a></li>
+      <ng-container *ngIf="!concern.closed">
+        <li><a mat-button routerLink="main">{{'nav.main' | translate}}</a></li>
+        <li><a mat-button routerLink="edit">{{'nav.edit' | translate}}</a></li>
+      </ng-container>
       <li class="fill-remaining-space"></li>
-      <li><a mat-button routerLink="/concerns">{{'concern.links.switch' | translate}}</a></li>
+      <li><a mat-button routerLink="/concerns">{{'nav.switch' | translate}}</a></li>
     </ul>
   </mat-toolbar>
 
@@ -17,17 +19,17 @@
       <mat-card-content *ngIf="concern.info" class="pre">{{concern.info}}</mat-card-content>
 
       <mat-card-actions *ngIf="concern.closed">
-        <button mat-button [disabled]="loading" (click)="setConcernOpen(true)">{{'concern.overview.reopen' | translate}}</button>
+        <button mat-button [disabled]="loading" (click)="setConcernOpen(true)">{{'concern.actions.open.label' | translate}}</button>
       </mat-card-actions>
       <mat-card-actions *ngIf="!concern.closed">
-        <a mat-flat-button color="primary" routerLink="main">{{'concern.links.main' | translate}}</a>
-        <a mat-button routerLink="edit">{{'concern.links.edit' | translate}}</a>
-        <button mat-button [disabled]="loading" (click)="setConcernOpen(false)">{{'concern.overview.close' | translate}}</button>
+        <a mat-flat-button color="primary" routerLink="main">{{'nav.main' | translate}}</a>
+        <a mat-button routerLink="edit">{{'nav.edit' | translate}}</a>
+        <button mat-button [disabled]="loading" (click)="setConcernOpen(false)">{{'concern.actions.close.label' | translate}}</button>
       </mat-card-actions>
     </mat-card>
 
     <mat-card class="mat-elevation-z4">
-      <mat-card-title translate>concern.overview.reports</mat-card-title>
+      <mat-card-title translate>report.header</mat-card-title>
       <mat-card-content>
         TODO
       </mat-card-content>

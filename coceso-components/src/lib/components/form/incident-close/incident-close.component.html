@@ -1,7 +1,7 @@
 ﻿<mat-form-field appearance="outline" *ngIf="control">
   <mat-label translate>{{label}}</mat-label>
   <mat-select [formControl]="control" [required]="required">
-    <mat-option *ngFor="let reason of reasons" [value]="reason">{{'incident.closed.' + reason | translate}}</mat-option>
+    <mat-option *ngFor="let reason of reasons" [value]="reason">{{'incident.data.closed.values.' + reason | translate}}</mat-option>
   </mat-select>
 
   <mat-hint>

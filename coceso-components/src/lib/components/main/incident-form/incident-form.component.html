@@ -3,28 +3,30 @@
     <div class="form-grid">
       <div class="form-button-group">
         <mat-button-toggle-group formControlName="type">
-          <mat-button-toggle *ngFor="let type of types" [value]="type">{{'incident.type.' + type | translate}}</mat-button-toggle>
+          <mat-button-toggle *ngFor="let type of types" [value]="type">
+            {{'incident.data.type.values.' + type | translate}}
+          </mat-button-toggle>
         </mat-button-toggle-group>
       </div>
       <div class="form-button-group align-right">
         <mat-button-toggle-group formControlName="options" multiple>
-          <mat-button-toggle value="blue">{{'incident.blue' | translate}}</mat-button-toggle>
-          <mat-button-toggle value="priority">{{'incident.priority' | translate}}</mat-button-toggle>
+          <mat-button-toggle value="blue">{{'incident.data.blue.label' | translate}}</mat-button-toggle>
+          <mat-button-toggle value="priority">{{'incident.data.priority.label' | translate}}</mat-button-toggle>
         </mat-button-toggle-group>
       </div>
 
-      <coceso-form-point [control]="form.control('bo')" label="incident.bo"></coceso-form-point>
-      <mls-form-multiline [control]="form.control('info')" label="incident.info"></mls-form-multiline>
+      <coceso-form-point [control]="form.control('bo')" label="incident.data.bo.label"></coceso-form-point>
+      <mls-form-multiline [control]="form.control('info')" label="incident.data.info.label"></mls-form-multiline>
 
-      <mls-form-text [control]="form.control('caller')" label="incident.caller" [max]="100" class="form-stretch"></mls-form-text>
+      <mls-form-text [control]="form.control('caller')" label="incident.data.caller.label" [max]="100" class="form-stretch"></mls-form-text>
 
       <ng-container *ngIf="isTaskOrTransport">
-        <coceso-form-point [control]="form.control('ao')" label="incident.ao"></coceso-form-point>
-        <mls-form-text [control]="form.control('casusNr')" label="incident.casus" [max]="100"></mls-form-text>
+        <coceso-form-point [control]="form.control('ao')" label="incident.data.ao.label"></coceso-form-point>
+        <mls-form-text [control]="form.control('casusNr')" label="incident.data.casus.label" [max]="100"></mls-form-text>
       </ng-container>
 
-      <coceso-form-incident-close [control]="form.control('closed')" label="incident.closed.label"></coceso-form-incident-close>
-      <coceso-form-section [control]="form.control('section')" label="concern.section"></coceso-form-section>
+      <coceso-form-incident-close [control]="form.control('closed')" label="incident.data.closed.label"></coceso-form-incident-close>
+      <coceso-form-section [control]="form.control('section')" label="concern.data.section.label"></coceso-form-section>
 
       <dl class="form-stretch">
         <coceso-main-incident-form-task *ngFor="let unit of units" [control]="unit" [states]="states"

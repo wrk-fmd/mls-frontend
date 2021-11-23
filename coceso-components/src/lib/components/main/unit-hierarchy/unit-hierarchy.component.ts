@@ -21,7 +21,7 @@ export class UnitHierarchyComponent implements DialogContent<null> {
   constructor(containerService: ContainerDataService, translateService: TranslateService) {
     this.container = containerService.getRootWithDependencies();
 
-    const titlePrefix = translateService.instant('main.nav.units.hierarchy');
+    const titlePrefix = translateService.instant('unit.views.hierarchy');
     this.taskTitle = of(titlePrefix);
     this.windowTitle = this.container.pipe(
         map(container => container ? `${titlePrefix} (${container.availableUnits}/${container.totalUnits})` : titlePrefix)

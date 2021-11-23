@@ -102,7 +102,7 @@ export class UnitEntryComponent implements OnDestroy {
     this.states = unit ? Object.values(UnitStateDto).filter(state => state !== unit.state) : [];
     this.stateCss = this.unitHelper.stateCss(unit);
 
-    this.isFree = this.unitHelper.isFree(unit);
+    this.isFree = this.unitHelper.isWaiting(unit);
     this.isHome = this.unitHelper.isHome(unit);
 
     this.allowSendHome = this.unitHelper.allowSendHome(unit);
@@ -127,7 +127,7 @@ export class UnitEntryComponent implements OnDestroy {
     }
 
     this.unitService.updateUnit(this.id, {state})
-        .subscribe(this.notificationService.onError('unit.state.error'));
+        .subscribe(this.notificationService.onError('unit.actions.state.error'));
   }
 
   sendHome(): void {
@@ -136,7 +136,7 @@ export class UnitEntryComponent implements OnDestroy {
     }
 
     this.unitService.sendHome(this.id)
-        .subscribe(this.notificationService.onError('unit.actions.error'));
+        .subscribe(this.notificationService.onError('unit.actions.task.error'));
   }
 
   setStandby() {
@@ -145,7 +145,7 @@ export class UnitEntryComponent implements OnDestroy {
     }
 
     this.unitService.standby(this.id)
-        .subscribe(this.notificationService.onError('unit.actions.error'));
+        .subscribe(this.notificationService.onError('unit.actions.task.error'));
   }
 
   setHoldPosition() {
@@ -154,7 +154,7 @@ export class UnitEntryComponent implements OnDestroy {
     }
 
     this.unitService.holdPosition(this.id)
-        .subscribe(this.notificationService.onError('unit.actions.error'));
+        .subscribe(this.notificationService.onError('unit.actions.task.error'));
   }
 
   openMessageForm(): void {

@@ -5,7 +5,7 @@
 
   <dd>
     <mat-button-toggle-group [formControl]="control">
-      <mat-button-toggle *ngFor="let state of states" [value]="state">{{'task.state.' + state | translate}}</mat-button-toggle>
+      <mat-button-toggle *ngFor="let state of states" [value]="state">{{'task.state.short.' + state | translate}}</mat-button-toggle>
     </mat-button-toggle-group>
 
     <div *ngIf="!control.isNew" class="task-actions">

@@ -40,7 +40,7 @@ export class MainComponent implements AfterViewInit, OnDestroy {
   readonly highlightedIncidents: Observable<string | null>;
   readonly highlightedTransports: Observable<string | null>;
   readonly alarmUnits: Observable<string | null>;
-  readonly freeUnits: Observable<string | null>;
+  readonly waitingUnits: Observable<string | null>;
 
   constructor(private readonly concernService: ConcernDataService, taskService: TaskDataService,
               incidentHelper: IncidentHelper, unitHelper: UnitHelper,
@@ -65,8 +65,8 @@ export class MainComponent implements AfterViewInit, OnDestroy {
         map(data => data.length ? data.length.toString() : null)
     );
 
-    const freeUnitsOptions = new ListOptions<UnitWithIncidents>().addFilters(u => unitHelper.isFree(u));
-    this.freeUnits = taskService.getUnits(freeUnitsOptions).pipe(
+    const waitingUnitsOptions = new ListOptions<UnitWithIncidents>().addFilters(u => unitHelper.isWaiting(u));
+    this.waitingUnits = taskService.getUnits(waitingUnitsOptions).pipe(
         map(data => data.length ? data.length.toString() : null)
     );
   }
@@ -106,62 +106,62 @@ export class MainComponent implements AfterViewInit, OnDestroy {
     this.windowService.open(UnitListComponent, {filter: UnitListFilter.AVAILABLE}, {left: '30%', bottom: '0px'});
   }
 
-  showUnitsFree() {
-    this.windowService.open(UnitListComponent, {filter: UnitListFilter.FREE}, {left: '15%', bottom: '0px'});
+  showUnitsWaiting() {
+    this.windowService.open(UnitListComponent, {filter: UnitListFilter.WAITING}, {left: '15%', bottom: '0px'});
   }
 
   createIncident() {
     this.windowService.open(IncidentFormComponent, {type: IncidentTypeDto.Task, options: ['blue']});
   }
 
-  createRelocation() {
+  createPosition() {
     this.windowService.open(IncidentFormComponent, {type: IncidentTypeDto.Position});
   }
 
   showAllIncidents() {
     this.windowService.open(IncidentListComponent, {
-      title: 'main.nav.incidents.showAll'
+      title: 'incident.views.all'
     }, {width: '460px', right: '460px', bottom: '0px'});
   }
 
   showActiveTasks() {
     this.windowService.open(IncidentListComponent, {
-      title: 'main.nav.incidents.showActiveTasks',
+      title: 'incident.views.activeTasks',
       filter: {onlyActive: true, types: [IncidentTypeDto.Task, IncidentTypeDto.Transport]}
     }, {width: '460px', right: '0px', top: '0px'});
   }
 
   showActivePositions() {
     this.windowService.open(IncidentListComponent, {
-      title: 'main.nav.incidents.showActivePositions',
+      title: 'incident.views.activePositions',
       filter: {onlyActive: true, types: [IncidentTypeDto.Position]}
     }, {width: '460px', right: '0px', bottom: '0px'});
   }
 
   showHighlightedIncidents() {
     this.windowService.open(IncidentListComponent, {
-      title: 'main.nav.incidents.showHighlightedIncidents',
+      title: 'incident.views.highlightedIncidents',
       filter: {highlighted: true}
     }, {width: '460px', right: '460px', top: '0px'});
   }
 
   showDoneIncidents() {
     this.windowService.open(IncidentListComponent, {
-      title: 'main.nav.incidents.showDone',
+      title: 'incident.views.done',
       filter: {onlyClosed: true}
     }, {width: '460px', right: '460px', top: '15%'});
   }
 
   showAllTransports() {
     this.windowService.open(IncidentListComponent, {
-      title: 'main.nav.incidents.showAllTransports',
+      title: 'incident.views.allTransports',
       filter: {types: [IncidentTypeDto.Transport]}
     }, {width: '460px', right: '0px', bottom: '0px'});
   }
 
   showHighlightedTransports() {
     this.windowService.open(IncidentListComponent, {
-      title: 'main.nav.incidents.showHighlightedTransports',
+      title: 'incident.views.highlightedTransports',
       filter: {highlighted: true, types: [IncidentTypeDto.Transport]}
     }, {width: '460px', right: '0px', top: '15%'});
   }

@@ -58,7 +58,7 @@ export class ConcernEditComponent implements OnDestroy {
     };
     this.concernService.updateConcern(data).pipe(
         finalize(() => this.loading = false)
-    ).subscribe(this.notificationService.onError('concern.update.error'));
+    ).subscribe(this.notificationService.onError('concern.actions.edit.error'));
   }
 
   addSection(section: string) {
@@ -74,7 +74,7 @@ export class ConcernEditComponent implements OnDestroy {
     this.concernService.addSection(data).pipe(
         tap(() => this.sectionForm.reset()),
         finalize(() => this.loading = false)
-    ).subscribe(this.notificationService.onError('concern.section.error'));
+    ).subscribe(this.notificationService.onError('concern.actions.sections.add.error'));
   }
 
   removeSection(section: string) {
@@ -85,6 +85,6 @@ export class ConcernEditComponent implements OnDestroy {
     this.loading = true;
     this.concernService.removeSection(section).pipe(
         finalize(() => this.loading = false)
-    ).subscribe(this.notificationService.onError('concern.section.error'));
+    ).subscribe(this.notificationService.onError('concern.actions.sections.remove.error'));
   }
 }

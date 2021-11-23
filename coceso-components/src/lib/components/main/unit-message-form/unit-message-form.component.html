@@ -1,14 +1,15 @@
 <form [formGroup]="form">
   <mat-dialog-content>
     <div class="form-grid">
-      <mls-form-multiline [control]="form.control('text')" label="message.text" class="form-stretch" [rows]="10" [required]="true">
+      <mls-form-multiline [control]="form.control('text')" label="message.form.text.label" class="form-stretch" [rows]="10"
+                          [required]="true">
       </mls-form-multiline>
 
       <mat-form-field *ngIf="units | async as units" class="form-stretch">
-        <mat-label translate>message.recipients.label</mat-label>
+        <mat-label translate>message.form.recipients.label</mat-label>
 
         <mat-chip-list [selectable]="false">
-          <mat-chip *ngIf="!units.length" translate>message.recipients.none</mat-chip>
+          <mat-chip *ngIf="!units.length" translate>message.form.recipients.none</mat-chip>
           <mat-chip *ngFor="let unit of units">{{unit.call}}</mat-chip>
         </mat-chip-list>
       </mat-form-field>

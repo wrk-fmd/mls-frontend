@@ -31,7 +31,7 @@ export class IncidentHelper {
 
   shortBo(incident?: IncidentDto): string {
     // TODO Do we really need this method here?
-    return this.pointHelper.toString(incident?.bo, null, 'incident.boMissing');
+    return this.pointHelper.toString(incident?.bo, null, 'incident.data.bo.none');
   }
 
   title(incident?: IncidentDto): string {
@@ -40,7 +40,7 @@ export class IncidentHelper {
     }
 
     const bo = this.shortBo(incident);
-    const type = this.translateService.instant(`incident.type.short.${this.shortType(incident)}`);
+    const type = this.translateService.instant(`incident.data.type.short.${this.shortType(incident)}`);
     return bo ? `${type}: ${bo}` : type;
   }
 

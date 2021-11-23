@@ -69,7 +69,7 @@ export class ContainerEditChildComponent implements OnDestroy {
       name: this.form.value.name
     }).pipe(
         tap(() => this.editing = false)
-    ).subscribe(this.notificationService.onError('container.update.error'));
+    ).subscribe(this.notificationService.onError('unit.hierarchy.actions.error'));
   }
 
   createContainer() {
@@ -78,7 +78,7 @@ export class ContainerEditChildComponent implements OnDestroy {
       parent: this._id.value
     };
     this.containerService.createContainer(data)
-        .subscribe(this.notificationService.onError('container.create.error'));
+        .subscribe(this.notificationService.onError('unit.hierarchy.actions.error'));
   }
 
   deleteContainer() {
@@ -88,7 +88,7 @@ export class ContainerEditChildComponent implements OnDestroy {
     }
 
     this.containerService.deleteContainer(id)
-        .subscribe(this.notificationService.onError('container.delete.error'));
+        .subscribe(this.notificationService.onError('unit.hierarchy.actions.error'));
   }
 
   dropUnit(event: CdkDragDrop<any>) {
@@ -97,7 +97,8 @@ export class ContainerEditChildComponent implements OnDestroy {
     const unitId = event.item.data;
     const index = event.currentIndex;
     if (event.isPointerOverContainer && containerId && unitId) {
-      this.containerService.updateUnit(containerId, unitId, index).subscribe(() => console.log('done'));
+      this.containerService.updateUnit(containerId, unitId, index)
+          .subscribe(this.notificationService.onError('unit.hierarchy.actions.error'));
     }
   }
 
@@ -108,6 +109,7 @@ export class ContainerEditChildComponent implements OnDestroy {
       parent: this._id.value,
       index: event.currentIndex
     };
-    this.containerService.updateContainer(containerId, data).subscribe(() => console.log('done'));
+    this.containerService.updateContainer(containerId, data)
+        .subscribe(this.notificationService.onError('unit.hierarchy.actions.error'));
   }
 }

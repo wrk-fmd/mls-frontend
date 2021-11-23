@@ -1,21 +1,23 @@
-<mat-toolbar color="primary">
-  <h2 translate>coceso.header</h2>
-  <h3 class="concern-name" *ngIf="concern | async as concern">{{concern.name}}</h3>
+<ng-container *ngIf="concern | async as concern">
+  <mat-toolbar color="primary">
+    <h2 translate>nav.header</h2>
+    <h3 class="concern-name">{{concern.name}}</h3>
 
-  <ul class="nav">
-    <li><a mat-button routerLink="../main">{{'concern.links.main' | translate}}</a></li>
-    <li><a mat-button routerLink="..">{{'concern.links.overview' | translate}}</a></li>
-  </ul>
-</mat-toolbar>
+    <ul class="nav">
+      <li *ngIf="!concern.closed"><a mat-button routerLink="../main">{{'nav.main' | translate}}</a></li>
+      <li><a mat-button routerLink="..">{{'nav.overview' | translate}}</a></li>
+    </ul>
+  </mat-toolbar>
 
-<mat-tab-group [selectedIndex]="1">
-  <mat-tab [label]="'concern.edit.header' | translate">
-    <coceso-edit-concern></coceso-edit-concern>
-  </mat-tab>
-  <mat-tab [label]="'concern.edit.units' | translate">
-    <coceso-edit-units></coceso-edit-units>
-  </mat-tab>
-  <mat-tab [label]="'concern.edit.containers' | translate">
-    <coceso-edit-container-root></coceso-edit-container-root>
-  </mat-tab>
-</mat-tab-group>
+  <mat-tab-group [selectedIndex]="1">
+    <mat-tab [label]="'concern.actions.edit.header' | translate">
+      <coceso-edit-concern></coceso-edit-concern>
+    </mat-tab>
+    <mat-tab [label]="'unit.actions.edit.header' | translate">
+      <coceso-edit-units></coceso-edit-units>
+    </mat-tab>
+    <mat-tab [label]="'unit.hierarchy.actions.header' | translate">
+      <coceso-edit-container-root></coceso-edit-container-root>
+    </mat-tab>
+  </mat-tab-group>
+</ng-container>

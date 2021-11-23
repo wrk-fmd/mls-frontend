@@ -3,37 +3,37 @@
     <h3>{{options.info | translate}}</h3>
 
     <dl *ngIf="incident | async as incident">
-      <dt translate>task.state.current</dt>
-      <dd>{{'task.state.' + options.currentState | translate}}</dd>
+      <dt translate>task.state.label</dt>
+      <dd>{{'task.state.values.' + options.currentState | translate}}</dd>
 
       <ng-container *ngIf="incident.bo">
-        <dt translate>incident.bo</dt>
+        <dt translate>incident.data.bo.label</dt>
         <dd><span class="pre">{{incident.bo | cocesoPoint}}</span></dd>
       </ng-container>
 
       <ng-container *ngIf="incident.ao">
-        <dt translate>incident.ao</dt>
+        <dt translate>incident.data.ao.label</dt>
         <dd><span class="pre">{{incident.ao | cocesoPoint}}</span></dd>
       </ng-container>
 
       <ng-container *ngIf="incident.blue">
-        <dt translate>incident.blue</dt>
+        <dt translate>incident.data.blue.label</dt>
         <dd translate>form.yes</dd>
       </ng-container>
 
       <ng-container *ngIf="incident.caller">
-        <dt translate>incident.callerShort</dt>
+        <dt translate>incident.data.caller.short</dt>
         <dd>{{incident.caller}}</dd>
       </ng-container>
 
       <ng-container *ngIf="incident.info">
-        <dt translate>incident.info</dt>
+        <dt translate>incident.data.info.label</dt>
         <dd><span class="pre">{{incident.info}}</span></dd>
       </ng-container>
 
       <ng-container *ngFor="let unit of units | async">
         <dt>{{unit.call}}</dt>
-        <dd>{{'task.state.' + unit.state | translate}}</dd>
+        <dd>{{'task.state.values.' + unit.state | translate}}</dd>
       </ng-container>
     </dl>
   </mat-dialog-content>

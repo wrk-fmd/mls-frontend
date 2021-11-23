@@ -49,7 +49,7 @@ export class TaskDialogComponent implements DialogContent<TaskDto> {
 
     this.taskService.setState(task.incident, task.unit, state)
         .pipe(tap(() => this.dialog.close()))
-        .subscribe(this.notificationService.onError('task.error'));
+        .subscribe(this.notificationService.onError('task.dialog.error'));
   }
 
   private buildTitle(incident?: IncidentDto, unit?: UnitDto): string {
@@ -114,7 +114,7 @@ export class TaskDialogComponent implements DialogContent<TaskDto> {
         }
         break;
       case IncidentTypeDto.ToHome:
-        button = nextState === TaskStateDto.Detached ? 'task.dialog.isHome' : `task.state.${nextState}`;
+        button = nextState === TaskStateDto.Detached ? 'task.dialog.isHome' : `task.state.values.${nextState}`;
         break;
       case IncidentTypeDto.Position:
         switch (nextState) {
@@ -125,12 +125,12 @@ export class TaskDialogComponent implements DialogContent<TaskDto> {
             info = 'task.dialog.position.end';
             break;
           default:
-            button = `task.state.${nextState}`;
+            button = `task.state.values.${nextState}`;
             break;
         }
         break;
       default:
-        button = `task.state.${nextState}`;
+        button = `task.state.values.${nextState}`;
         break;
     }
 

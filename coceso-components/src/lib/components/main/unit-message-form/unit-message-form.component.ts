@@ -37,7 +37,7 @@ export class UnitMessageFormComponent implements DialogContent<UnitMessageFormOp
         shareReplay(1)
     );
 
-    this.title = translateService.instant('unit.message.title');
+    this.title = translateService.instant('message.form.title');
     this.taskTitle = of(this.title);
     this.windowTitle = this.units.pipe(map(units => this.buildTitle(units)));
   }
@@ -66,7 +66,7 @@ export class UnitMessageFormComponent implements DialogContent<UnitMessageFormOp
 
     combineLatest(this.ids.value.map(id => this.unitService.sendMessage(id, data)))
         .pipe(tap(_ => this.dialog.close()))
-        .subscribe(this.notificationService.onError('alarm.send.error'));
+        .subscribe(this.notificationService.onError('message.form.error'));
   }
 }
 

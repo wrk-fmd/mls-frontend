@@ -21,7 +21,7 @@ export class UnitHelper {
     return !!unit?.incidents.find(t => t.state === TaskStateDto.Assigned);
   }
 
-  isFree(unit?: UnitDto): boolean {
+  isWaiting(unit?: UnitDto): boolean {
     return !!unit && unit.portable
         // Units without assigned incidents
         && !unit.incidents.length

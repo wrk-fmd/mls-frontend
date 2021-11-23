@@ -1,7 +1,7 @@
 ﻿<mat-form-field appearance="outline" *ngIf="control">
   <mat-label translate>{{label}}</mat-label>
   <mat-select [formControl]="control" [required]="required" multiple>
-    <mat-option *ngFor="let type of types" [value]="type">{{'unit.type.' + type | translate}}</mat-option>
+    <mat-option *ngFor="let type of types" [value]="type">{{'unit.data.type.values.' + type | translate}}</mat-option>
   </mat-select>
 
   <mat-hint>

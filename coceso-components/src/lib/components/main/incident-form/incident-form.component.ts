@@ -140,8 +140,8 @@ export class IncidentFormComponent implements DialogContent<IncidentDto>, OnDest
   private updateTitles(incident?: IncidentDto) {
     if (this.id.value) {
       const prefix = this.translateService.instant(this.form.value.type === IncidentTypeDto.Position
-          ? 'incident.form.editPosition'
-          : 'incident.form.editIncident'
+          ? 'incident.form.edit.position'
+          : 'incident.form.edit.incident'
       );
 
       const bo = this.incidentHelper.shortBo(incident);
@@ -151,8 +151,8 @@ export class IncidentFormComponent implements DialogContent<IncidentDto>, OnDest
       this.taskTitle.next(fullTitle ? fullTitle : prefix);
     } else {
       const title = this.translateService.instant(this.form.value.type === IncidentTypeDto.Position
-          ? 'incident.form.addPosition'
-          : 'incident.form.addIncident'
+          ? 'incident.form.create.position'
+          : 'incident.form.create.incident'
       );
       this.windowTitle.next(title);
       this.taskTitle.next(title);
@@ -238,11 +238,11 @@ export class IncidentFormComponent implements DialogContent<IncidentDto>, OnDest
     if (incidentId) {
       this.incidentService.updateIncident(incidentId, data)
           .pipe(mergeMap(() => this.saveUnits()))
-          .subscribe(this.notificationService.onError('incident.update.error'));
+          .subscribe(this.notificationService.onError('incident.form.edit.error'));
     } else {
       this.incidentService.createIncident(data)
           .pipe(tap(id => this.id.next(id)), mergeMap(() => this.saveUnits()))
-          .subscribe(this.notificationService.onError('incident.create.error'));
+          .subscribe(this.notificationService.onError('incident.form.create.error'));
     }
   }
 

@@ -93,10 +93,10 @@ export class UnitEditFormComponent implements DialogContent<any>, OnDestroy {
 
   private buildTitle(unit?: UnitDto): string {
     if (!this.id.value) {
-      return this.translateService.instant('unit.form.add');
+      return this.translateService.instant('unit.form.create.label');
     }
 
-    const prefix = this.translateService.instant('unit.form.edit');
+    const prefix = this.translateService.instant('unit.form.edit.label');
     return unit ? `${prefix}: ${unit.call}` : prefix;
   }
 
@@ -130,11 +130,11 @@ export class UnitEditFormComponent implements DialogContent<any>, OnDestroy {
     if (unitId) {
       this.unitService.updateUnit(unitId, data)
           .pipe(mergeMap(() => this.saveCrew()))
-          .subscribe(this.notificationService.onError('unit.update.error'));
+          .subscribe(this.notificationService.onError('unit.form.edit.error'));
     } else {
       this.unitService.createUnit(data)
           .pipe(tap(id => this.id.next(id)), mergeMap(() => this.saveCrew()))
-          .subscribe(this.notificationService.onError('unit.create.error'));
+          .subscribe(this.notificationService.onError('unit.form.create.error'));
     }
   }
 

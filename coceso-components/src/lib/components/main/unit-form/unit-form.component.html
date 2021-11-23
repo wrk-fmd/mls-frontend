@@ -3,17 +3,19 @@
     <div class="form-grid">
       <div class="form-button-group form-stretch">
         <mat-button-toggle-group formControlName="state">
-          <mat-button-toggle *ngFor="let state of states" [value]="state">{{'unit.state.' + state | translate}}</mat-button-toggle>
+          <mat-button-toggle *ngFor="let state of states" [value]="state">
+            {{'unit.data.state.values.' + state | translate}}
+          </mat-button-toggle>
         </mat-button-toggle-group>
       </div>
 
-      <coceso-form-point [control]="form.control('position')" label="unit.position"></coceso-form-point>
-      <mls-form-multiline [control]="form.control('info')" label="unit.info"></mls-form-multiline>
+      <coceso-form-point [control]="form.control('position')" label="unit.data.position.label"></coceso-form-point>
+      <mls-form-multiline [control]="form.control('info')" label="unit.data.info.label"></mls-form-multiline>
     </div>
 
     <dl *ngIf="unit | async as unit">
       <ng-container *ngIf="unit.home">
-        <dt translate>unit.home</dt>
+        <dt translate>unit.data.home.label</dt>
         <dd><span class="pre">{{unit.home | cocesoPoint}}</span></dd>
       </ng-container>
 
@@ -25,7 +27,7 @@
       </ng-container>
 
       <ng-container *ngIf="unit.crew && unit.crew.length">
-        <dt translate>unit.crew.label</dt>
+        <dt translate>unit.data.crew.label</dt>
 
         <ng-container *ngFor="let member of crew">
           <dt>{{member | cocesoStaffName}}</dt>

@@ -1,11 +1,11 @@
 <form [formGroup]="form" *ngIf="incident">
   <mat-dialog-content>
     <div class="form-grid">
-      <mls-form-multiline [control]="form.control('text')" label="message.text" class="form-stretch" [rows]="10" [required]="true">
+      <mls-form-multiline [control]="form.control('text')" label="message.form.text.label" class="form-stretch" [rows]="10" [required]="true">
       </mls-form-multiline>
 
       <mat-form-field class="form-stretch">
-        <mat-label translate>message.recipients.label</mat-label>
+        <mat-label translate>message.form.recipients.label</mat-label>
 
         <mat-button-toggle-group *ngIf="showModeForm" formControlName="mode">
           <mat-button-toggle *ngFor="let mode of modes" [value]="mode">{{'incident.message.mode.' + mode | translate}}</mat-button-toggle>

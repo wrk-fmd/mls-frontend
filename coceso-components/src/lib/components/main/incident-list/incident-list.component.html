@@ -1,36 +1,36 @@
 <mat-dialog-content>
   <mat-expansion-panel class="filter-panel">
-    <mat-expansion-panel-header [ngClass]="filterCss">{{'main.filter' | translate}}</mat-expansion-panel-header>
+    <mat-expansion-panel-header [ngClass]="filterCss">{{'incident.filter.label' | translate}}</mat-expansion-panel-header>
 
     <form [formGroup]="filterForm">
       <div *ngIf="filterTypes" class="filter-group" formGroupName="types">
-        <label translate>incident.type.label</label>
+        <label translate>incident.data.type.label</label>
         <mat-checkbox *ngFor="let type of filterTypes" [formControlName]="type" [value]="type">
-          {{'incident.type.' + type | translate}}
+          {{'incident.data.type.values.' + type | translate}}
         </mat-checkbox>
       </div>
 
       <div class="filter-group" formGroupName="blue">
-        <label translate>incident.blue</label>
+        <label translate>incident.data.blue.label</label>
         <mat-checkbox formControlName="yes" value="yes">{{'form.yes' | translate}}</mat-checkbox>
         <mat-checkbox formControlName="no" value="no">{{'form.no' | translate}}</mat-checkbox>
       </div>
 
       <div *ngIf="filterStates" class="filter-group" formGroupName="states">
-        <label translate>incident.closed.label</label>
+        <label translate>incident.data.closed.label</label>
         <mat-checkbox *ngFor="let state of filterStates" [formControlName]="state" [value]="state">
-          {{'incident.closed.' + state | translate}}
+          {{'incident.data.closed.values.' + state | translate}}
         </mat-checkbox>
       </div>
 
       <div *ngIf="filterCasusAndPatient" class="filter-group" formGroupName="casus">
-        <label translate>incident.casus</label>
+        <label translate>incident.data.casus.label</label>
         <mat-checkbox formControlName="yes" value="yes">{{'form.yes' | translate}}</mat-checkbox>
         <mat-checkbox formControlName="no" value="no">{{'form.no' | translate}}</mat-checkbox>
       </div>
 
       <div *ngIf="filterCasusAndPatient" class="filter-group" formGroupName="patient">
-        <label translate>incident.patient</label>
+        <label translate>incident.data.patient.label</label>
         <mat-checkbox formControlName="yes" value="yes">{{'form.yes' | translate}}</mat-checkbox>
         <mat-checkbox formControlName="no" value="no">{{'form.no' | translate}}</mat-checkbox>
       </div>

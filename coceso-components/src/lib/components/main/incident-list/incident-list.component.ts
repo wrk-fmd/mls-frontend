@@ -107,7 +107,7 @@ export class IncidentListComponent implements DialogContent<IncidentListOptions>
 
     this.optionsPredicates.next(predicates);
 
-    this.taskTitle.next(this.translateService.instant(data.title || 'main.nav.incidents.header'));
+    this.taskTitle.next(this.translateService.instant(data.title || 'incident.views.header'));
   }
 
   isHighlighted(incident: IncidentDto): boolean {

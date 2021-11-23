@@ -1,7 +1,7 @@
 <main *ngIf="root | async as container">
   <mat-card class="mat-elevation-z4">
     <mat-card-title>
-      <span translate>concern.edit.containers</span>
+      <span translate>unit.hierarchy.actions.header</span>
       <div class="fill-remaining-space"></div>
       <button mat-icon-button (click)="createContainer()">
         <mat-icon>add</mat-icon>
@@ -19,7 +19,7 @@
   </mat-card>
 
   <mat-card class="mat-elevation-z4">
-    <mat-card-title translate>container.unassigned</mat-card-title>
+    <mat-card-title translate>unit.hierarchy.actions.unassigned</mat-card-title>
     <mat-card-content cdkDropListGroup dropListGroupName="edit-units">
       <div class="units-unassigned" cdkDropList (cdkDropListDropped)="dropUnit($event)" cdkDropListSortingDisabled>
         <coceso-edit-container-unit *ngFor="let id of container.units" [unitId]="id"></coceso-edit-container-unit>

@@ -46,20 +46,20 @@ export class UnitListComponent implements DialogContent<UnitListOptions> {
     data = data || {};
 
     let filterPredicate = undefined;
-    let titlePrefix = 'main.nav.units.overview';
+    let titlePrefix = 'unit.views.overview';
 
     switch (data.filter) {
       case UnitListFilter.ALARM:
         filterPredicate = (u: UnitWithIncidents) => this.unitHelper.hasAssigned(u);
-        titlePrefix = 'main.nav.units.alarm';
+        titlePrefix = 'unit.views.alarm';
         break;
-      case UnitListFilter.FREE:
-        filterPredicate = (u: UnitWithIncidents) => this.unitHelper.isFree(u);
-        titlePrefix = 'main.nav.units.free';
+      case UnitListFilter.WAITING:
+        filterPredicate = (u: UnitWithIncidents) => this.unitHelper.isWaiting(u);
+        titlePrefix = 'unit.views.waiting';
         break;
       case UnitListFilter.AVAILABLE:
         filterPredicate = (u: UnitWithIncidents) => this.unitHelper.isAvailable(u);
-        titlePrefix = 'main.nav.units.available';
+        titlePrefix = 'unit.views.available';
         break;
     }
 
@@ -73,5 +73,5 @@ export interface UnitListOptions {
 }
 
 export enum UnitListFilter {
-  ALARM, FREE, AVAILABLE
+  ALARM, WAITING, AVAILABLE
 }

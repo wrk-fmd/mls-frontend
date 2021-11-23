@@ -24,6 +24,6 @@ export class ConcernOverviewComponent {
     this.loading = true;
     this.concernService.setConcernOpen(open).pipe(
         finalize(() => this.loading = false)
-    ).subscribe(this.notificationService.onError(open ? 'concern.open.error' : 'concern.close.error'));
+    ).subscribe(this.notificationService.onError(open ? 'concern.actions.open.error' : 'concern.actions.close.error'));
   }
 }

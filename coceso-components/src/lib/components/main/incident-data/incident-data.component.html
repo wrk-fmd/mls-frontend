@@ -3,58 +3,57 @@
   <mat-expansion-panel-header>
     <mat-panel-title class="incident-title" [ngClass]="{'incident-highlighted': isHighlighted, 'incident-priority': incident.priority}">
       <span class="incident-type" [ngClass]="{'incident-blue': incident.blue}" translate>
-        incident.type.short.{{typeChar}}
+        incident.data.type.short.{{typeChar}}
       </span>
       <span class="incident-timer" *ngIf="timer | async as timer" [ngClass]="timer.css">{{timer.elapsed}}'</span>
-      <span>{{incident.bo | cocesoPoint : null : 'incident.boMissing'}}</span>
+      <span>{{incident.bo | cocesoPoint : null : 'incident.data.bo.none'}}</span>
       <span class="incident-subtitle" *ngIf="incident.ao">&#x2794; {{incident.ao | cocesoPoint : null}}</span>
-
     </mat-panel-title>
   </mat-expansion-panel-header>
 
   <dl>
     <ng-container *ngIf="incident.bo">
-      <dt translate>incident.bo</dt>
+      <dt translate>incident.data.bo.label</dt>
       <dd><span class="pre">{{incident.bo | cocesoPoint}}</span></dd>
     </ng-container>
 
     <ng-container *ngIf="incident.ao">
-      <dt translate>incident.ao</dt>
+      <dt translate>incident.data.ao.label</dt>
       <dd><span class="pre">{{incident.ao | cocesoPoint}}</span></dd>
     </ng-container>
 
     <ng-container *ngIf="incident.caller">
-      <dt translate>incident.callerShort</dt>
+      <dt translate>incident.data.caller.short</dt>
       <dd>{{incident.caller}}</dd>
     </ng-container>
 
     <ng-container *ngIf="incident.info">
-      <dt translate>incident.info</dt>
+      <dt translate>incident.data.info.label</dt>
       <dd><span class="pre">{{incident.info}}</span></dd>
     </ng-container>
 
     <ng-container *ngIf="incident.closed">
-      <dt translate>incident.closed.label</dt>
-      <dd>{{'incident.closed.' + incident.closed | translate}}</dd>
+      <dt translate>incident.data.closed.label</dt>
+      <dd>{{'incident.data.closed.values.' + incident.closed | translate}}</dd>
     </ng-container>
 
-    <dt translate>incident.created</dt>
+    <dt translate>incident.data.created.label</dt>
     <dd>{{incident.created * 1000 | date:'mediumTime'}}</dd>
 
     <ng-container *ngIf="incident.arrival">
-      <dt translate>incident.arrival</dt>
+      <dt translate>incident.data.arrival.label</dt>
       <dd>{{incident.arrival * 1000 | date:'mediumTime'}}</dd>
     </ng-container>
 
     <ng-container *ngIf="incident.ended">
-      <dt translate>incident.ended</dt>
+      <dt translate>incident.data.ended.label</dt>
       <dd>{{incident.ended * 1000 | date:'mediumTime'}}</dd>
     </ng-container>
 
     <ng-container *ngFor="let task of incident.units">
       <dt>{{task.unitData ? task.unitData.call : ''}}</dt>
       <dd>
-        <span translate>task.state.{{task.state}}</span>
+        <span translate>task.state.values.{{task.state}}</span>
         <button mat-icon-button class="mat-icon-button-small" (click)="nextState(task)">
           <mat-icon>arrow_right</mat-icon>
         </button>
@@ -63,8 +62,8 @@
   </dl>
 
   <p>
-    <button mat-button (click)="openForm()">{{'incident.list.openForm' | translate}}</button>
-    <button mat-button (click)="addJournalEntry()">{{'incident.list.addJournalEntry' | translate}}</button>
-    <button mat-button (click)="openJournal()">{{'incident.list.openJournal' | translate}}</button>
+    <button mat-button (click)="openForm()">{{'incident.form.edit.label' | translate}}</button>
+    <button mat-button (click)="addJournalEntry()">{{'journal.actions.add' | translate}}</button>
+    <button mat-button (click)="openJournal()">{{'journal.views.log' | translate}}</button>
   </p>
 </mat-expansion-panel>
