@@ -50,9 +50,30 @@ export class PointHelper {
     return !point.poi && !point.details && this.isAddressEmpty(point.address);
   }
 
-  equals(a?: PointDto | null, b?: PointDto | null) {
-    // TODO
-    return false;
+  equals(a?: PointDto | null, b?: PointDto | null): boolean {
+    return !!a && !!b
+        && this.nullableEquals(a.poi, b.poi)
+        && this.nullableEquals(a.details, b.details)
+        && this.addressEquals(a.address, b.address);
+  }
+
+  addressEquals(a?: Address | null, b?: Address | null): boolean {
+    if (!a && !b) {
+      return true;
+    }
+
+    return !!a && !!b
+        && this.nullableEquals(a.street, b.street)
+        && this.nullableEquals(a.intersection, b.intersection)
+        && this.nullableEquals(a.number, b.number)
+        && this.nullableEquals(a.block, b.block)
+        && this.nullableEquals(a.details, b.street)
+        && this.nullableEquals(a.postCode, b.postCode)
+        && this.nullableEquals(a.city, b.city);
+  }
+
+  nullableEquals<T>(a?: T | null, b?: T | null): boolean {
+    return (!a && !b) || a === b;
   }
 
   isAddressEmpty(address?: Address | null): boolean {
