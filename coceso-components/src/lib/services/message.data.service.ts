@@ -20,7 +20,7 @@ export class MessageDataService extends DataService<ReceivedMessageDto> implemen
               private readonly concernService: ConcernDataService, watchService: CocesoWatchService) {
     super(watchService.watchMessages());
 
-    this.contacts = taskService.getUnits().pipe(
+    this.contacts = taskService.getAllUnits().pipe(
         map(units => this.buildContactDictionary(units)),
         shareReplay(1)
     );
@@ -89,7 +89,7 @@ export class MessageDataService extends DataService<ReceivedMessageDto> implemen
     return result;
   }
 
-  private buildContactDictionary(units: UnitWithIncidents[]): Map<string, UnitWithIncidents> {
+  private buildContactDictionary(units: Map<number, UnitWithIncidents>): Map<string, UnitWithIncidents> {
     const result = new Map<string, UnitWithIncidents>();
     units.forEach(unit => {
       if (unit.contacts) {

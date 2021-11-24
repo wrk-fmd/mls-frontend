@@ -15,12 +15,18 @@ import {UnitDataService} from './unit.data.service';
 export class TaskDataService {
 
   private readonly combined: Observable<CombinedData>;
+  private readonly filtered: Observable<FilteredData>;
 
   constructor(private readonly concernService: ConcernDataService, private readonly endpoint: TaskEndpointService,
               incidentService: IncidentDataService, unitService: UnitDataService) {
     this.combined = combineLatest([incidentService.getData(), unitService.getData()]).pipe(
         auditTime(50),
         map(([incidents, units]) => this.buildCombined(incidents, units)),
+        shareReplay(1)
+    );
+
+    this.filtered = combineLatest([this.combined, this.concernService.getActiveSection()]).pipe(
+        map(([combined, section]) => this.buildFiltered(combined, section)),
         shareReplay(1)
     );
   }
@@ -52,6 +58,15 @@ export class TaskDataService {
     };
   }
 
+  private buildFiltered(data: CombinedData, section: string | null): FilteredData {
+    const incidents = [...data.incidents.values()];
+    const units = [...data.units.values()];
+    return section ? {
+      incidents: incidents.filter(i => !i.section || i.section === section),
+      units: units.filter(u => !u.section || u.section === section)
+    } : {incidents, units};
+  }
+
   getIncident(id?: number): Observable<IncidentWithUnits | undefined> {
     return id ? this.combined.pipe(map(c => c.incidents.get(id))) : of(undefined);
   }
@@ -70,11 +85,15 @@ export class TaskDataService {
       );
     }
 
-    return this.combined.pipe(map(c => options!.apply([...c.incidents.values()])));
+    return this.filtered.pipe(map(data => options!.apply(data.incidents)));
   }
 
   getUnit(id?: number): Observable<UnitWithIncidents | undefined> {
     return id ? this.combined.pipe(map(c => c.units.get(id))) : of(undefined);
+  }
+
+  getAllUnits(): Observable<Map<number, UnitWithIncidents>> {
+    return this.combined.pipe(map(data => data.units));
   }
 
   getUnits(options?: ListOptions<UnitWithIncidents>, addDefaultSort = true): Observable<UnitWithIncidents[]> {
@@ -87,7 +106,7 @@ export class TaskDataService {
       );
     }
 
-    return this.combined.pipe(map(c => options!.apply([...c.units.values()])));
+    return this.filtered.pipe(map(data => options!.apply(data.units)));
   }
 
   assign(incident: number, unit: number): Observable<void> {
@@ -106,4 +125,9 @@ export class TaskDataService {
 interface CombinedData {
   incidents: Map<number, IncidentWithUnits>;
   units: Map<number, UnitWithIncidents>;
+}
+
+interface FilteredData {
+  incidents: IncidentWithUnits[];
+  units: UnitWithIncidents[];
 }

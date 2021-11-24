@@ -149,7 +149,11 @@
 
     <li *ngIf="sections | async as sections">
       <button mat-button [matMenuTriggerFor]="filterMenu">
-        <span translate>concern.data.section.list</span>
+        <span *ngIf="!activeSection" translate>concern.data.section.list</span>
+        <ng-container *ngIf="activeSection">
+          <span translate>concern.data.section.label</span>:
+          {{activeSection}}
+        </ng-container>
         <mat-icon>arrow_drop_down</mat-icon>
       </button>
 
