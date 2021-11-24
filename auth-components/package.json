@@ -11,8 +11,8 @@
     "@angular/forms": "*",
     "@angular/material": "*",
     "@angular/router": "*",
-    "angularx-qrcode": "*",
     "mls-auth-api": "*",
-    "mls-common-i18n": "*"
+    "mls-common-i18n": "*",
+    "ng-qrcode": "*"
   }
 }

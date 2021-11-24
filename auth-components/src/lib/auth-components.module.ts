@@ -10,9 +10,10 @@ import {MatListModule} from '@angular/material/list';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatToolbarModule} from '@angular/material/toolbar';
 
-import {QRCodeModule} from 'angularx-qrcode';
-
 import {CommonI18nModule, TRANSLATE_REGISTRAR, Translations} from 'mls-common-i18n';
+
+import {QrCodeModule} from 'ng-qrcode';
+
 import de from '../i18n/de';
 import en from '../i18n/en';
 
@@ -37,7 +38,7 @@ import {UnitTokenConcernsComponent, UnitTokenListComponent, UnitTokenPageCompone
     // Translations
     CommonI18nModule,
     // QR Codes
-    QRCodeModule,
+    QrCodeModule,
     // MLS modules
     AuthRoutingModule
   ],
