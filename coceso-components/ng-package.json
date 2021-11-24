@@ -2,14 +2,6 @@
   "$schema": "../node_modules/ng-packagr/ng-package.schema.json",
   "dest": "../dist/coceso-components",
   "lib": {
-    "entryFile": "src/public-api.ts",
-    "umdModuleIds": {
-      "@ngx-translate/core": "ngx-translate",
-      "mls-coceso-api": "mls-coceso-api",
-      "mls-common-data": "mls-common-data",
-      "mls-common-forms": "mls-common-forms",
-      "mls-common-i18n": "mls-common-i18n",
-      "mls-common-ui": "mls-common-ui"
-    }
+    "entryFile": "src/public-api.ts"
   }
 }
