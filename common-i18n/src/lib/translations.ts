@@ -19,7 +19,7 @@ export function registerTranslations(translate: TranslateService) {
 export function registerLocale(translate: TranslateService) {
   return () => {
     translate.setDefaultLang('en');
-    translate.use(translate.getBrowserLang());
+    translate.use(translate.getBrowserLang() || 'en');
   };
 }
 

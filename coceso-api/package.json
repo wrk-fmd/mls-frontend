@@ -11,7 +11,7 @@
   "peerDependencies": {
     "@angular/common": "*",
     "@angular/core": "*",
-    "rxjs": "^6.6.3"
+    "rxjs": "^7.4.0"
   },
   "devDependencies": {
     "ng-openapi-gen": "^0.19.2"
