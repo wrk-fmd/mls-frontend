@@ -17,6 +17,7 @@ export class UnitHierarchyComponent implements DialogContent<null> {
   readonly taskTitle: Observable<string>;
 
   readonly container: Observable<ContainerWithDependencies | null>;
+  readonly hiddenContainers = new Set<number>();
 
   constructor(containerService: ContainerDataService, translateService: TranslateService) {
     this.container = containerService.getRootWithDependencies();

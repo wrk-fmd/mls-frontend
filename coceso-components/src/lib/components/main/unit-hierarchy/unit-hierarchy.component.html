@@ -1,3 +1,4 @@
 <mat-dialog-content cdkDropListGroup dropListGroupName="unit-assign" [dropListGroupCanReceive]="false">
-  <coceso-main-unit-container *ngIf="container | async as container" [container]="container"></coceso-main-unit-container>
+  <coceso-main-unit-container *ngIf="container | async as container" [container]="container" [hiddenContainers]="hiddenContainers">
+  </coceso-main-unit-container>
 </mat-dialog-content>
