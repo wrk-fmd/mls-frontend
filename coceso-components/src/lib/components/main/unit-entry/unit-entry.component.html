@@ -3,7 +3,7 @@
     <button class="unit-entry-button" [mat-menu-trigger-for]="unitMenu" (contextmenu)="openMenu($event)"
             cdkDrag [cdkDragData]="{type: 'unit', id: unit.id}">
       <span [ngClass]="['unit-state', stateCss]">{{unit.call}}</span>
-      <span *ngIf="!hasIncident" [ngClass]="['unit-state', isFree ? 'unit-state-free' : stateCss]">
+      <span *ngIf="!hasIncident" [ngClass]="['unit-state', isWaiting ? 'unit-state-waiting' : stateCss]">
         <mat-icon>{{isHome ? 'home' : 'error'}}</mat-icon>
       </span>
       <coceso-main-unit-task *ngFor="let task of unit.incidents" [task]="task"></coceso-main-unit-task>

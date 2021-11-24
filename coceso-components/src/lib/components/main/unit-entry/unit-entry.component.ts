@@ -56,7 +56,7 @@ export class UnitEntryComponent implements OnDestroy {
   states: UnitStateDto[] = [];
   stateCss: string | null = null;
 
-  isFree: boolean = false;
+  isWaiting: boolean = false;
   isHome: boolean = false;
 
   showActions: boolean = false;
@@ -102,7 +102,7 @@ export class UnitEntryComponent implements OnDestroy {
     this.states = unit ? Object.values(UnitStateDto).filter(state => state !== unit.state) : [];
     this.stateCss = this.unitHelper.stateCss(unit);
 
-    this.isFree = this.unitHelper.isWaiting(unit);
+    this.isWaiting = this.unitHelper.isWaiting(unit);
     this.isHome = this.unitHelper.isHome(unit);
 
     this.allowSendHome = this.unitHelper.allowSendHome(unit);
