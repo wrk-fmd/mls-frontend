@@ -38,6 +38,7 @@
             "styles": [
               "styles/theme.scss",
               "styles/styles.scss",
+              "styles/material-icons.scss",
               "coceso-components/src/styles.scss"
             ],
             "scripts": []
