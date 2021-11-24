@@ -1,6 +1,6 @@
 export default {
   state: {
-    current: 'Aktueller Status',
+    label: 'Aktueller Status',
     values: {
       Assigned: 'Zugewiesen',
       ZBO: 'ZBO',
