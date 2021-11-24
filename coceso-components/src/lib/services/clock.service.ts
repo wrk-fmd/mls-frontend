@@ -3,7 +3,7 @@ import {Injectable} from '@angular/core';
 import {SystemEndpointService} from 'mls-coceso-api';
 
 import {Observable, timer} from 'rxjs';
-import {map, shareReplay} from 'rxjs/operators';
+import {distinctUntilChanged, map, shareReplay} from 'rxjs/operators';
 
 @Injectable()
 export class ClockService {
@@ -13,15 +13,16 @@ export class ClockService {
 
   constructor(private readonly endpoint: SystemEndpointService) {
     this.loadOffset();
-    this.timestamp = timer(0, 1000).pipe(
+    this.timestamp = timer(0, 500).pipe(
         map(() => Date.now() + this.offset),
         shareReplay(1)
     );
   }
 
   private loadOffset() {
-    // TODO This does not take the RTT into account
-    this.endpoint.getSystemTime().subscribe(res => this.offset = 1000 * res.time - Date.now());
+    // Synchronize with the server clock, including RTT
+    const start = Date.now();
+    this.endpoint.getSystemTime().subscribe(res => this.offset = 1000 * res.time - (start + Date.now()) / 2);
   }
 
   elapsedMinutes(sinceTimestamp: number): Observable<number> {
@@ -35,7 +36,8 @@ export class ClockService {
   private elapsed(sinceTimestamp: number, unit: number) {
     sinceTimestamp = sinceTimestamp * 1000;
     return this.timestamp.pipe(
-        map(current => current > sinceTimestamp ? Math.floor((current - sinceTimestamp) / (unit * 1000)) : 0)
+        map(current => current > sinceTimestamp ? Math.floor((current - sinceTimestamp) / (unit * 1000)) : 0),
+        distinctUntilChanged()
     );
   }
 }
