@@ -4,7 +4,7 @@
   </ul>
 
   <mat-accordion multi *ngIf="container.childrenData as children">
-    <mat-expansion-panel class="container-panel mat-elevation-z4" *ngFor="let child of children"
+    <mat-expansion-panel class="container-panel mat-elevation-z4" *ngFor="let child of children; trackBy: trackById"
                          [expanded]="isExpanded(child.id)" (expandedChange)="setExpanded(child.id, $event)">
       <mat-expansion-panel-header>
         <mat-panel-title>

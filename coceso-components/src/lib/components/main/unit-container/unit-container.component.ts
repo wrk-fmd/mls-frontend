@@ -14,6 +14,10 @@ export class UnitContainerComponent {
   @Input()
   hiddenContainers?: Set<number>;
 
+  trackById(index: number, item: ContainerWithDependencies): number | null {
+    return item.id;
+  }
+
   isExpanded(id: number | null): boolean {
     // Check if the id of this container has been hidden (default to 'not hidden')
     return !id || !this.hiddenContainers?.has(id);

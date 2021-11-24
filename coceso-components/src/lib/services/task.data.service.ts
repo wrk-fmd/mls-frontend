@@ -4,7 +4,7 @@ import {IncidentDto, IncidentTypeDto, TaskEndpointService, TaskStateDto, UnitDto
 import {ListOptions} from 'mls-common-data';
 
 import {combineLatest, Observable, of} from 'rxjs';
-import {auditTime, map, shareReplay} from 'rxjs/operators';
+import {auditTime, distinctUntilChanged, map, shareReplay} from 'rxjs/operators';
 
 import {IncidentWithUnits, UnitWithIncidents} from '../models';
 import {ConcernDataService} from './concern.data.service';
@@ -16,6 +16,9 @@ export class TaskDataService {
 
   private readonly combined: Observable<CombinedData>;
   private readonly filtered: Observable<FilteredData>;
+
+  private incidentCache = new Map<IncidentDto, IncidentWithUnits>();
+  private unitCache = new Map<UnitDto, UnitWithIncidents>();
 
   constructor(private readonly concernService: ConcernDataService, private readonly endpoint: TaskEndpointService,
               incidentService: IncidentDataService, unitService: UnitDataService) {
@@ -32,13 +35,26 @@ export class TaskDataService {
   }
 
   private buildCombined(incidents: Map<number, IncidentDto>, units: Map<number, UnitDto>): CombinedData {
+    // Build or load extended incidents and units
+    const incidentsWithUnits = new Map([...incidents.values()].map(i => [i, this.buildIncident(i, units, this.incidentCache)]));
+    const unitsWithIncidents = new Map([...units.values()].map(u => [u, this.buildUnit(u, incidents, this.unitCache)]));
+    this.incidentCache = incidentsWithUnits;
+    this.unitCache = unitsWithIncidents;
+
+    // Return a map keyed by the id
     return {
-      incidents: new Map([...incidents.values()].map(i => [i.id, this.buildIncident(i, units)])),
-      units: new Map([...units.values()].map(i => [i.id, this.buildUnit(i, incidents)]))
+      incidents: new Map([...incidentsWithUnits.values()].map(i => [i.id, i])),
+      units: new Map([...unitsWithIncidents.values()].map(u => [u.id, u]))
     };
   }
 
-  private buildIncident(incident: IncidentDto, units: Map<number, UnitDto>): IncidentWithUnits {
+  private buildIncident(incident: IncidentDto, units: Map<number, UnitDto>, cache: Map<IncidentDto, IncidentWithUnits>): IncidentWithUnits {
+    const cached = cache.get(incident);
+    if (cached && !cached.units.find(task => task.unitData !== units.get(task.unit))) {
+      // The extended incident has been built before AND all the data for assigned units is still valid: Reuse it
+      return cached;
+    }
+
     return {
       ...incident,
       units: incident.units ? incident.units.map(task => ({
@@ -48,7 +64,13 @@ export class TaskDataService {
     };
   }
 
-  private buildUnit(unit: UnitDto, incidents: Map<number, IncidentDto>): UnitWithIncidents {
+  private buildUnit(unit: UnitDto, incidents: Map<number, IncidentDto>, cache: Map<UnitDto, UnitWithIncidents>): UnitWithIncidents {
+    const cached = cache.get(unit);
+    if (cached && !cached.incidents.find(task => task.incidentData !== incidents.get(task.incident))) {
+      // The extended unit has been built before AND all the data for assigned incidents is still valid: Reuse it
+      return cached;
+    }
+
     return {
       ...unit,
       incidents: unit.incidents ? unit.incidents.map(task => ({
@@ -68,7 +90,10 @@ export class TaskDataService {
   }
 
   getIncident(id?: number): Observable<IncidentWithUnits | undefined> {
-    return id ? this.combined.pipe(map(c => c.incidents.get(id))) : of(undefined);
+    return id ? this.combined.pipe(
+        map(c => c.incidents.get(id)),
+        distinctUntilChanged()
+    ) : of(undefined);
   }
 
   getIncidents(options?: ListOptions<IncidentWithUnits>, addDefaultSort = true): Observable<IncidentWithUnits[]> {
@@ -89,7 +114,10 @@ export class TaskDataService {
   }
 
   getUnit(id?: number): Observable<UnitWithIncidents | undefined> {
-    return id ? this.combined.pipe(map(c => c.units.get(id))) : of(undefined);
+    return id ? this.combined.pipe(
+        map(c => c.units.get(id)),
+        distinctUntilChanged()
+    ) : of(undefined);
   }
 
   getAllUnits(): Observable<Map<number, UnitWithIncidents>> {
