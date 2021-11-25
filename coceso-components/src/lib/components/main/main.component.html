@@ -144,6 +144,18 @@
           <mat-icon>info</mat-icon>
           <span translate>journal.views.log</span>
         </button>
+
+        <mat-divider></mat-divider>
+
+        <button mat-menu-item (click)="increaseArea()">
+          <mat-icon>zoom_out_map</mat-icon>
+          <span translate>nav.area.increase</span>
+        </button>
+
+        <button mat-menu-item (click)="resetArea()">
+          <mat-icon>zoom_in_map</mat-icon>
+          <span translate>nav.area.reset</span>
+        </button>
       </mat-menu>
     </li>
 

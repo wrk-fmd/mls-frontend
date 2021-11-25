@@ -3,8 +3,21 @@
   flex-direction: column;
 }
 
-.window-area {
+.window-container {
+  display: flex;
   flex: 1 1 auto;
+  overflow: auto;
+
+  &.extend-shadow {
+    // This is a hack to extend the box-shadow of windows over the footer (taskbar)
+    // However, it must not be enabled when the area is increased because it would also move the horizontal scrollbar
+    margin-bottom: -46px;
+    padding-bottom: 46px;
+  }
+}
+
+.window-area {
+  flex: 1 0 auto;
   margin: 5px;
   position: relative;
 }

@@ -1,3 +1,4 @@
+import {NoopScrollStrategy} from '@angular/cdk/overlay';
 import {AfterViewInit, Component, ElementRef, Type, ViewChild} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
 
@@ -23,6 +24,9 @@ export class WinmanComponent implements AfterViewInit {
 
   @ViewChild('winmanContainer', {static: true}) winmanContainer?: ElementRef;
 
+  sizeStyle?: { width: string, height: string };
+  extendShadow = true;
+
   constructor(private readonly dialog: WinmanMatDialog) {
   }
 
@@ -46,6 +50,7 @@ export class WinmanComponent implements AfterViewInit {
       hasBackdrop: false,
       disableClose: true,
       position: options,
+      scrollStrategy: new NoopScrollStrategy(),
       data: {component, componentData}
     });
 
@@ -94,6 +99,17 @@ export class WinmanComponent implements AfterViewInit {
 
       // Set to the last value (might be null if no windows are left)
       this.focused = window;
+    }
+  }
+
+  setSize(level: number) {
+    if (level > 0) {
+      const factor = `${100 + level * 50}%`;
+      this.sizeStyle = {width: factor, height: factor};
+      this.extendShadow = false;
+    } else {
+      this.sizeStyle = undefined;
+      this.extendShadow = true;
     }
   }
 }

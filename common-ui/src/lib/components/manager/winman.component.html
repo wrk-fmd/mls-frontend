@@ -1,4 +1,6 @@
-<main class="window-area" #winmanContainer></main>
+<div class="window-container" [class.extend-shadow]="extendShadow">
+  <main class="window-area" #winmanContainer [style]="sizeStyle"></main>
+</div>
 
 <footer>
   <ul class="taskbar">

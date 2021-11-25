@@ -42,6 +42,8 @@ export class MainComponent implements AfterViewInit, OnDestroy {
   readonly alarmUnits: Observable<string | null>;
   readonly waitingUnits: Observable<string | null>;
 
+  private areaSize = 0;
+
   constructor(private readonly concernService: ConcernDataService, taskService: TaskDataService,
               incidentHelper: IncidentHelper, unitHelper: UnitHelper,
               private readonly windowService: WindowService, private readonly snackBar: MatSnackBar) {
@@ -73,6 +75,7 @@ export class MainComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.windowService.setComponent(this.winmanComponent!);
+    this.winmanComponent!.setSize(this.areaSize);
     this.showUnitsHierarchy();
     this.showActiveTasks();
     this.showActivePositions();
@@ -188,5 +191,19 @@ export class MainComponent implements AfterViewInit, OnDestroy {
 
   setSection(section: string | null) {
     this.concernService.setActiveSection(section);
+  }
+
+  increaseArea() {
+    this.areaSize++;
+    if (this.winmanComponent) {
+      this.winmanComponent.setSize(this.areaSize);
+    }
+  }
+
+  resetArea() {
+    this.areaSize = 0;
+    if (this.winmanComponent) {
+      this.winmanComponent.setSize(this.areaSize);
+    }
   }
 }

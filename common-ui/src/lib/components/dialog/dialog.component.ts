@@ -20,8 +20,8 @@ export class DialogComponent {
 
   readonly windowTitle: Observable<string>;
 
-  constructor(@Inject(MAT_DIALOG_DATA) private readonly data: DialogComponentOptions<any>) {
-    this.content = new ComponentPortal(data.component);
+  constructor(@Inject(MAT_DIALOG_DATA) private readonly options: DialogComponentOptions<any>) {
+    this.content = new ComponentPortal(options.component);
     this.windowTitle = this.component.pipe(switchMap(c => c.windowTitle));
   }
 
@@ -32,7 +32,7 @@ export class DialogComponent {
   setComponent(componentRef: CdkPortalOutletAttachedRef) {
     if (componentRef instanceof ComponentRef) {
       const component = componentRef.instance;
-      component.data = this.data.componentData;
+      component.data = this.options.componentData;
 
       // Connect to the component asynchronously to prevent circular changes
       setTimeout(() => this.component.next(component), 0);
