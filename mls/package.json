@@ -3,15 +3,15 @@
   "version": "3.0.0-SNAPSHOT",
   "private": true,
   "dependencies": {
-    "@angular/animations": "^13.2.2",
-    "@angular/common": "^13.2.2",
-    "@angular/compiler": "^13.2.2",
-    "@angular/core": "^13.2.2",
-    "@angular/platform-browser": "^13.2.2",
-    "@angular/platform-browser-dynamic": "^13.2.2",
-    "@angular/router": "^13.2.2",
-    "rxjs": "^7.4.0",
-    "tslib": "^2.3.0",
-    "zone.js": "~0.11.4"
+    "@angular/animations": "^13.3.0",
+    "@angular/common": "^13.3.0",
+    "@angular/compiler": "^13.3.0",
+    "@angular/core": "^13.3.0",
+    "@angular/platform-browser": "^13.3.0",
+    "@angular/platform-browser-dynamic": "^13.3.0",
+    "@angular/router": "^13.3.0",
+    "rxjs": "^7.5.5",
+    "tslib": "^2.3.1",
+    "zone.js": "~0.11.5"
   }
 }
